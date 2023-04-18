@@ -135,18 +135,19 @@ def op():
 	    os.system('pip3 install wget')
 	    os.system('pip3 install requests')
 	    import webbrowser,wget,requests
+
+	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/1.8v'
 	
-	version_url = "https://bitbucket.org/bsbsjsjs/bbb/raw/7f799064627450237a1b8e2f631bd4a788458f/1.8v"
 	
-	response = requests.get(version_url)
-	version_number = version_url.split("/")[-1]
+	response = requests.get(url)
+	version_number = url.split("/")[-1]
 	if __name__ == '__main__':
-	    with open(__file__) as f:
-	        content = f.read()
-	    if version_url not in content:
-	        print('This script is outdated. Please update it to version', version_number)
-	        os.remove(__file__)
-	        exit()
+		    with open(__file__) as f:
+		        content = f.read()
+		    if response.status_code != 200:
+		        	print('    This script is outdated. Please update it to version', version_number)
+		        	os.remove(__file__)
+		        	exit()
 	words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
 	words_ar = "\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n"
 	vers = ('\033[34m       Virus-Scripts version '+version_number+'\n')
