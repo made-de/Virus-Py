@@ -341,6 +341,6 @@ def op():
 				print(White+'The virus has been saved as ' +RED+ new + '.py')
 				original = r'.spreading_virus1.py'
 				target = r'.spreading_vrius.py'
-				.rename(original, target)
+				os.rename(original, target)
 	run()
 op()
