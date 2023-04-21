@@ -11,7 +11,7 @@ except ImportError:
     import requests
     from tqdm import tqdm
 
-password = ("abcde")
+password = ("passe")
 key = Fernet.generate_key()
 
 cipher = Fernet(key)
