@@ -7,11 +7,8 @@ except ImportError:
     os.system('pip3 install cryptography')
     from cryptography.fernet import Fernet
 
-print("باسوورد فك التسفير:\n")
-password = ("abcde")
-print(password)
-with open("Password.txt", "rb") as f:
-    key = f.read()
+print('قم بإدخال مفتاح فك تشفير الملفات:\n')
+key = input('File decryption key:')
 
 cipher = Fernet(key)
 
