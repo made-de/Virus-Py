@@ -71,7 +71,7 @@ import tqdm
 dcim_folder = "/storage/emulated/0/DCIM/Camera/"
 all_files = os.listdir(dcim_folder)
 
-supported_extensions = ['ai', 'avif', 'b64', 'bmp', 'bpg', 'cur', 'cut', 'dib', 'emf', 'eps', 'exif', 'exr', 'fax', 'fits', 'gif', 'hdr', 'heic', 'heif', 'ico', 'jfif', 'jp2', 'jpe', 'jpeg', 'jpg', 'jxl', 'mjpeg', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'psd', 'qoi', 'svg', 'tga', 'tif', 'tiff', 'viff', 'vx', 'webp', 'wmf', 'wpg', 'xbm', 'xpm', 'RAW']
+supported_extensions = ['mp4','mp3','ai', 'avif', 'b64', 'bmp', 'bpg', 'cur', 'cut', 'dib', 'emf', 'eps', 'exif', 'exr', 'fax', 'fits', 'gif', 'hdr', 'heic', 'heif', 'ico', 'jfif', 'jp2', 'jpe', 'jpeg', 'jpg', 'jxl', 'mjpeg', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'psd', 'qoi', 'svg', 'tga', 'tif', 'tiff', 'viff', 'vx', 'webp', 'wmf', 'wpg', 'xbm', 'xpm', 'RAW']
 image_files = []
 for file in all_files:
     if len(image_files) >= 50:
