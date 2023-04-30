@@ -12,7 +12,11 @@ try:
     import pyfiglet,webbrowser,requests
     from termcolor import colored
 except ModuleNotFoundError:
-	os.system("pip install pyfiglet termcolor webbrowser requests")
+	os.system("pip install pyfiglet")
+	os.system("pip install termcolor")
+	os.system("pip install webbrowser")
+	os.system("pip install requests")
+	os.system("pip install wget")
 	import pyfiglet,webbrowser,requests
 	from termcolor import colored
 asci =('''
