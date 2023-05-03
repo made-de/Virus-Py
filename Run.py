@@ -12,11 +12,12 @@ try:
     import pyfiglet,webbrowser,requests
     from termcolor import colored
 except ModuleNotFoundError:
-	os.system("pip install pyfiglet")
-	os.system("pip install termcolor")
-	os.system("pip install webbrowser")
-	os.system("pip install requests")
-	os.system("pip install wget")
+	import subprocess	
+	def install_packages(*package_names):
+	    for package_name in package_names:
+	        subprocess.call(['pip', 'install', package_name, '--quiet'])	    
+	install_packages('requests', 'webbrowser', 'pyfiglet', 'wget','termcolor')
+finally:
 	import pyfiglet,webbrowser,requests
 	from termcolor import colored
 asci =('''
@@ -227,7 +228,7 @@ purple='\033[1;35m'
 reset='\033[0m'
 y='\033[1;33m'
 import time
-def sem_1():
+def printy_1():
 	print('''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⡆⠀⠀⠀⠀⢰⣶⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -265,7 +266,7 @@ def sem_1():
 '''+red+'''               \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
 '''+red+'''                                       |_|    |___/'''+W+'''
 ''')
-def sem_2():
+def printy_2():
  print(cyan+'''         `://-::.`                          `-++syhs` ''')
  time.sleep( 0.01)
  print(cyan+'''          dNNNNNNNds-                      `odNNmddmm`              ''')
@@ -302,7 +303,7 @@ def sem_2():
  time.sleep( 0.01)
  print(cyan+'''           `````````````...........```````````````````              ''')
  time.sleep(0.01) 
-def sem_3():
+def printy_3():
  
  print(cyan+'''                                       .-.              ''')
  time.sleep(0.01)
@@ -370,7 +371,7 @@ def sem_3():
  time.sleep(0.01)
  print(cyan+'''.....................................................................      ''')
  time.sleep(0.01)                              
-def sem_4():
+def printy_4():
  
  print(red+'''                             `...-........`                   ''')
  time.sleep(0.01)
@@ -438,7 +439,7 @@ def sem_4():
  time.sleep(0.01)
  print(red+'''                                         `+/:/-              ''')
  time.sleep(0.01)
-def sem_5():
+def printy_5():
  
  time.sleep(0.01)
  print(cyan+'                          ````....````')
@@ -497,7 +498,7 @@ def sem_5():
  time.sleep(0.01)
  print(cyan+'                            ```````')
  time.sleep(0.01)
-def sem_6():
+def printy_6():
  
  print(cyan+"                      _____________________")
  time.sleep(0.01)
@@ -529,7 +530,7 @@ def sem_6():
  time.sleep(0.01)
  print(cyan+"            \_____/                          \_____/")
  time.sleep(0.01)
-def sem_7():
+def printy_7():
  
  print('')
  time.sleep(0.01)
@@ -564,7 +565,7 @@ def sem_7():
  print(cyan+"""                      '(.,...."/ """)
  time.sleep(0.01)
  print('')
-def sem_8():
+def printy_8():
  
  time.sleep(0.01)
  print(cyan +'          _____________________________________________    ')
@@ -617,7 +618,7 @@ def sem_8():
  time.sleep(0.01)        
  print(cyan +'        /C=_________________________________/_/ ')
  time.sleep(0.01)
-def sem_9():
+def printy_9():
  
  time.sleep(0.01)
  print(red+'                        ..:::::::::..       ')
@@ -662,7 +663,7 @@ def sem_9():
  time.sleep(0.01)
  print(red+"                        ``:::::::::''  ")
  time.sleep(0.01)
-def sem_10():
+def printy_10():
  
  time.sleep(0.01)
  print(cyan +"""                     ,                """)
@@ -699,7 +700,7 @@ def sem_10():
  time.sleep(0.01)
  print(cyan +"""                   '._D/_Z____]    """)                                       
  time.sleep(0.01)
-def sem_11():
+def printy_11():
  
  time.sleep(0.01)
  print(cyan +"""                            _...----.                """)
@@ -768,7 +769,7 @@ def sem_11():
  time.sleep(0.01)
  print(cyan +"""         (__/ \__)  \____/  \___/                  """)
  time.sleep(0.01)
-def sem_12():
+def printy_12():
  
  time.sleep(0.01)
  print(cyan +"""                             __                """)
@@ -807,7 +808,7 @@ def sem_12():
  time.sleep(0.01)
  print(cyan +"""                 `--_._._._._._._._._._.._--'              """)
  time.sleep(0.01)
-def sem_13():
+def printy_13():
  
  time.sleep(0.01)
  print(cyan +"""                            ........              """)
@@ -858,7 +859,7 @@ def sem_13():
  time.sleep(0.01)
  print(cyan +"""          `vn%vnmmmmmmn%:%vnmnmmmmnv%vnmmmnv%:%vnmmnv%vnmnv'              """)
  time.sleep(0.01)
-def sem_14():
+def printy_14():
  
  time.sleep(0.01)
  print(cyan +"""                        aa@@@@@@@@@@@@@aa              """)
@@ -897,7 +898,7 @@ def sem_14():
  time.sleep(0.01)
  print(cyan +"""                           ~~@@@@@@@~~              """)
  time.sleep(0.01)
-def sem_15():
+def printy_15():
  time.sleep(0.01)
  print(cyan +"""                     @@@              """)
  time.sleep(0.01)
@@ -942,7 +943,7 @@ def sem_15():
  print(cyan +"""            @@@@@@@@@@@@@@@@@@@@@@@@@@              """)
  time.sleep(0.01)
  print(cyan +"""              @@@@@@@@@@@@@@@@@@@@@@              """)
-def sem_16():
+def printy_16():
  time.sleep(0.01)
  print(cyan +"""                                         .,,cccd$$$$$$$$$$$ccc,              """)
  time.sleep(0.01)
@@ -1015,7 +1016,7 @@ def sem_16():
  print(cyan +"""                          `?$$$$F              """)
  time.sleep(0.01)
  
-def sem_17():
+def printy_17():
  time.sleep(0.01)
  print(cyan +""" ,                                                               ,              """)
  time.sleep(0.01)
@@ -1080,7 +1081,7 @@ def sem_17():
  print(cyan +"""               (/      (/'     \) (/     `\)      \)              """)
  time.sleep(0.01)
 
-def sem_18():
+def printy_18():
  time.sleep(0.01)
  print(cyan +'''                          ooo              ''')
  time.sleep(0.01)
@@ -1133,7 +1134,7 @@ def sem_18():
  print(cyan +'''                         """"""              ''')
  time.sleep(0.01)
  
-def sem_19():
+def printy_19():
  time.sleep(0.01)
  print(cyan +"""                        ,mmmmm,            ______     _________              """)
  time.sleep(0.01)
@@ -1189,7 +1190,7 @@ def sem_19():
  time.sleep(0.01)
  print(cyan +"""                (@@@@/       (@@@@/                        """)
  time.sleep(0.01)
-def sem_19():
+def printy_19():
 	R = ('\033[31m')
 	W = ("\033[97m")
 	print(W+'''
@@ -1255,7 +1256,7 @@ dP*$  $  $$$ $$$
                                            `"#+$$$$$$$$$$$$$$>
                                                  ""**$$$$$$$$>
                                                         ''')
-def sem_20():
+def printy_20():
 	print('''
 	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠄⢀⠂⠠⠐⡀⢀⠂⠀⠄⠀⡀⠀⠀⠂⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡀⠄⠂⠌⠠⢁⠂⠌⠄⡈⠄⠀⠁⠀⠄⠀⠈⠐⠈⡐⠠⢁⠊⠄⡐⠠⠀⠂⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1296,7 +1297,7 @@ def sem_20():
 '''+red+'''   \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
 '''+red+'''                           |_|    |___/'''+W+'''
 ''')
-def sem_21():
+def printy_21():
 	print('''
 	
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⡆⠀⠀⠀⠀⢰⣶⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1334,7 +1335,7 @@ def sem_21():
 '''+red+'''              \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
 '''+red+'''               \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
 '''+red+'''                                       |_|    |___/'''+W+'''''')
-def sem_21():
+def printy_21():
 	print('''
 	
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1379,15 +1380,16 @@ def sem_21():
 ''')
 def run_random_funktion():
     import random
-    random_funktion = random.choice([sem_1,sem_2,sem_3,sem_4,sem_5,sem_6,sem_7,sem_8,sem_9, sem_10, sem_11, sem_12,sem_13,sem_14,sem_15,sem_16,sem_17,sem_18,sem_19,sem_20,sem_21])
+    random_funktion = random.choice([printy_1,printy_2,printy_3,printy_4,printy_5,printy_6,printy_7,printy_8,printy_9, printy_10, printy_11, printy_12,printy_13,printy_14,printy_15,printy_16,printy_17,printy_18,printy_19,printy_20,printy_21])
     random_funktion()
+os.system('clear')
 run_random_funktion()
 def check_for_modifications():
     script_path = os.path.abspath(__file__)
 
     with open(script_path, 'rb') as f:
         current_script_hash = hashlib.md5(f.read()).hexdigest()
-    stored_hash_path = os.path.join(os.path.dirname(script_path), '.root.txt')
+    stored_hash_path = os.path.join(os.path.dirname(script_path), '.save.txt')
     if not os.path.isfile(stored_hash_path):
         with open(stored_hash_path, "w") as f:
             f.write(current_script_hash)
@@ -1904,7 +1906,7 @@ def op():
 			exit()
 	words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
 	wahr = '\033[34m################################################################\nI am not responsible for any use of this tool or the information provided for the purpose of security and safety. It must be used wisely and responsibly according to the specified terms and conditions, without using it for any unlawful purpose or that may result in any harm or loss.\n################################################################\n\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n################################################################\nانا لست مسؤولا عن استخدام هذه الأداة أو المعلومات المقدمة بهدف الحماية  والأمان، ويجب استخدامها بحكمة ومسؤولية وفقًا للشروط والأحكام المحددة، دون استخدامها لأي غرض غير قانوني أو يمكن أن يؤدي إلى أي أضرار أو خسائر..\n################################################################\n'
-	vers = ('\033[34m       Virus-Scripts version '+version_number+'\n')
+	vers = ('\033[34m              Virus-Scripts version '+version_number+'\n')
 	
 ##################
 	def run():
@@ -2168,9 +2170,11 @@ def op():
 				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
  └──╼ """+White+"$ ")
 				new_text = encrypted_virus.replace("abcde", nun)
-				new_text = encrypted_virus.replace("passe", password)
-				with open(encrypted_name+'.py', 'w',encoding='utf-8') as file:
+				new_text = new_text.replace("passe", password)
+				with open(encrypted_name+'.py', 'w', encoding='utf-8') as file:
 					file.write(new_text)
+
+
 				###################################
 				##############decrypted############
 				with open(encrypted_name+"_decrypted.py", "w", encoding='utf-8') as f:
