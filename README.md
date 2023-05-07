@@ -15,7 +15,7 @@ https://apkhome.io/de/pydroid-3-ide-for-python-3-premium-4-01/
 
 * أو نفس المحرر لكن على موقع mediafire لتجنب الاعلانات المنبثقة:
 
-https://www.mediafire.com/file/mhnzfdgo3rkpr2i/Pydroid_3_v4.01_arm64_
+https://www.mediafire.com/file/mhnzfdgo3rkpr2i/Pydroid_3_v4.01_arm64
 
 * تطبيق لفك ضغط ملف الاداة Virus-Scripts-main.zip:
 
