@@ -7,15 +7,10 @@
 
 * ثم قم بفك ضغط الملف Virus-Py-main.zip وتشغيل ملف Run.py
 
-* الأداة لن تعمل على محرر Python من Google Play
+* يجب تنزيل هذا المحرر:
+  https://play.google.com/store/apps/details?id=com.alif.ide.python
 
-* يجب تنزيل محرر خاص:
-
-https://apkhome.io/de/pydroid-3-ide-for-python-3-premium-4-01/
-
-* أو نفس المحرر لكن على موقع mediafire لتجنب الاعلانات المنبثقة:
-
-https://www.mediafire.com/file/mhnzfdgo3rkpr2i/Pydroid_3_v4.01_arm64
+* ونفس الشيء ينطبق على الضحية التي ستقوم بتشغيل الفايروس التي عليها أيضا تشغيل الفايروس على هذا المحرر
 
 * تطبيق لفك ضغط ملف الاداة Virus-Scripts-main.zip:
 
